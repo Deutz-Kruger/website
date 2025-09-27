@@ -1,0 +1,33 @@
+---
+import CasePreview from "@components/astro/CasePreview.astro";
+import Hero from "@components/astro/Hero.astro";
+import Services from "@components/astro/Services.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { GetStaticPaths } from "astro";
+import { type CollectionEntry, getEntry } from "astro:content";
+
+export const getStaticPaths = (() => {
+  return [{ params: { lang: "en" } }, { params: { lang: "de" } }];
+}) satisfies GetStaticPaths;
+
+type LandingPageEntry = CollectionEntry<"landing-page">;
+
+const { lang } = Astro.params;
+
+const page: LandingPageEntry | undefined = await getEntry("landing-page", lang);
+
+if (!page) {
+  return new Response(null, { status: 404 });
+}
+
+const { hero, cases, services } = page.data;
+console.log(cases);
+---
+
+<BaseLayout>
+  <Hero hero={hero} />
+  <main>
+    <CasePreview cases={cases} />
+    <Services services={services} />
+  </main>
+</BaseLayout>

@@ -9,11 +9,11 @@ const appEnv = import.meta.env.APP_ENV || "development";
 const allowIndexing = appEnv === "production";
 const robotsContent = allowIndexing ? "index, follow" : "noindex, nofollow";
 
-const { title, description = "Astro Starter" } = Astro.props;
+const { title, description = "Deutz & Krüger" } = Astro.props;
 
-const isIndexPage = Astro.url.pathname === "/";
+const isIndexPage = Astro.url.pathname === "/en" || "/de";
 
-const DEFAULT_TITLE = "Astro Starter";
+const DEFAULT_TITLE = "Deutz & Krüger";
 
 const pageTitle = isIndexPage ? DEFAULT_TITLE : title || DEFAULT_TITLE;
 const titleTemplate = isIndexPage ? "%s" : "%s | Astro Starter";
@@ -34,35 +34,35 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Astro Starter";
       nofollow={!allowIndexing}
       openGraph={{
         basic: {
-          title: title || "Astro Starter",
+          title: title || DEFAULT_TITLE,
           type: "website",
           image: `${siteUrl}/og.png`,
           url: Astro.url.toString(),
         },
         image: {
-          alt: "Astro Starter",
+          alt: DEFAULT_TITLE,
           width: 1600,
           height: 800,
           type: "image/png",
         },
         optional: {
           description,
-          siteName: "Astro Starter",
+          siteName: DEFAULT_TITLE,
           locale: "en_US",
         },
       }}
       twitter={{
         card: "summary_large_image",
-        site: "@alipiry",
-        creator: "@alipiry",
-        title: title || "Astro Starter",
+        site: "",
+        creator: "",
+        title: title || DEFAULT_TITLE,
         description,
         image: `${siteUrl}/og.png`,
-        imageAlt: "Astro Starter",
+        imageAlt: DEFAULT_TITLE,
       }}
       extend={{
         meta: [
-          { name: "author", content: "Ali Piry" },
+          { name: "author", content: "Deutz & Krüger" },
           {
             name: "keywords",
             content:

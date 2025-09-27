@@ -1,0 +1,23 @@
+---
+import { type CollectionEntry } from "astro:content";
+type CasesEntry = CollectionEntry<"cases">;
+
+interface Props {
+  cases: CasesEntry[];
+}
+
+const { cases } = Astro.props;
+---
+
+<section>
+  {
+    cases.map((c) => (
+      <article>
+        <h2>{c.data.casePreview.title}</h2>
+        {c.data.casePreview.previewImage && (
+          <img alt="case preview" src={c.data.casePreview.previewImage} />
+        )}
+      </article>
+    ))
+  }
+</section>
