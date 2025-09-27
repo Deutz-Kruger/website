@@ -193,7 +193,7 @@ media:
     extensions: [ png, webp, jpg, jpeg, svg ]
   - name: files
     label: Files & Documents
-    input: src/content/documents
-    output: /src/content/documents
+    input: public/documents
+    output: /documents
     categories: [ document ]
 
