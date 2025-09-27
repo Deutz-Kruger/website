@@ -211,7 +211,7 @@ content:
                 type: file
                 options:
                   path: public/documents
-                  extension: [pdf]
+                  categories: [document]
           
 
     
