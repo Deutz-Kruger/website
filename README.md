@@ -1,10 +1,4 @@
-# Astro Template Deutz & Krüger
-
-A template built with Astro, SEO, and Tailwind CSS.
-
-Heavely base on [alipiry/astro-starter](https://github.com/alipiry/astro-starter)
-
-Linting and formatting ready to go.
+# Deutz & Krüger Portfoli
 
 ## Features
 
@@ -77,63 +71,3 @@ Linting and formatting ready to go.
    ```
 
 4. Open your browser and navigate to `http://localhost:4321`
-
-## Available Scripts
-
-| Command        | Description                                   |
-| -------------- | --------------------------------------------- |
-| `pnpm dev`     | Start development server                      |
-| `pnpm build`   | Build for production (includes type checking) |
-| `pnpm preview` | Preview production build locally              |
-| `pnpm astro`   | Run Astro CLI commands                        |
-
-## Styling
-
-This template uses Tailwind CSS 4 with the Vite plugin:
-
-- Global styles: `src/styles/global.css`
-- Tailwind config: Configured via the Vite plugin in `astro.config.mjs`
-
-## Code Quality
-
-### ESLint Configuration
-
-The project uses a flat ESLint configuration with:
-
-- JavaScript/TypeScript: ESLint recommended + TypeScript ESLint
-- Astro: Official Astro ESLint plugin
-- React: React and JSX a11y rules
-
-### Prettier Configuration
-
-Formatting is handled by Prettier with:
-
-- Astro support: `prettier-plugin-astro`
-- Tailwind integration: `prettier-plugin-tailwindcss`
-- Configuration: 2 spaces, semicolons, double quotes
-
-### Running Linting & Formatting
-
-```bash
-# Run ESLint
-pnpm eslint .
-
-# Run Prettier
-pnpm prettier --write .
-```
-
-## Building for Production
-
-```bash
-# Type check and build
-pnpm build
-
-# Preview the build
-pnpm preview
-```
-
-The build process includes:
-
-1. Type checking with `astro check`
-2. Static generation with `astro build`
-3. Output in the `dist/` directory

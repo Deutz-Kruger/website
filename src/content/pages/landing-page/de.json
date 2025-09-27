@@ -1,0 +1,21 @@
+{
+  "lang": "de",
+  "hero": {
+    "headline": "TEST"
+  },
+  "cases": [
+    "src/content/cases/krumphof.en.json",
+    "src/content/cases/bl-thermo.en.json",
+    "src/content/cases/skaut.en.json"
+  ],
+  "services": [
+    {
+      "title": "Branding",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "icon": {
+        "iconLogo": "/src/content/images/icon_services.svg",
+        "iconColor": "#425E6B"
+      }
+    }
+  ]
+}
