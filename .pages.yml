@@ -183,6 +183,37 @@ content:
         type: image
         description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
 
+      - name: legal
+        label: Legal Stuff
+        description: Stuff like privacy policy, Impressum, etc.
+        type: object
+        fields:
+          - name: impressum
+            label: Impressum
+            type: object
+            fields: 
+              - name: title
+                label: Impressum Title
+                type: string
+              - name: body
+                label: Impressum Body
+                type: text
+          - name: privacy
+            label: Privacy Policy
+            description: Add the Privacy Policy as a PDF.
+            type: object
+            fields:
+              - name: title
+                label: Privacy Policy Title
+                type: string
+              - name: body
+                label: PP body as PDF
+                type: file
+                options:
+                  path: public/documents
+                  extension: [pdf]
+          
+
     
 
 media:
