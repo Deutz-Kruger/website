@@ -56,11 +56,6 @@ content:
         type: object
         fields:
           - { name: headline, type: text, label: Headline }
-
-      #      - name: caseShowcase
-      #        label: Case Overview
-      #        type: object
-      #       fields:
       - name: cases
         label: Cases
         type: reference
@@ -187,5 +182,7 @@ content:
         label: Preview image
         type: image
         description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
+
+    
 
 media: src/content/images
