@@ -185,4 +185,15 @@ content:
 
     
 
-media: src/content/images
+media:
+  - name: images
+    label: Images
+    input: src/content/images
+    output: /src/content/images
+    extensions: [ png, webp, jpg, jpeg, svg ]
+  - name: files
+    label: Files & Documents
+    input: src/content/documents
+    output: /src/content/documents
+    categories: [ document ]
+
