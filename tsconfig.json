@@ -4,6 +4,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": "./",
+    "verbatimModuleSyntax": true,
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],

@@ -1,6 +1,7 @@
 // @ts-check
 import { fileURLToPath, URL } from "node:url";
 
+import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -37,5 +38,18 @@ export default defineConfig({
     },
     // @ts-expect-error Compat issues with vite 7 and plugin typing
     plugins: [tailwindcss()],
+  },
+  adapter: cloudflare({
+    imageService: "compile",
+    platformProxy: {
+      enabled: true,
+      configPath: "wrangler.jsonc",
+      persist: {
+        path: "./.cache/wrangler/v3",
+      },
+    },
+  }),
+  redirects: {
+    "/": "/en",
   },
 });

@@ -1,4 +1,4 @@
-# Deutz & Krüger Portfoli
+# Deutz & Krüger Portfolio
 
 ## Features
 

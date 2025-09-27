@@ -2,7 +2,7 @@
 import CasePreview from "@components/astro/CasePreview.astro";
 import Hero from "@components/astro/Hero.astro";
 import Services from "@components/astro/Services.astro";
-import BaseLayout from "@layouts/BaseLayout.astro";
+import Layout from "@layouts/Layout.astro";
 import type { GetStaticPaths } from "astro";
 import { type CollectionEntry, getEntry } from "astro:content";
 
@@ -24,10 +24,10 @@ const { hero, cases, services } = page.data;
 console.log(cases);
 ---
 
-<BaseLayout>
+<Layout>
   <Hero hero={hero} />
   <main>
     <CasePreview cases={cases} />
     <Services services={services} />
   </main>
-</BaseLayout>
+</Layout>
