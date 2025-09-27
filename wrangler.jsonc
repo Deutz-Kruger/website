@@ -1,0 +1,7 @@
+{
+  "name": "deutz-krueger-portfolio",
+  "compatibility_date": "2025-09-22",
+  "assets": {
+    "directory": "./dist"
+  }
+}

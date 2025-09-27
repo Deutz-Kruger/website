@@ -39,6 +39,7 @@ export default defineConfig([
       "eslint-comments/no-unlimited-disable": "error",
       "eslint-comments/no-unused-disable": "error",
       "eslint-comments/no-unused-enable": "error",
+      trailingComma: "off",
     },
   },
 

@@ -6,12 +6,18 @@ export default {
   printWidth: 80,
   tabWidth: 2,
   plugins: ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
-  tailwindConfig: "/src/styles/global.css",
+  tailwindStylesheet: "/src/styles/global.css",
   overrides: [
     {
       files: ["**/*.astro"],
       options: {
         parser: "astro",
+      },
+    },
+    {
+      files: "*.jsonc",
+      options: {
+        trailingComma: "none",
       },
     },
   ],

@@ -1,12 +1,12 @@
 {
-  "name": "astro-template-deutz-krueger",
+  "name": "deutz-krueger-portfolio",
   "private": "true",
   "type": "module",
   "version": "0.0.1",
   "author": "Marvin Deutz",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alipiry/astro-starter.git"
+    "url": "https://github.com/Deutz-Kruger/website"
   },
   "homepage": "https://deutzkrueger.de",
   "engines": {
@@ -14,7 +14,7 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "git pull && astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -23,9 +23,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "astro check",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy-cf": "pnpm astro build && pnpm wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.6.8",
     "@astrojs/sitemap": "^3.6.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.14.1",
@@ -49,6 +51,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript-eslint": "^8.44.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "wrangler": "^4.40.2"
   }
 }

@@ -1,0 +1,191 @@
+content:
+  - name: cases
+    label: Cases
+    type: collection
+    format: json
+    path: "src/content/cases"
+    filename: "{fields.slug}.{fields.lang}.json"
+    fields:
+      - name: slug
+        label: Slug
+        description: Always include '/' in the slug. 'deutzkrueger.de/slug'
+        type: string
+      - name: lang
+        label: Language
+        type: select
+        options:
+          values: [{ value: en, label: English }, { value: de, label: German }]
+        #required: true
+      - name: title
+        label: Case Title
+        type: text
+        #required: true
+      - name: description
+        label: Case Description
+        type: text
+        #required: true
+      - name: casePreview
+        label: Preview shown on the landing page
+        type: object
+        fields:
+          - name: title
+            label: Preview Title
+            type: text
+          - name: previewImage
+            label: Preview Image
+            type: image
+
+  - name: landingPage
+    label: Landing Page
+    type: collection
+    format: json
+    path: "src/content/pages/landing-page"
+    filename: "{fields.lang}.json"
+    view:
+      primary: hero.headline
+      fields: [lang, hero.headline]
+    fields:
+      - name: lang
+        label: Language
+        type: select
+        options:
+          values: [{ value: en, label: English }, { value: de, label: German }]
+
+      - name: hero
+        label: Hero Section
+        type: object
+        fields:
+          - { name: headline, type: text, label: Headline }
+
+      #      - name: caseShowcase
+      #        label: Case Overview
+      #        type: object
+      #       fields:
+      - name: cases
+        label: Cases
+        type: reference
+        options:
+          collection: "cases"
+        list:
+          collapsible:
+            collapsed: false
+            summary: "{title}"
+          max: 5
+
+      - name: services
+        label: Services
+        type: object
+        list:
+          max: 3
+          collapsible:
+            collapsed: true
+            summary: "{fields.title}"
+        fields:
+          - name: title
+            label: Service Title
+            type: string
+          - name: body
+            label: Service Description
+            type: text
+          - name: icon
+            label: Service Icon
+            type: object
+            fields:
+              - name: iconLogo
+                label: Logo for Icon
+                type: image
+              - name: iconColor
+                label: Icon Color
+                description: The color as a hex value. eg. #425E6B
+                type: string
+
+  - name: aboutPage
+    label: About Page
+    type: collection
+    format: json
+    filename: "{fields.lang}.json"
+    path: "src/content/pages/about"
+    view:
+      fields: [lang, headline]
+      primary: headline
+    fields:
+      - name: lang
+        label: Language
+        type: select
+        options:
+          values: [{ value: en, label: English }, { value: de, label: German }]
+      - { name: headline, type: text, label: Headline }
+      - { name: body, type: text, label: Headline }
+
+  - name: layout
+    label: Layout Settings
+    type: file
+    path: "src/content/settings/layout.json"
+    format: json
+    fields:
+      - name: navigation
+        label: Navigation Settings
+        type: object
+        fields:
+          - name: navItems
+            label: Navigation Links
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{fields.title} | {fields.href}"
+            fields:
+              - name: href
+                label: URL ending
+                description: Always include '/' in the slug. 'deutzkrueger.de/slug'
+                type: string
+              - name: title
+                label: Displayed text
+                type: string
+
+          - name: footerItems
+            label: Footer Links
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{fields.title} | {fields.href}"
+            fields:
+              - name: href
+                label: URL ending
+                description: Always include '/' in the slug. 'deutzkrueger.de/slug'
+                type: string
+              - name: title
+                label: Displayed text
+                type: string
+
+          - name: logo
+            label: Header Logo
+            type: image
+
+  - name: settings
+    label: Site Settings
+    type: file
+    path: "src/content/settings/settings.json"
+    format: json
+    fields:
+      - name: title
+        label: Website title
+        type: string
+
+      - name: description
+        label: Website description
+        type: string
+        description: Will be used for any page with no description.
+
+      - name: url
+        label: Website URL
+        type: string
+        pattern: ^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$
+
+      - name: cover
+        label: Preview image
+        type: image
+        description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
+
+media: src/content/images
