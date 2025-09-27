@@ -210,7 +210,7 @@ content:
                 label: PP body as PDF
                 type: file
                 options:
-                  path: public/documents
+                  media: files
                   categories: [document]
           
 
