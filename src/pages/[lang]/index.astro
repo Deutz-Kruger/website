@@ -13,7 +13,6 @@ export const getStaticPaths = (() => {
 type LandingPageEntry = CollectionEntry<"landing-page">;
 
 const { lang } = Astro.params;
-
 const page: LandingPageEntry | undefined = await getEntry("landing-page", lang);
 
 if (!page) {
@@ -21,7 +20,6 @@ if (!page) {
 }
 
 const { hero, cases, services } = page.data;
-console.log(cases);
 ---
 
 <Layout>

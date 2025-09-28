@@ -1,23 +1,34 @@
 ---
-import { type CollectionEntry } from "astro:content";
-type CasesEntry = CollectionEntry<"cases">;
+import {
+  type CasePaths,
+  extractSlugsFromPaths,
+  resolveCasePreview,
+} from "@/utils/collections.ts";
+
+import CasePreviewCard from "./CasePreviewCard.astro";
 
 interface Props {
-  cases: CasesEntry[];
+  cases: CasePaths;
 }
-
 const { cases } = Astro.props;
+
+const caseSlugs = extractSlugsFromPaths(cases);
+const resolvedCasePreview = await resolveCasePreview(caseSlugs);
 ---
 
 <section>
   {
-    cases.map((c) => (
-      <article>
-        <h2>{c.data.casePreview.title}</h2>
-        {c.data.casePreview.previewImage && (
-          <img alt="case preview" src={c.data.casePreview.previewImage} />
-        )}
-      </article>
-    ))
+    resolvedCasePreview.map((preview) => {
+      const { slug, casePreview } = preview.data;
+      const { title, previewImage } = casePreview;
+      return (
+        <CasePreviewCard
+          imagePath={previewImage}
+          altText={title}
+          title={title}
+          slug={slug}
+        />
+      );
+    })
   }
 </section>
