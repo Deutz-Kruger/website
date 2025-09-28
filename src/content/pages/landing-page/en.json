@@ -16,6 +16,22 @@
         "iconLogo": "/src/content/images/icon_services.svg",
         "iconColor": "#425E6B"
       }
+    },
+    {
+      "title": "Design",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+      "icon": {
+        "iconLogo": "/src/content/images/icon_services.svg",
+        "iconColor": "#9A2B5A"
+      }
+    },
+    {
+      "title": "Development",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team. I also created the corporate design and developed the logo.",
+      "icon": {
+        "iconLogo": "/src/content/images/icon_services.svg",
+        "iconColor": "#618667"
+      }
     }
   ]
 }
