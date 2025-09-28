@@ -1,6 +1,5 @@
 {
-  "navigation": {
-    "navItems": [
+  "navItems": [
       {
         "href": "/bl-thermo",
         "title": "BL thermodynamics"
@@ -21,5 +20,4 @@
       }
     ],
     "logo": "/src/content/images/dk-logo.png"
-  }
 }
