@@ -122,10 +122,7 @@ content:
     path: "src/content/settings/layout.json"
     format: json
     fields:
-      - name: navigation
-        label: Navigation Settings
-        type: object
-        fields:
+
           - name: navItems
             label: Navigation Links
             type: object
