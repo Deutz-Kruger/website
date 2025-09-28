@@ -1,4 +1,23 @@
 ---
-// const { services } = Astro.props;
-// console.log(services);
+import Service from "@components/astro/Service.astro";
+import { servicesSchema } from "@content/config";
+import { z } from "astro:content";
+
+export type Services = z.infer<typeof servicesSchema>;
+
+interface Props {
+  services: Services;
+}
+
+const { services } = Astro.props;
 ---
+
+<section>
+  {
+    services.map((service) => {
+      const { title, body, icon } = service;
+
+      return <Service title={title} body={body} icon={icon} />;
+    })
+  }
+</section>

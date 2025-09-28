@@ -1,6 +1,5 @@
 ---
-import { type ImageMetadata } from "astro";
-import { Image } from "astro:assets";
+import ImageWrapper from "./ImageWrapper.astro";
 
 interface Props {
   imagePath: string;
@@ -27,8 +26,8 @@ if (!images[imagePath])
 
 <a href={slug}>
   <h2>{title}</h2>
-  <Image
-    src={images[imagePath]()}
-    alt={`Highlight of a project done with ${altText}`}
+  <ImageWrapper
+    imagePath={imagePath}
+    altText={`Highlight of a project done with ${altText}`}
   />
 </a>

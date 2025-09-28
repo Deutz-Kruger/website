@@ -1,0 +1,22 @@
+---
+import ImageWrapper from "./ImageWrapper.astro";
+
+interface Props {
+  title: string;
+  body: string;
+  icon: {
+    iconLogo: string;
+    iconColor: string;
+  };
+}
+
+const { title, body, icon } = Astro.props;
+---
+
+<div>
+  <div>
+    <ImageWrapper imagePath={icon.iconLogo} altText="Services Logo" />
+  </div>
+  <h2>{title}</h2>
+  <p>{body}</p>
+</div>
