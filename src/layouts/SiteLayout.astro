@@ -3,10 +3,9 @@ import { type CollectionEntry, getEntry } from "astro:content";
 
 import ImageWrapper from "@/components/astro/ImageWrapper.astro";
 
-const layoutEntry: CollectionEntry<"layout"> | undefined = await getEntry(
-  "layout",
-  "layout",
-);
+export type LayoutData = CollectionEntry<"layout">;
+
+const layoutEntry: LayoutData | undefined = await getEntry("layout", "layout");
 if (!layoutEntry) {
   return new Response(null, { status: 404 });
 }
