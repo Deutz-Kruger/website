@@ -122,42 +122,41 @@ content:
     path: "src/content/settings/layout.json"
     format: json
     fields:
+      - name: navItems
+        label: Navigation Links
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.title} | {fields.href}"
+        fields:
+          - name: href
+            label: URL ending
+            description: Always include '/' in the slug. 'deutzkrueger.de/slug'
+            type: string
+          - name: title
+            label: Displayed text
+            type: string
 
-          - name: navItems
-            label: Navigation Links
-            type: object
-            list:
-              collapsible:
-                collapsed: true
-                summary: "{fields.title} | {fields.href}"
-            fields:
-              - name: href
-                label: URL ending
-                description: Always include '/' in the slug. 'deutzkrueger.de/slug'
-                type: string
-              - name: title
-                label: Displayed text
-                type: string
+      - name: footerItems
+        label: Footer Links
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.title} | {fields.href}"
+        fields:
+          - name: href
+            label: URL ending
+            description: Always include '/' in the slug. 'deutzkrueger.de/slug'
+            type: string
+          - name: title
+            label: Displayed text
+            type: string
 
-          - name: footerItems
-            label: Footer Links
-            type: object
-            list:
-              collapsible:
-                collapsed: true
-                summary: "{fields.title} | {fields.href}"
-            fields:
-              - name: href
-                label: URL ending
-                description: Always include '/' in the slug. 'deutzkrueger.de/slug'
-                type: string
-              - name: title
-                label: Displayed text
-                type: string
-
-          - name: logo
-            label: Header Logo
-            type: image
+      - name: logo
+        label: Header Logo
+        type: image
 
   - name: settings
     label: Site Settings

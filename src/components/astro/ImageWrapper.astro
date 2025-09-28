@@ -5,9 +5,10 @@ import { Image } from "astro:assets";
 interface Props {
   imagePath: string;
   altText: string;
+  className?: string;
 }
 
-const { imagePath, altText } = Astro.props;
+const { imagePath, altText, className = "" } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/content/images/*.{jpeg,jpg,png,gif,svg}",
@@ -18,4 +19,4 @@ if (!images[imagePath])
   );
 ---
 
-<Image src={images[imagePath]()} alt={altText} />
+<Image src={images[imagePath]()} alt={altText} class={` ${className}`} />

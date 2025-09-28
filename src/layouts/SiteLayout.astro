@@ -1,0 +1,38 @@
+---
+import { type CollectionEntry, getEntry } from "astro:content";
+
+import ImageWrapper from "@/components/astro/ImageWrapper.astro";
+
+const layoutEntry: CollectionEntry<"layout"> | undefined = await getEntry(
+  "layout",
+  "layout",
+);
+if (!layoutEntry) {
+  return new Response(null, { status: 404 });
+}
+
+const { navItems, footerItems, logo } = layoutEntry.data;
+---
+
+<header>
+  <a href="/">
+    <ImageWrapper imagePath={logo} altText="Deutz & Krüger Logo" />
+  </a>
+  <nav>
+    {
+      navItems.map((item) => {
+        const { href, title } = item;
+        return <a href={href}>{title}</a>;
+      })
+    }
+  </nav>
+</header>
+<slot />
+<footer>
+  {
+    footerItems.map((item) => {
+      const { href, title } = item;
+      return <a href={href}>{title}</a>;
+    })
+  }
+</footer>

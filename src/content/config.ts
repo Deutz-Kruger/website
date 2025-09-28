@@ -3,6 +3,22 @@ import path from "node:path";
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+export const layoutSchema = z.object({
+  navItems: z.array(
+    z.object({
+      href: z.string(),
+      title: z.string(),
+    }),
+  ),
+  footerItems: z.array(
+    z.object({
+      href: z.string(),
+      title: z.string(),
+    }),
+  ),
+  logo: z.string(),
+});
+
 export const caseSchema = z.object({
   slug: z.string(),
   lang: z.string(),
@@ -54,4 +70,12 @@ const landingPage = defineCollection({
   schema: landingPageSchema,
 });
 
-export const collections = { cases, "landing-page": landingPage };
+const layout = defineCollection({
+  loader: glob({
+    pattern: "layout.json",
+    base: "./src/content/settings",
+  }),
+  schema: layoutSchema,
+});
+
+export const collections = { cases, "landing-page": landingPage, layout };
