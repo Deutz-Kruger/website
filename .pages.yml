@@ -15,15 +15,19 @@ content:
         type: select
         options:
           values: [{ value: en, label: English }, { value: de, label: German }]
-        #required: true
+
       - name: title
         label: Case Title
         type: text
-        #required: true
+        
+      - name: client
+        label: Client Name
+        type: string
+
       - name: description
         label: Case Description
         type: text
-        #required: true
+
       - name: casePreview
         label: Preview shown on the landing page
         type: object
