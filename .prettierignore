@@ -11,3 +11,6 @@ dist
 # lockfiles
 pnpm-lock.yaml
 yarn.lock
+
+# CMS Data
+src/content/**/*.json

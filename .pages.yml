@@ -19,7 +19,7 @@ content:
       - name: title
         label: Case Title
         type: text
-        
+
       - name: client
         label: Client Name
         type: string

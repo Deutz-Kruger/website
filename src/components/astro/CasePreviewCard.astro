@@ -27,5 +27,8 @@ if (!images[imagePath])
 
 <a href={slug}>
   <h2>{title}</h2>
-  <Image src={images[imagePath]()} alt={altText} />
+  <Image
+    src={images[imagePath]()}
+    alt={`Highlight of a project done with ${altText}`}
+  />
 </a>

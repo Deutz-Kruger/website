@@ -19,12 +19,12 @@ const resolvedCasePreview = await resolveCasePreview(caseSlugs);
 <section>
   {
     resolvedCasePreview.map((preview) => {
-      const { slug, casePreview } = preview.data;
+      const { slug, casePreview, client } = preview.data;
       const { title, previewImage } = casePreview;
       return (
         <CasePreviewCard
           imagePath={previewImage}
-          altText={title}
+          altText={client}
           title={title}
           slug={slug}
         />

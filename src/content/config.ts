@@ -3,27 +3,11 @@ import path from "node:path";
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
-/** Case preview resolution
-type CollectionEntry,
-import { getEntry } from "astro:content";
-cases: z
-    .array(z.string())
-    .transform(async (casePaths): Promise<CollectionEntry<"cases">[]> => {
-      const allEntries = await Promise.all(
-        casePaths.map((casePath) => {
-          const slug = path.basename(casePath, ".json");
-          return getEntry("cases", slug);
-        }),
-      );
-      return allEntries.filter(
-        (entry): entry is CollectionEntry<"cases"> => entry !== undefined,
-      );
-    }),
-*/
 export const caseSchema = z.object({
   slug: z.string(),
   lang: z.string(),
   title: z.string(),
+  client: z.string(),
   description: z.string(),
   casePreview: z.object({
     title: z.string(),
