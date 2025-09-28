@@ -191,7 +191,7 @@ content:
           - name: impressum
             label: Impressum
             type: object
-            fields: 
+            fields:
               - name: title
                 label: Impressum Title
                 type: string
@@ -212,19 +212,15 @@ content:
                 options:
                   media: files
                   categories: [document]
-          
-
-    
 
 media:
   - name: images
     label: Images
     input: src/content/images
     output: /src/content/images
-    extensions: [ png, webp, jpg, jpeg, svg ]
+    extensions: [png, webp, jpg, jpeg, svg]
   - name: files
     label: Files & Documents
     input: public/documents
     output: /documents
-    categories: [ document ]
-
+    categories: [document]
