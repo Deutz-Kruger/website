@@ -1,0 +1,13 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getLegalData } from "@/utils/collections";
+
+const legal = await getLegalData();
+
+const { impressum } = legal;
+---
+
+<Layout>
+  <h1>{impressum.title}</h1>
+  <p>{impressum.body}</p>
+</Layout>

@@ -1,0 +1,12 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getLegalData } from "@/utils/collections";
+
+const legal = await getLegalData();
+
+const { privacy } = legal;
+---
+
+<Layout>
+  <h1>{privacy.title}</h1>
+</Layout>

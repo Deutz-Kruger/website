@@ -1,0 +1,9 @@
+---
+import { getLegalData } from "@/utils/collections";
+
+const legal = await getLegalData();
+
+const { privacy } = legal;
+---
+
+<h1>{privacy.title}</h1>
