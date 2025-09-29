@@ -1,23 +1,23 @@
 {
   "navItems": [
-      {
-        "href": "/bl-thermo",
-        "title": "BL thermodynamics"
-      },
-      {
-        "href": "/skaut",
-        "title": "Skaut"
-      },
-      {
-        "href": "/krumphof",
-        "title": "Krumphof"
-      }
-    ],
-    "footerItems": [
-      {
-        "href": "/privacy",
-        "title": "Privacy Policy"
-      }
-    ],
-    "logo": "/src/content/images/dk-logo.png"
+    {
+      "href": "/bl-thermo",
+      "title": "BL thermodynamics"
+    },
+    {
+      "href": "/skaut",
+      "title": "Skaut"
+    },
+    {
+      "href": "/krumphof",
+      "title": "Krumphof"
+    }
+  ],
+  "footerItems": [
+    {
+      "href": "/privacy",
+      "title": "Privacy Policy"
+    }
+  ],
+  "logo": "/src/content/images/dk-logo.png"
 }
