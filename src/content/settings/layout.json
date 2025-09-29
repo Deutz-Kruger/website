@@ -17,6 +17,10 @@
     {
       "href": "/privacy",
       "title": "Privacy Policy"
+    },
+    {
+      "href": "/impressum",
+      "title": "Impressum"
     }
   ],
   "logo": "/src/content/images/dk-logo.png"
