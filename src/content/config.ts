@@ -69,6 +69,12 @@ export const landingPageSchema = z.object({
   services: servicesSchema,
 });
 
+export const aboutSchema = z.object({
+  lang: z.string(),
+  headline: z.string(),
+  body: z.string(),
+});
+
 const cases = defineCollection({
   loader: glob({
     pattern: "**/*.json",
@@ -76,6 +82,14 @@ const cases = defineCollection({
     generateId: ({ entry }) => path.basename(entry, ".json"),
   }),
   schema: caseSchema,
+});
+
+const about = defineCollection({
+  loader: glob({
+    pattern: "**/*.json",
+    base: "./src/content/pages/about",
+  }),
+  schema: aboutSchema,
 });
 
 const landingPage = defineCollection({
@@ -107,4 +121,5 @@ export const collections = {
   "landing-page": landingPage,
   layout,
   settings,
+  about,
 };

@@ -1,0 +1,30 @@
+---
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+
+import Layout from "@/layouts/Layout.astro";
+
+export const getStaticPaths = (() => {
+  return [{ params: { lang: "en" } }, { params: { lang: "de" } }];
+}) satisfies GetStaticPaths;
+
+type AboutPageEntry = CollectionEntry<"about">;
+
+const { lang } = Astro.params;
+
+const page: AboutPageEntry | undefined = await getEntry("about", lang);
+
+if (!page) {
+  return new Response(null, { status: 404 });
+}
+
+const { headline, body } = page.data;
+---
+
+<Layout>
+  <main>
+    <h1>{headline}</h1>
+    <p>{body}</p>
+  </main>
+</Layout>
