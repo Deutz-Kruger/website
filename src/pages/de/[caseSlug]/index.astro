@@ -6,7 +6,9 @@ import ImageWrapper from "@/components/astro/ImageWrapper.astro";
 import Layout from "@/layouts/Layout.astro";
 
 export const getStaticPaths = (async () => {
-  const cases = await getCollection("cases");
+  const cases = await getCollection("cases", (entry) =>
+    entry.id.endsWith(".de"),
+  );
   const paths = cases.map((caseEntry) => {
     const { slug, lang } = caseEntry.data;
     return {
