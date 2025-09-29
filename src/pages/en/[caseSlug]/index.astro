@@ -1,0 +1,49 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+
+import ImageWrapper from "@/components/astro/ImageWrapper.astro";
+import Layout from "@/layouts/Layout.astro";
+
+export const getStaticPaths = (async () => {
+  const cases = await getCollection("cases");
+  const paths = cases.map((caseEntry) => {
+    const { slug } = caseEntry.data;
+    return {
+      params: {
+        caseSlug: slug.replace("/", ""),
+      },
+      props: {
+        caseEntry: caseEntry.data,
+      },
+    };
+  });
+  return paths;
+}) satisfies GetStaticPaths;
+
+interface Props {
+  caseEntry: {
+    lang: string;
+    slug: string;
+    title: string;
+    client: string;
+    description: string;
+    casePreview: {
+      title: string;
+      previewImage: string;
+    };
+  };
+}
+
+const { caseEntry } = Astro.props;
+const { title, client, description, casePreview } = caseEntry;
+---
+
+<Layout>
+  <main>
+    <h1>{title}</h1>
+    <p>{description}</p>
+    <sub>{client}</sub>
+    <ImageWrapper imagePath={casePreview.previewImage} altText={client} />
+  </main>
+</Layout>

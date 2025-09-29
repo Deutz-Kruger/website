@@ -17,6 +17,17 @@ const { SITE_URL, APP_ENV } = loadEnv(
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL || "https://deutzkrueger.de",
+  i18n: {
+    locales: ["en", "de"],
+    defaultLocale: "en",
+    fallback: {
+      de: "en",
+    },
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
+    },
+  },
   integrations: [
     sitemap({
       changefreq: "monthly",
@@ -49,7 +60,4 @@ export default defineConfig({
       },
     },
   }),
-  redirects: {
-    "/": "/en",
-  },
 });

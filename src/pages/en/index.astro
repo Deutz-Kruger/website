@@ -1,0 +1,29 @@
+---
+import CasePreview from "@components/astro/CasePreview.astro";
+import Hero from "@components/astro/Hero.astro";
+import Services from "@components/astro/Services.astro";
+import Layout from "@layouts/Layout.astro";
+import { type CollectionEntry, getEntry } from "astro:content";
+
+type LandingPageEntry = CollectionEntry<"landing-page">;
+
+const lang = Astro.currentLocale;
+const page: LandingPageEntry | undefined = await getEntry(
+  "landing-page",
+  lang ?? "en",
+);
+
+if (!page) {
+  return new Response(null, { status: 404 });
+}
+
+const { hero, cases, services } = page.data;
+---
+
+<Layout>
+  <Hero hero={hero} />
+  <main>
+    <CasePreview cases={cases} />
+    <Services services={services} />
+  </main>
+</Layout>

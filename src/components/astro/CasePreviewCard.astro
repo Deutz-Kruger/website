@@ -1,4 +1,6 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
 import ImageWrapper from "./ImageWrapper.astro";
 
 interface Props {
@@ -15,16 +17,10 @@ const {
   slug,
 } = Astro.props;
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/content/images/*.{jpeg,jpg,png,gif,svg}",
-);
-if (!images[imagePath])
-  throw new Error(
-    `"${imagePath}" does not exist in glob: "src/content/images/*.{jpeg,jpg,png,gif}"`,
-  );
+const lang = Astro.currentLocale ?? "en";
 ---
 
-<a href={slug}>
+<a href={getRelativeLocaleUrl(lang, slug)}>
   <h2>{title}</h2>
   <ImageWrapper
     imagePath={imagePath}

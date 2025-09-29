@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+
+import Layout from "@/layouts/Layout.astro";
+
+type AboutPageEntry = CollectionEntry<"about">;
+
+const lang = Astro.currentLocale;
+
+const page: AboutPageEntry | undefined = await getEntry("about", lang ?? "en");
+
+if (!page) {
+  return new Response(null, { status: 404 });
+}
+
+const { headline, body } = page.data;
+---
+
+<Layout>
+  <main>
+    <h1>{headline}</h1>
+    <p>{body}</p>
+  </main>
+</Layout>

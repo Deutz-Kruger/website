@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry, getEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 
 import ImageWrapper from "@/components/astro/ImageWrapper.astro";
 
@@ -9,19 +10,20 @@ const layoutEntry: LayoutData | undefined = await getEntry("layout", "layout");
 if (!layoutEntry) {
   return new Response(null, { status: 404 });
 }
+const lang = Astro.currentLocale ?? "en";
 
 const { navItems, footerItems, logo } = layoutEntry.data;
 ---
 
 <header>
-  <a href="/">
+  <a href={getRelativeLocaleUrl(lang, "/")}>
     <ImageWrapper imagePath={logo} altText="Deutz & Krüger Logo" />
   </a>
   <nav>
     {
       navItems.map((item) => {
         const { href, title } = item;
-        return <a href={href}>{title}</a>;
+        return <a href={getRelativeLocaleUrl(lang, href)}>{title}</a>;
       })
     }
   </nav>
@@ -31,7 +33,7 @@ const { navItems, footerItems, logo } = layoutEntry.data;
   {
     footerItems.map((item) => {
       const { href, title } = item;
-      return <a href={href}>{title}</a>;
+      return <a href={getRelativeLocaleUrl(lang, href)}>{title}</a>;
     })
   }
 </footer>
