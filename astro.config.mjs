@@ -47,6 +47,11 @@ export default defineConfig({
     ssr: {
       external: ["node:path", "node:crypto", "node:fs/promises", "node:url"],
     },
+    server: {
+      watch: {
+        ignored: ["**/*.astro.tsx"],
+      },
+    },
     // @ts-expect-error Compat issues with vite 7 and plugin typing
     plugins: [tailwindcss()],
   },
