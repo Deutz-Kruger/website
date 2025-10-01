@@ -218,7 +218,7 @@ media:
     label: Media
     input: src/content/media
     output: /src/content/media
-    extensions: [png, webp, jpg, jpeg, svg]
+    extensions: [png, webp, jpg, jpeg, svg, mp4, mov, webm]
   - name: files
     label: Files & Documents
     input: public/documents
