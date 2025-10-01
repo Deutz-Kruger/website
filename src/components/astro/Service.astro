@@ -1,17 +1,11 @@
 ---
+import { type z } from "astro:content";
+
+import { servicesSchema } from "@/content/config";
+
 import ImageWrapper from "./ImageWrapper.astro";
 
-interface Props {
-  title: string;
-  body: string;
-  icon: {
-    iconLogo: {
-      image: string;
-      alt: string;
-    };
-    iconColor: string;
-  };
-}
+type Props = z.infer<typeof servicesSchema.element>;
 
 const { title, body, icon } = Astro.props;
 ---

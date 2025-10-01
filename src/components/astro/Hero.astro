@@ -1,4 +1,14 @@
 ---
+import { type z } from "astro:content";
+
+import { landingPageSchema } from "@/content/config";
+
+type Hero = z.infer<typeof landingPageSchema.shape.hero>;
+
+interface Props {
+  hero: Hero;
+}
+
 const { hero } = Astro.props;
 ---
 

@@ -1,29 +1,23 @@
 ---
+import { type z } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
+
+import { caseSchema } from "@/content/config";
 
 import ImageWrapper from "./ImageWrapper.astro";
 
-interface Props {
-  imagePath: string;
-  altText: string;
-  title: string;
+type CasePreview = z.infer<typeof caseSchema.shape.casePreview>;
+
+interface Props extends CasePreview {
   slug: string;
 }
 
-const {
-  imagePath,
-  altText = "Preview for client case",
-  title,
-  slug,
-} = Astro.props;
+const { previewImage, title, slug } = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
 ---
 
 <a href={getRelativeLocaleUrl(lang, slug)}>
   <h2>{title}</h2>
-  <ImageWrapper
-    src={imagePath}
-    altText={`Highlight of a project done with ${altText}`}
-  />
+  <ImageWrapper src={previewImage.image} altText={previewImage.alt} />
 </a>

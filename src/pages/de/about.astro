@@ -6,9 +6,9 @@ import Layout from "@/layouts/Layout.astro";
 
 type AboutPageEntry = CollectionEntry<"about">;
 
-const lang = Astro.currentLocale;
+const lang = Astro.currentLocale ?? "en";
 
-const page: AboutPageEntry | undefined = await getEntry("about", lang ?? "en");
+const page: AboutPageEntry | undefined = await getEntry("about", lang);
 
 if (!page) {
   return new Response(null, { status: 404 });

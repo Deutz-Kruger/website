@@ -1,8 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection, type z } from "astro:content";
 
 import ImageWrapper from "@/components/astro/ImageWrapper.astro";
+import { caseSchema } from "@/content/config";
 import Layout from "@/layouts/Layout.astro";
 
 export const getStaticPaths = (async () => {
@@ -23,25 +24,15 @@ export const getStaticPaths = (async () => {
   return paths;
 }) satisfies GetStaticPaths;
 
+export type CaseEntry = z.infer<typeof caseSchema>;
+
 interface Props {
-  caseEntry: {
-    lang: string;
-    slug: string;
-    title: string;
-    client: string;
-    description: string;
-    casePreview: {
-      title: string;
-      previewImage: {
-        image: string;
-        alt: string;
-      };
-    };
-  };
+  caseEntry: CaseEntry;
 }
 
 const { caseEntry } = Astro.props;
-const { title, client, description, casePreview } = caseEntry;
+const { client, blocks, casePreview } = caseEntry;
+console.log(blocks);
 ---
 
 <Layout>
@@ -49,8 +40,5 @@ const { title, client, description, casePreview } = caseEntry;
     <div>
       <ImageWrapper src={casePreview.previewImage.image} altText={client} />
     </div>
-    <h1>{title}</h1>
-    <p>{description}</p>
-    <sub>{client}</sub>
   </main>
 </Layout>
