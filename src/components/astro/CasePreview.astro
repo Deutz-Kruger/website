@@ -23,7 +23,7 @@ const resolvedCasePreview = await resolveCasePreview(caseSlugs);
       const { title, previewImage } = casePreview;
       return (
         <CasePreviewCard
-          imagePath={previewImage}
+          imagePath={previewImage.image}
           altText={client}
           title={title}
           slug={slug}

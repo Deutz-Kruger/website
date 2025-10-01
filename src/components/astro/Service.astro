@@ -5,7 +5,10 @@ interface Props {
   title: string;
   body: string;
   icon: {
-    iconLogo: string;
+    iconLogo: {
+      image: string;
+      alt: string;
+    };
     iconColor: string;
   };
 }
@@ -15,7 +18,7 @@ const { title, body, icon } = Astro.props;
 
 <div>
   <div>
-    <ImageWrapper src={icon.iconLogo} altText="Services Logo" />
+    <ImageWrapper src={icon.iconLogo.image} altText="Services Logo" />
   </div>
   <h2>{title}</h2>
   <p>{body}</p>

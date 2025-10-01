@@ -12,11 +12,11 @@ interface Props {
 const { src, altText, className = "", loading = "lazy" } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/content/images/*.{jpeg,jpg,png,gif,svg}",
+  "/src/content/media/*.{jpeg,jpg,png,gif,svg}",
 );
 if (!images[src])
   throw new Error(
-    `"${src}" does not exist in glob: "src/content/images/*.{jpeg,jpg,png,gif}"`,
+    `"${src}" does not exist in glob: "src/content/media/*.{jpeg,jpg,png,gif}"`,
   );
 ---
 

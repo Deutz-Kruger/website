@@ -3,6 +3,34 @@ import path from "node:path";
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+const caseTitleBlock = z.object({
+  _block: z.literal("caseTitle"),
+  title: z.string(),
+  subHeading: z.string(),
+});
+
+const caseVideoBlock = z.object({
+  _block: z.literal("caseVideo"),
+  video: z.string(),
+  animatedBg: z.boolean(),
+});
+
+const caseImageTextBlock = z.object({
+  _block: z.literal("caseImageText"),
+  image: z.object({
+    image: z.string(),
+    alt: z.string(),
+  }),
+  text: z.string(),
+  textRight: z.boolean(),
+});
+
+const blocksUnion = z.discriminatedUnion("_block", [
+  caseTitleBlock,
+  caseVideoBlock,
+  caseImageTextBlock,
+]);
+
 export const settingsSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -32,18 +60,23 @@ export const layoutSchema = z.object({
       title: z.string(),
     }),
   ),
-  logo: z.string(),
+  logo: z.object({
+    image: z.string(),
+    alt: z.string(),
+  }),
 });
 
 export const caseSchema = z.object({
   slug: z.string(),
   lang: z.string(),
-  title: z.string(),
   client: z.string(),
-  description: z.string(),
+  blocks: z.array(blocksUnion),
   casePreview: z.object({
     title: z.string(),
-    previewImage: z.string(),
+    previewImage: z.object({
+      image: z.string(),
+      alt: z.string(),
+    }),
   }),
 });
 
@@ -52,7 +85,10 @@ export const servicesSchema = z.array(
     title: z.string(),
     body: z.string(),
     icon: z.object({
-      iconLogo: z.string(),
+      iconLogo: z.object({
+        image: z.string(),
+        alt: z.string(),
+      }),
       iconColor: z.string(),
     }),
   }),
