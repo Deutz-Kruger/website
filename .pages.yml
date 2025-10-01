@@ -216,6 +216,11 @@ components:
   case-row:
     label: Case Row
     description: On desktop, 1 case row is the width of the full screen
+    type: block
+    blocks:
+      - name: case-block
+        label: Case Block
+        component: case-block
     list: true
 
   case-block:
