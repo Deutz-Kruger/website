@@ -227,13 +227,60 @@ components:
     label: Case Block
     description: On desktop, 1 case block is the width of half the screen
     list: true
+    type: block
+    blocks:
+      - name: case-video
+        label: Case Video Block
+        component: case-video
 
   case-video:
-    label: Case Video
-    description: A case video is as big as a case block
-    type: file
-    options:
-      categories: [video]
+    label: Case Video Block
+    description: This is as big as a case block
+    type: object
+    fields:
+      - name: video
+        label: Video File
+        type: file
+        options:
+          categories: [video]
+      - name: animatedBg
+        label: Animated Background?
+        type: boolean
+        default: false
+        
+  case-image:
+    label: Case Image Block
+    description: This is as big as a case block
+    type: object
+    fields:
+      - name: image
+        label: Image File
+        type: file
+        options:
+          categories: [image]
+      - name: animatedBg
+        label: Animated Background?
+        type: boolean
+        default: false
+
+  case-image-text:
+    label: Case Image & Text
+    description: This is as big as a case block
+    type: object
+    fields:
+      - name: image
+        label: Image File
+        type: file
+        options:
+          categories: [image]
+      - name: text
+        label: Text next to image
+        type: text
+      - name: textRight
+        label: Text align right?
+        type: boolean
+        default: false
+    
   
 
 media:
