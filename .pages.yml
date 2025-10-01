@@ -77,7 +77,7 @@ content:
         list:
           max: 3
           collapsible:
-            collapsed: true
+            collapsed: false
             summary: "{fields.title}"
         fields:
           - name: title
