@@ -11,7 +11,10 @@
       "title": "Branding",
       "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
       "icon": {
-        "iconLogo": "/src/content/media/icon_services.svg",
+        "iconLogo": {
+          "image": "/src/content/media/icon_services.svg",
+          "alt": "DK logo for services"
+        },
         "iconColor": "#425E6B"
       }
     },
@@ -19,7 +22,10 @@
       "title": "Design",
       "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
       "icon": {
-        "iconLogo": "/src/content/media/icon_services.svg",
+        "iconLogo": {
+          "image": "/src/content/media/icon_services.svg",
+          "alt": "DK logo for services"
+        },
         "iconColor": "#9A2B5A"
       }
     },
@@ -27,7 +33,10 @@
       "title": "Development",
       "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team. I also created the corporate design and developed the logo.",
       "icon": {
-        "iconLogo": "/src/content/media/icon_services.svg",
+        "iconLogo": {
+          "image": "/src/content/media/icon_services.svg",
+          "alt": "DK logo for services"
+        },
         "iconColor": "#618667"
       }
     }
