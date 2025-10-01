@@ -257,9 +257,7 @@ components:
     fields:
       - name: image
         label: Image File
-        type: file
-        options:
-          categories: [image]
+        component: image
       - name: animatedBg
         label: Animated Background?
         type: boolean
@@ -272,9 +270,7 @@ components:
     fields:
       - name: image
         label: Image File
-        type: file
-        options:
-          categories: [image]
+        component: image
       - name: text
         label: Text next to image
         type: text
@@ -290,9 +286,7 @@ components:
     fields:
       - name: image
         label: Image File
-        type: file
-        options:
-          categories: [image]
+        component: image
       - name: animatedBg
         label: Animated Background?
         type: boolean
@@ -305,9 +299,7 @@ components:
     fields:
       - name: image
         label: Image File
-        type: file
-        options:
-          categories: [image]
+        component: image
       - name: text
         label: Text next to image
         type: text
