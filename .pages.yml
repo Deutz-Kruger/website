@@ -213,7 +213,7 @@ content:
                   media: files
                   categories: [document]
 components:
-  case-row:
+  caseRow:
     label: Case Row
     description: On desktop, 1 case row is the width of the full screen
     type: block
@@ -223,17 +223,17 @@ components:
         component: case-block
     list: true
 
-  case-block:
+  caseBlock:
     label: Case Block
     description: On desktop, 1 case block is the width of half the screen
     list: true
     type: block
     blocks:
-      - name: case-video
+      - name: caseVideo
         label: Case Video Block
-        component: case-video
+        component: caseVideo
 
-  case-video:
+  caseVideo:
     label: Case Video Block
     description: This is as big as a case block
     type: object
@@ -248,7 +248,7 @@ components:
         type: boolean
         default: false
         
-  case-image:
+  caseImage:
     label: Case Image Block
     description: This is as big as a case block
     type: object
@@ -263,7 +263,7 @@ components:
         type: boolean
         default: false
 
-  case-image-text:
+  caseImageText:
     label: Case Image & Text
     description: This is as big as a case block
     type: object
@@ -280,8 +280,36 @@ components:
         label: Text align right?
         type: boolean
         default: false
-    
-  
+        
+  caseImageFull:
+    label: Case Image Full Width
+    description: This is a whole screen wide
+    type: object
+    fields:
+      - name: image
+        label: Image File
+        type: file
+        options:
+          categories: [image]
+      - name: animatedBg
+        label: Animated Background?
+        type: boolean
+        default: false
+        
+  caseImageTextFull:
+    label: Case Image & Text Full Width
+    description: This is a whole screen wide
+    type: object
+    fields:
+      - name: image
+        label: Image File
+        type: file
+        options:
+          categories: [image]
+      - name: textRight
+        label: Text align right?
+        type: boolean
+        default: false
 
 media:
   - name: media
