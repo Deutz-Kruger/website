@@ -232,50 +232,6 @@ content:
                   media: files
                   categories: [document]
 components:
-  caseRow:
-    label: Row
-    description: On desktop, 1 row is the width of the full screen
-    type: block
-    blocks:
-      - name: caseVideo
-        label: Video Block
-        component: caseVideo
-      - name: caseImage
-        label: Image Block
-        component: caseImage
-      - name: caseImageText
-        label: Image & Text
-        component: caseImageText
-      - name: caseImageFull
-        label: Image Full Width
-        component: caseImageFull
-      - name: caseImageTextFull
-        label: Image & Text Full Width
-        component: caseImageTextFull
-    list: true
-
-  caseBlock:
-    label: Block
-    description: On desktop, 1 block is the width of half the screen
-    list: true
-    type: block
-    blocks:
-      - name: caseVideo
-        label: Video Block
-        component: caseVideo
-      - name: caseImage
-        label: Image Block
-        component: caseImage
-      - name: caseImageText
-        label: Image & Text
-        component: caseImageText
-      - name: caseImageFull
-        label: Image Full Width
-        component: caseImageFull
-      - name: caseImageTextFull
-        label: Image & Text Full Width
-        component: caseImageTextFull
-
   caseVideo:
     label: Video Block
     description: This is as big as a case block
