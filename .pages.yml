@@ -33,9 +33,21 @@ content:
         type: block
         list: true
         blocks:
-          - name: caseRow
-            label: Rows
-            component: caseRow
+          - name: caseVideo
+            label: Video Block
+            component: caseVideo
+          - name: caseImage
+            label: Image Block
+            component: caseImage
+          - name: caseImageText
+            label: Image & Text
+            component: caseImageText
+          - name: caseImageFull
+            label: Image Full Width
+            component: caseImageFull
+          - name: caseImageTextFull
+            label: Image & Text Full Width
+            component: caseImageTextFull
 
       - name: casePreview
         label: Preview shown on the landing page
