@@ -25,7 +25,10 @@
     },
     {
       "_block": "caseImageText",
-      "image": "/src/content/media/tower_in_sunset.png",
+      "image": {
+        "image": "/src/content/media/tower_in_sunset.png",
+        "alt": "A rectification column in an industrial setting"
+      },
       "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
       "textRight": false
     },
@@ -37,6 +40,9 @@
   ],
   "casePreview": {
     "title": "BL thermodynamics Website Re-Design.",
-    "previewImage": "/src/content/media/blt_preview.png"
+    "previewImage": {
+      "image": "/src/content/media/blt_preview.png",
+      "alt": "The logo of BL thermodynamics in a dot matrix"
+    }
   }
 }
