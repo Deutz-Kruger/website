@@ -2,6 +2,13 @@
   "slug": "/skaut",
   "lang": "en",
   "client": "SKAUT",
+  "blocks": [
+    {
+      "_block": "caseTitle",
+      "title": "SKAUT Branding & Backoffice Ticketing System",
+      "subHeading": "Do ipsum aliqua consectetur sint. Do laboris est tempor anim ut amet incididunt enim non consectetur ex anim. Aliqua officia aliquip labore esse."
+    }
+  ],
   "casePreview": {
     "title": "SKAUT Branding & Backoffice Ticketing System",
     "previewImage": {
