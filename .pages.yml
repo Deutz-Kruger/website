@@ -28,6 +28,14 @@ content:
         label: Case Description
         type: text
 
+      - name: blocks
+        label: Blocks
+        type: block
+        blocks:
+          - name: caseRow
+            label: Rows
+            component: caseRow
+
       - name: casePreview
         label: Preview shown on the landing page
         type: object
