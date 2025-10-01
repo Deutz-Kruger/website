@@ -23,7 +23,7 @@ const lang = Astro.currentLocale ?? "en";
 <a href={getRelativeLocaleUrl(lang, slug)}>
   <h2>{title}</h2>
   <ImageWrapper
-    imagePath={imagePath}
+    src={imagePath}
     altText={`Highlight of a project done with ${altText}`}
   />
 </a>

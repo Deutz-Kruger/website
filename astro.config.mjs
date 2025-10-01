@@ -44,11 +44,14 @@ export default defineConfig({
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
+    ssr: {
+      external: ["node:path", "node:crypto", "node:fs/promises", "node:url"],
+    },
     // @ts-expect-error Compat issues with vite 7 and plugin typing
     plugins: [tailwindcss()],
   },
   adapter: cloudflare({
-    imageService: "compile",
+    imageService: "cloudflare",
     platformProxy: {
       enabled: true,
       configPath: "wrangler.jsonc",
