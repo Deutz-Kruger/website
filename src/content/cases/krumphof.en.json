@@ -1,11 +1,12 @@
 {
   "slug": "/krumphof",
   "lang": "en",
-  "title": "Krumphof",
   "client": "Krumphof",
-  "description": "Dolore sit officia esse tempor voluptate elit cupidatat labore elit dolor. Laboris ipsum enim tempor id velit exercitation ad fugiat enim labore in ullamco voluptate do.",
   "casePreview": {
     "title": "Krumphof",
-    "previewImage": "/src/content/media/krumphof_preview.png"
+    "previewImage": {
+      "image": "/src/content/media/krumphof_preview.png",
+      "alt": "Krumphof promotional flyer"
+    }
   }
 }
