@@ -1,0 +1,30 @@
+{
+  "navItems": [
+    {
+      "href": "/bl-thermo",
+      "title": "BL thermodynamics"
+    },
+    {
+      "href": "/skaut",
+      "title": "SKAUT"
+    },
+    {
+      "href": "/krumphof",
+      "title": "Krumphof"
+    }
+  ],
+  "footerItems": [
+    {
+      "href": "/impressum",
+      "title": "Impressum"
+    },
+    {
+      "href": "/privacy",
+      "title": "Privacy Policy"
+    }
+  ],
+  "logo": {
+    "image": "/src/content/media/dk-logo.png",
+    "alt": "DK Logo"
+  }
+}
