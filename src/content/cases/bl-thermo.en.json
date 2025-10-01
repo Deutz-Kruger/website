@@ -1,9 +1,40 @@
 {
   "slug": "/bl-thermo",
   "lang": "en",
-  "title": "BL thermodynamics Website Re-Design.",
   "client": "BL thermodynamics",
-  "description": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+  "blocks": [
+    {
+      "_block": "caseTitle",
+      "title": "BL thermodynamics Website Re-Design",
+      "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features."
+    },
+    {
+      "_block": "caseVideo",
+      "video": "/src/content/media/key_visual 3-compressed.mp4",
+      "animatedBg": false
+    },
+    {
+      "_block": "caseVideo",
+      "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
+      "animatedBg": true
+    },
+    {
+      "_block": "caseVideo",
+      "video": "/src/content/media/concept_reality 1-compressed.mp4",
+      "animatedBg": false
+    },
+    {
+      "_block": "caseImageText",
+      "image": "/src/content/media/tower_in_sunset.png",
+      "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+      "textRight": false
+    },
+    {
+      "_block": "caseVideo",
+      "video": "/src/content/media/mission 4-compressed.mp4",
+      "animatedBg": false
+    }
+  ],
   "casePreview": {
     "title": "BL thermodynamics Website Re-Design.",
     "previewImage": "/src/content/media/blt_preview.png"
