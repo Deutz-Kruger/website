@@ -114,7 +114,7 @@ content:
         options:
           values: [{ value: en, label: English }, { value: de, label: German }]
       - { name: headline, type: text, label: Headline }
-      - { name: body, type: text, label: Headline }
+      - { name: body, type: text, label: Body }
 
   - name: layout
     label: Layout Settings
