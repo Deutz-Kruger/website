@@ -214,8 +214,8 @@ content:
                   categories: [document]
 
 media:
-  - name: images
-    label: Images
+  - name: media
+    label: Media
     input: src/content/media
     output: /src/content/media
     extensions: [png, webp, jpg, jpeg, svg]
