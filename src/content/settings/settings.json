@@ -1,0 +1,19 @@
+{
+  "title": "Deutz & Krüger",
+  "description": "We are Manuel Krüger and Marvin Deutz, a design and creative development* duo based in Berlin. Together, we create brands and digital experiences* that connect clarity in design with creativity in technology.",
+  "url": "https://deutzkrueger.de",
+  "cover": {
+    "image": "/src/content/media/dk-logo.png",
+    "alt": "DK Logo"
+  },
+  "legal": {
+    "impressum": {
+      "title": "Impressum",
+      "body": "Elit tempor cillum tempor officia non aute. Veniam consequat deserunt nostrud aliquip ex est nulla ea aute sunt incididunt ipsum. In consequat consectetur pariatur duis consectetur. Laboris ipsum eu aliquip sunt."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "body": "/documents/recherche_gruendung.pdf"
+    }
+  }
+}
