@@ -114,7 +114,7 @@ content:
             fields:
               - name: iconLogo
                 label: Logo for Icon
-                type: image
+                component: image
               - name: iconColor
                 label: Icon Color
                 description: The color as a hex value. eg. #425E6B
