@@ -1,12 +1,12 @@
 {
   "lang": "de",
   "hero": {
-    "headline": "TEST"
+    "headline": "Consectetur dolore sunt aliquip nisi velit non exercitation deserunt laborum consectetur aliquip culpa mollit dolor. Deserunt tempor commodo veniam excepteur ullamco qui minim. Sint pariatur irure occaecat ex aliquip pariatur consectetur sint incididunt non deserunt aliquip nisi."
   },
   "cases": [
-    "src/content/cases/krumphof.en.json",
     "src/content/cases/bl-thermo.en.json",
-    "src/content/cases/skaut.en.json"
+    "src/content/cases/skaut.en.json",
+    "src/content/cases/krumphof.en.json"
   ],
   "services": [
     {
