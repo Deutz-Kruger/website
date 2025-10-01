@@ -27,5 +27,8 @@
       "title": "Impressum"
     }
   ],
-  "logo": "/src/content/images/dk-logo.png"
+  "logo": {
+    "image": "/src/content/media/dk-logo.png",
+    "alt": "Deutz & Krüger Logo"
+  }
 }
