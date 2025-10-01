@@ -351,6 +351,9 @@ components:
         type: file
         options:
           categories: [image]
+      - name: text
+        label: Text next to image
+        type: text
       - name: textRight
         label: Text align right?
         type: boolean
