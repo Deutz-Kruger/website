@@ -31,6 +31,7 @@ content:
       - name: blocks
         label: Blocks
         type: block
+        list: true
         blocks:
           - name: caseRow
             label: Rows
@@ -226,9 +227,21 @@ components:
     description: On desktop, 1 row is the width of the full screen
     type: block
     blocks:
-      - name: case-block
-        label: Case Block
-        component: case-block
+      - name: caseVideo
+        label: Video Block
+        component: caseVideo
+      - name: caseImage
+        label: Image Block
+        component: caseImage
+      - name: caseImageText
+        label: Image & Text
+        component: caseImageText
+      - name: caseImageFull
+        label: Image Full Width
+        component: caseImageFull
+      - name: caseImageTextFull
+        label: Image & Text Full Width
+        component: caseImageTextFull
     list: true
 
   caseBlock:
