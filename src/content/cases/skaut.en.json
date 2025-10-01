@@ -1,11 +1,12 @@
 {
   "slug": "/skaut",
   "lang": "en",
-  "title": "SKAUT Branding & Backoffice Ticketing System",
   "client": "SKAUT",
-  "description": "Qui nostrud ad elit. Veniam minim magna velit aute minim enim ut incididunt.",
   "casePreview": {
     "title": "SKAUT Branding & Backoffice Ticketing System",
-    "previewImage": "/src/content/media/skaut_preview.png"
+    "previewImage": {
+      "image": "/src/content/media/skaut_preview.png",
+      "alt": "SKAUT logo"
+    }
   }
 }
