@@ -1,0 +1,19 @@
+{
+  "slug": "/krumphof",
+  "lang": "en",
+  "client": "Krumphof",
+  "blocks": [
+    {
+      "_block": "caseTitle",
+      "title": "Krumphof",
+      "subHeading": "Laborum ea tempor excepteur sunt nostrud amet laborum consequat pariatur ea dolor elit exercitation quis. Eu laboris amet sit enim culpa sunt amet duis culpa qui ea amet nulla. Incididunt excepteur enim commodo do anim ad."
+    }
+  ],
+  "casePreview": {
+    "title": "Krumphof",
+    "previewImage": {
+      "image": "/src/content/media/krumphof_preview.png",
+      "alt": "Krumphof Flyer"
+    }
+  }
+}
