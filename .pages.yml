@@ -326,6 +326,20 @@ components:
       - name: subHeading
         label: Case Subheading
         type: text
+        
+  image:
+    label: Image File
+    type: object
+    fields:
+      - name: image
+        label: Image File
+        type: file
+        options:
+          categories: [image]
+      - name: alt
+        label: Alt Text
+        type: string
+        
 
 media:
   - name: media
