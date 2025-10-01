@@ -214,8 +214,8 @@ content:
                   categories: [document]
 components:
   caseRow:
-    label: Case Row
-    description: On desktop, 1 case row is the width of the full screen
+    label: Row
+    description: On desktop, 1 row is the width of the full screen
     type: block
     blocks:
       - name: case-block
@@ -224,17 +224,29 @@ components:
     list: true
 
   caseBlock:
-    label: Case Block
-    description: On desktop, 1 case block is the width of half the screen
+    label: Block
+    description: On desktop, 1 block is the width of half the screen
     list: true
     type: block
     blocks:
       - name: caseVideo
-        label: Case Video Block
+        label: Video Block
         component: caseVideo
+      - name: caseImage
+        label: Image Block
+        component: caseImage
+      - name: caseImageText
+        label: Image & Text
+        component: caseImageText
+      - name: caseImageFull
+        label: Image Full Width
+        component: caseImageFull
+      - name: caseImageTextFull
+        label: Image & Text Full Width
+        component: caseImageTextFull
 
   caseVideo:
-    label: Case Video Block
+    label: Video Block
     description: This is as big as a case block
     type: object
     fields:
@@ -249,8 +261,8 @@ components:
         default: false
         
   caseImage:
-    label: Case Image Block
-    description: This is as big as a case block
+    label: Image Block
+    description: This is as big as a block
     type: object
     fields:
       - name: image
@@ -264,8 +276,8 @@ components:
         default: false
 
   caseImageText:
-    label: Case Image & Text
-    description: This is as big as a case block
+    label: Image & Text
+    description: This is as big as a block
     type: object
     fields:
       - name: image
@@ -282,7 +294,7 @@ components:
         default: false
         
   caseImageFull:
-    label: Case Image Full Width
+    label: Image Full Width
     description: This is a whole screen wide
     type: object
     fields:
@@ -297,7 +309,7 @@ components:
         default: false
         
   caseImageTextFull:
-    label: Case Image & Text Full Width
+    label: Image & Text Full Width
     description: This is a whole screen wide
     type: object
     fields:
