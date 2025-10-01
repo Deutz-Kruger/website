@@ -59,7 +59,7 @@ content:
             type: text
           - name: previewImage
             label: Preview Image
-            type: image
+            component: image
 
   - name: landingPage
     label: Landing Page
@@ -178,7 +178,7 @@ content:
 
       - name: logo
         label: Header Logo
-        type: image
+        component: image
 
   - name: settings
     label: Site Settings
@@ -202,7 +202,7 @@ content:
 
       - name: cover
         label: Preview image
-        type: image
+        component: image
         description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
 
       - name: legal
