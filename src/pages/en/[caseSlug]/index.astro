@@ -32,7 +32,10 @@ interface Props {
     description: string;
     casePreview: {
       title: string;
-      previewImage: string;
+      previewImage: {
+        image: string;
+        alt: string;
+      };
     };
   };
 }
@@ -44,7 +47,7 @@ const { title, client, description, casePreview } = caseEntry;
 <Layout>
   <main>
     <div>
-      <ImageWrapper src={casePreview.previewImage} altText={client} />
+      <ImageWrapper src={casePreview.previewImage.image} altText={client} />
     </div>
     <h1>{title}</h1>
     <p>{description}</p>
