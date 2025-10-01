@@ -216,8 +216,8 @@ content:
 media:
   - name: images
     label: Images
-    input: src/content/images
-    output: /src/content/images
+    input: src/content/media
+    output: /src/content/media
     extensions: [png, webp, jpg, jpeg, svg]
   - name: files
     label: Files & Documents
