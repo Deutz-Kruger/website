@@ -212,6 +212,24 @@ content:
                 options:
                   media: files
                   categories: [document]
+components:
+  case-row:
+    label: Case Row
+    description: On desktop, 1 case row is the width of the full screen
+    list: true
+
+  case-block:
+    label: Case Block
+    description: On desktop, 1 case block is the width of half the screen
+    list: true
+
+  case-video:
+    label: Case Video
+    description: A case video is as big as a case block
+    type: file
+    options:
+      categories: [video]
+  
 
 media:
   - name: media
