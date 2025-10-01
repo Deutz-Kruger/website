@@ -15,18 +15,16 @@ content:
         type: select
         options:
           values: [{ value: en, label: English }, { value: de, label: German }]
-
-      - name: title
-        label: Case Title
-        type: text
-
       - name: client
         label: Client Name
         type: string
 
-      - name: description
-        label: Case Description
-        type: text
+      #- name: title
+      #  label: Case Title
+      #  type: text
+      #- name: description
+      #  label: Case Description
+      #  type: text
 
       - name: blocks
         label: Blocks
