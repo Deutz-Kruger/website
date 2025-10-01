@@ -31,6 +31,9 @@ content:
         type: block
         list: true
         blocks:
+          - name: caseTitle
+            label: Case Title
+            component: caseTitle
           - name: caseVideo
             label: Video Block
             component: caseVideo
@@ -312,6 +315,17 @@ components:
         label: Text align right?
         type: boolean
         default: false
+        
+  caseTitle:
+    label: Case Title
+    type: object
+    fields:
+      - name: title
+        label: Case Title
+        type: string
+      - name: subHeading
+        label: Case Subheading
+        type: text
 
 media:
   - name: media
