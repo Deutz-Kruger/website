@@ -36,6 +36,31 @@
       "_block": "caseVideo",
       "video": "/src/content/media/mission 4-compressed.mp4",
       "animatedBg": false
+    },
+    {
+      "_block": "caseImageFull",
+      "image": {
+        "image": "/src/content/media/skaut_preview.png",
+        "alt": "Test Block"
+      },
+      "animatedBg": false
+    },
+    {
+      "_block": "caseImage",
+      "image": {
+        "image": "/src/content/media/tower_in_sunset.png",
+        "alt": "Test Block"
+      },
+      "animatedBg": false
+    },
+    {
+      "_block": "caseImageTextFull",
+      "image": {
+        "image": "/src/content/media/tower_in_sunset.png",
+        "alt": "Test Block"
+      },
+      "text": "Proident esse et ad irure culpa mollit voluptate ut labore ipsum et sunt consequat enim.",
+      "textRight": false
     }
   ],
   "casePreview": {
