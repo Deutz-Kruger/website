@@ -3,6 +3,11 @@ import path from "node:path";
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+const imageField = z.object({
+  image: z.string(),
+  alt: z.string(),
+});
+
 const caseTitleBlock = z.object({
   _block: z.literal("caseTitle"),
   title: z.string(),
@@ -15,20 +20,39 @@ const caseVideoBlock = z.object({
   animatedBg: z.boolean(),
 });
 
+const caseImageBlock = z.object({
+  _block: z.literal("caseImage"),
+  image: imageField,
+  animatedBg: z.boolean(),
+});
+
 const caseImageTextBlock = z.object({
   _block: z.literal("caseImageText"),
-  image: z.object({
-    image: z.string(),
-    alt: z.string(),
-  }),
+  image: imageField,
   text: z.string(),
   textRight: z.boolean(),
+});
+
+const caseImageTextFullBlock = z.object({
+  _block: z.literal("caseImageTextFull"),
+  image: imageField,
+  text: z.string(),
+  textRight: z.boolean(),
+});
+
+const caseImageFullBlock = z.object({
+  _block: z.literal("caseImageFull"),
+  image: imageField,
+  animatedBg: z.boolean(),
 });
 
 const blocksUnion = z.discriminatedUnion("_block", [
   caseTitleBlock,
   caseVideoBlock,
   caseImageTextBlock,
+  caseImageBlock,
+  caseImageTextFullBlock,
+  caseImageFullBlock,
 ]);
 
 export const settingsSchema = z.object({
@@ -60,10 +84,7 @@ export const layoutSchema = z.object({
       title: z.string(),
     }),
   ),
-  logo: z.object({
-    image: z.string(),
-    alt: z.string(),
-  }),
+  logo: imageField,
 });
 
 export const caseSchema = z.object({
@@ -73,10 +94,7 @@ export const caseSchema = z.object({
   blocks: z.array(blocksUnion),
   casePreview: z.object({
     title: z.string(),
-    previewImage: z.object({
-      image: z.string(),
-      alt: z.string(),
-    }),
+    previewImage: imageField,
   }),
 });
 
@@ -85,10 +103,7 @@ export const servicesSchema = z.array(
     title: z.string(),
     body: z.string(),
     icon: z.object({
-      iconLogo: z.object({
-        image: z.string(),
-        alt: z.string(),
-      }),
+      iconLogo: imageField,
       iconColor: z.string(),
     }),
   }),
