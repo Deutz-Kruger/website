@@ -1,2 +1,31 @@
-/* TODO: Implement BlockRenderer component using a swtich statement and
-block._block in a switch statement. **/
+---
+import { type z } from "astro:content";
+
+import { blocksUnion } from "@/content/config";
+
+import CaseImageBlock from "./blocks/CaseImageBlock.astro";
+import CaseImageFullBlock from "./blocks/CaseImageFullBlock.astro";
+import CaseImageTextBlock from "./blocks/CaseImageTextBlock.astro";
+import CaseImageTextFullBlock from "./blocks/CaseImageTextFullBlock.astro";
+import CaseTitleBlock from "./blocks/CaseTitleBlock.astro";
+import CaseVideoBlock from "./blocks/CaseVideoBlock.astro";
+
+type Block = z.infer<typeof blocksUnion>;
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+---
+
+{block._block === "caseTitle" && <CaseTitleBlock block={block} />}
+{block._block === "caseVideo" && <CaseVideoBlock block={block} />}
+{block._block === "caseImage" && <CaseImageBlock block={block} />}
+{block._block === "caseImageText" && <CaseImageTextBlock block={block} />}
+{block._block === "caseImageFull" && <CaseImageFullBlock block={block} />}
+{
+  block._block === "caseImageTextFull" && (
+    <CaseImageTextFullBlock block={block} />
+  )
+}

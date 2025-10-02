@@ -1,0 +1,16 @@
+---
+import type { z } from "astro:content";
+
+import type { caseImageTextBlock } from "@/content/config";
+
+type CaseImageTextBlock = z.infer<typeof caseImageTextBlock>;
+
+interface Props {
+  block: CaseImageTextBlock;
+}
+
+const { block } = Astro.props;
+console.log(block);
+---
+
+<div>Case Image Text Block</div>

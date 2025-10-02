@@ -1,0 +1,18 @@
+---
+import type { z } from "astro:content";
+
+import type { caseTitleBlock } from "@/content/config";
+
+type CaseTitleBlock = z.infer<typeof caseTitleBlock>;
+
+interface Props {
+  block: CaseTitleBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section>
+  <h1>{block.title}</h1>
+  <sub>{block.subHeading}</sub>
+</section>

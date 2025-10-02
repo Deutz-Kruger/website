@@ -3,50 +3,50 @@ import path from "node:path";
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
-const imageField = z.object({
+export const imageField = z.object({
   image: z.string(),
   alt: z.string(),
 });
 
-const caseTitleBlock = z.object({
+export const caseTitleBlock = z.object({
   _block: z.literal("caseTitle"),
   title: z.string(),
   subHeading: z.string(),
 });
 
-const caseVideoBlock = z.object({
+export const caseVideoBlock = z.object({
   _block: z.literal("caseVideo"),
   video: z.string(),
   animatedBg: z.boolean(),
 });
 
-const caseImageBlock = z.object({
+export const caseImageBlock = z.object({
   _block: z.literal("caseImage"),
   image: imageField,
   animatedBg: z.boolean(),
 });
 
-const caseImageTextBlock = z.object({
+export const caseImageTextBlock = z.object({
   _block: z.literal("caseImageText"),
   image: imageField,
   text: z.string(),
   textRight: z.boolean(),
 });
 
-const caseImageTextFullBlock = z.object({
+export const caseImageTextFullBlock = z.object({
   _block: z.literal("caseImageTextFull"),
   image: imageField,
   text: z.string(),
   textRight: z.boolean(),
 });
 
-const caseImageFullBlock = z.object({
+export const caseImageFullBlock = z.object({
   _block: z.literal("caseImageFull"),
   image: imageField,
   animatedBg: z.boolean(),
 });
 
-const blocksUnion = z.discriminatedUnion("_block", [
+export const blocksUnion = z.discriminatedUnion("_block", [
   caseTitleBlock,
   caseVideoBlock,
   caseImageTextBlock,
