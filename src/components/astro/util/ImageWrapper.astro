@@ -16,8 +16,10 @@ interface Props {
 
 const { src, altText, className = "", loading = "lazy" } = Astro.props;
 
-const imageId = getMedia(src);
-const image = getImageSet(imageId.id);
+const mediaEntry = getMedia(src);
+const image = getImageSet(mediaEntry.id) ?? {
+  baseImage: "/public/web-app-manifest-512x512.png",
+};
 ---
 
 <Image

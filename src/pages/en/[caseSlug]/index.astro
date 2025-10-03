@@ -3,7 +3,6 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, type z } from "astro:content";
 
 import BlockRenderer from "@/components/astro/BlockRenderer.astro";
-import ImageWrapper from "@/components/astro/util/ImageWrapper.astro";
 import { caseSchema } from "@/content/config";
 import Layout from "@/layouts/Layout.astro";
 
@@ -32,13 +31,12 @@ interface Props {
 }
 
 const { caseEntry } = Astro.props;
-const { client, blocks, casePreview } = caseEntry;
+const { client, blocks } = caseEntry;
 ---
 
-<Layout>
+<Layout title={client}>
   <main>
     <div>
-      <ImageWrapper src={casePreview.previewImage.image} altText={client} />
       {
         blocks.map((block) => {
           return <BlockRenderer block={block} />;

@@ -1,4 +1,5 @@
 ---
+import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import type { z } from "astro:content";
 
 import type { caseImageTextFullBlock } from "@/content/config";
@@ -10,7 +11,9 @@ interface Props {
 }
 
 const { block } = Astro.props;
-console.log(block);
+const { image, text, textRight } = block;
+console.log(textRight);
 ---
 
-<div>Case Image Text Full Block</div>
+<ImageWrapper src={image.image} altText={image.alt} />
+<p>{text}</p>

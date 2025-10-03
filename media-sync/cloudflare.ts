@@ -29,40 +29,6 @@ if (!API_TOKEN || !ACCOUNT_ID) {
   );
 }
 
-// const uploadTest = async () => {
-//   console.log("--- Running Minimal API Test ---");
-//   try {
-//     console.log(`Attempting to upload file to account: ${ACCOUNT_ID}`);
-//     const fileBlob = await openAsBlob(testFilePath, {});
-//     const formData = new FormData();
-//     formData.append("file", fileBlob, "test-video.mp4");
-//     const response = await fetch(
-//       `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/stream`,
-//       {
-//         method: "POST",
-//         headers: {
-//           Authorization: `Bearer ${API_TOKEN}`,
-//         },
-//         body: formData,
-//       },
-//     );
-
-//     console.log(
-//       `API Response Status: ${response.status} ${response.statusText}`,
-//     );
-//     const jsonResponse = await response.json();
-
-//     if (!response.ok) {
-//       throw new Error(`API request failed.`);
-//     }
-//     console.log("-----TEST SUCCESS-----");
-//     console.log("API JSON repsonse:", jsonResponse);
-//   } catch (error) {
-//     console.error("-----TEST FAILED-----");
-//     console.error(error);
-//   }
-// };
-
 export const uploadMedia = async (
   filePath: string,
   mediaType: MediaType,

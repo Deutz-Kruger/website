@@ -3,6 +3,8 @@ import type { z } from "astro:content";
 
 import type { caseVideoBlock } from "@/content/config";
 
+import VideoWrapper from "../util/VideoWrapper.astro";
+
 type CaseVideoBlock = z.infer<typeof caseVideoBlock>;
 
 interface Props {
@@ -10,7 +12,6 @@ interface Props {
 }
 
 const { block } = Astro.props;
-console.log(block);
 ---
 
-<div>Case Video Block</div>
+<VideoWrapper src={block.video} />

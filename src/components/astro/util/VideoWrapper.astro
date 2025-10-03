@@ -1,0 +1,25 @@
+---
+import { cn } from "@/utils/cn";
+import { getMedia, getVideoPlayerUrl } from "@/utils/media";
+
+interface Props {
+  src: string;
+  className?: string;
+}
+
+const { src, className = "" } = Astro.props;
+
+const mediaEntry = getMedia(src);
+const video = getVideoPlayerUrl(mediaEntry.id);
+---
+
+<iframe
+  src={video}
+  title={mediaEntry.id}
+  style="border: none"
+  height="360"
+  width="640"
+  class={cn(className)}
+  allow="accelerometer; gyroscope; autoplay; encrypted-media;"
+  allowfullscreen="false"
+  loading="lazy"></iframe>

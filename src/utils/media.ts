@@ -2,7 +2,9 @@ import manifest from "../../media-sync/manifest.json";
 import type { ManifestEntry } from "../../media-sync/sync.ts";
 
 const CLOUDFLARE_IMAGE_URL = "https://imagedelivery.net/MdnPOFk9l0bFpoVPozEWbw";
-// const CLOUDFLARE_STREAM_URL = "customer-k0tb9kusbwt5rfcb.cloudflarestream.com"; TODO: Implement video fetching+
+const CLOUDFLARE_STREAM_URL =
+  "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
+// TODO: Implement video fetching+
 
 const IMAGE_VARIANTS = [
   { name: "thumbnail", width: 200 },
@@ -38,4 +40,9 @@ const getSrcSet = (id: string) => {
     return `${CLOUDFLARE_IMAGE_URL}/${encodedId}/${variant.name} ${variant.width}w`;
   });
   return srcSetParts.join(",\n");
+};
+
+export const getVideoPlayerUrl = (id: string) => {
+  const encodedId = encodeURIComponent(id);
+  return `${CLOUDFLARE_STREAM_URL}/${encodedId}/iframe?autoplay=true&muted=true&controls=false&loop=true`;
 };
