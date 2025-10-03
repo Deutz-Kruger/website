@@ -22,7 +22,7 @@ interface CFVideoUploadResponse {
 }
 
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
-const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
+const API_TOKEN = process.env.CLOUDFLARE_MEDIA_API_TOKEN;
 if (!API_TOKEN || !ACCOUNT_ID) {
   throw new Error(
     "Cloudflare API Token or Account ID are not defined in .env file.",
