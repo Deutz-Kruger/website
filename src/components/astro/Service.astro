@@ -1,9 +1,8 @@
 ---
+import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 
 import { servicesSchema } from "@/content/config";
-
-import ImageWrapper from "./ImageWrapper.astro";
 
 type Props = z.infer<typeof servicesSchema.element>;
 

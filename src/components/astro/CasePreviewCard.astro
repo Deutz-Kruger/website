@@ -1,10 +1,9 @@
 ---
+import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 import { caseSchema } from "@/content/config";
-
-import ImageWrapper from "./ImageWrapper.astro";
 
 type CasePreview = z.infer<typeof caseSchema.shape.casePreview>;
 
