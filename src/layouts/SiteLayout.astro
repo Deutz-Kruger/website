@@ -17,7 +17,12 @@ const { navItems, footerItems, logo } = layoutEntry.data;
 
 <header>
   <a href={getRelativeLocaleUrl(lang, "/")}>
-    <ImageWrapper src={logo.image} altText="Deutz & Krüger Logo" />
+    <ImageWrapper
+      src={logo.image}
+      altText="Deutz & Krüger Logo"
+      loading="eager"
+      className="w-16"
+    />
   </a>
   <nav>
     {

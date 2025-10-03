@@ -56,7 +56,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   adapter: cloudflare({
-    imageService: "cloudflare",
+    imageService: "passthrough",
     platformProxy: {
       enabled: true,
       configPath: "wrangler.jsonc",
