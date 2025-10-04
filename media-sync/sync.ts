@@ -59,6 +59,15 @@ export const getMediaPaths = async (): Promise<string[]> => {
 /**
  * Checks the local media files against the manifest, uploads new or modified files to Cloudflare,
  * and updates the manifest accordingly.
+ *
+ * This function performs the following steps:
+ * 1. Retrieves the existing media manifest and a list of all local media file paths.
+ * 2. Iterates through each local media file:
+ *    a. Generates metadata (hash, media type, dimensions).
+ *    b. If the file is new or has been modified (hash mismatch), it uploads the file to Cloudflare.
+ *    c. Updates the manifest with the new or updated media entry.
+ *    d. Handles unsupported media types by skipping them.
+ *    e. Logs the process and any errors encountered.
  */
 export const checkManifest = async () => {
   const manifest = await getManifest();
@@ -83,15 +92,15 @@ export const checkManifest = async () => {
 
     console.log(`[${path}] New or modified file detected.\n`);
 
-    // if (mediaType === "unknown") {
-    //   console.error(
-    //     `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
-    //   );
-    //   console.log(
-    //     `------------------------------------------------------------------------\n`,
-    //   );
-    //   continue;
-    // }
+    if (mediaType === "unknown") {
+      console.error(
+        `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
+      );
+      console.log(
+        `------------------------------------------------------------------------\n`,
+      );
+      continue;
+    }
     try {
       const status = await uploadMedia(path, mediaType);
       const mediaEntry: ManifestEntry = {

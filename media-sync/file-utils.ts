@@ -38,6 +38,16 @@ const generateFileHash = async (file: Buffer): Promise<string> => {
   return hash.toString();
 };
 
+/**
+ * Generates metadata for a given media file, including its hash, media type, and dimensions (if applicable).
+ *
+ * @param filePath - The path to the media file.
+ * @returns A promise that resolves to an object containing the file's hash, media type, and optional width and height.
+ *          - `hash`: The XXH64 hash of the file content.
+ *          - `mediaType`: The determined media type ('image', 'video', or 'unknown').
+ *          - `width`: The width of the media, if available (for images and videos).
+ *          - `height`: The height of the media, if available (for images and videos).
+ */
 export const generateMetaData = async (filePath: string) => {
   const mediaType = getMediaType(filePath);
   const file = await readFile(filePath);

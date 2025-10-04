@@ -12,10 +12,12 @@ export const VALID_MEDIA_TYPES: MediaType[] = ["image", "video"] as const;
 
 /**
  * Zod schema for a single entry in the media manifest.
- * @property id - The unique identifier of the media on the remote service (e.g., Cloudflare).
- * @property type - The type of media, restricted to 'image' or 'video'.
- * @property createdAt - The ISO string timestamp when the media was uploaded/processed.
- * @property hash - The XXH64 hash of the media file content.
+ * @property `id` - The unique identifier of the media on the remote service (e.g., Cloudflare).
+ * @property `type` - The type of media, restricted to 'image' or 'video'.
+ * @property `createdAt` - The ISO string timestamp when the media was uploaded/processed.
+ * @property `hash` - The XXH64 hash of the media file content.
+ * @property `width` - The width of the media, if applicable (e.g., for images and videos).
+ * @property `height` - The height of the media, if applicable (e.g., for images and videos).
  */
 export const manifestValueSchema = z.object({
   id: z.string(),
@@ -28,6 +30,6 @@ export const manifestValueSchema = z.object({
 
 /**
  * Zod schema for the entire media manifest.
- * It's a record where keys are file paths (strings) and values are `manifestValueSchema` objects.
+ * It's a record where keys are file paths `string` and values are `manifestValueSchema` objects.
  */
 export const manifestSchema = z.record(z.string(), manifestValueSchema);
