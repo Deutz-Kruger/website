@@ -1,26 +1,33 @@
 ---
 // TODO: Implement loading prop
-import { cn } from "@/utils/cn";
+import { getAspectPercantage } from "@/utils/aspectRatio";
 import { getMedia, getVideoPlayerUrl } from "@/utils/media";
 
 interface Props {
   src: string;
-  className?: string;
+  loading: string;
 }
 
-const { src, className = "" } = Astro.props;
+const { src, loading } = Astro.props;
 
 const mediaEntry = getMedia(src);
 const video = getVideoPlayerUrl(mediaEntry.id);
+
+const loadingOrder =
+  loading === "lazy" || loading === "eager" ? loading : "lazy";
+
+const paddingTopPercent =
+  mediaEntry.width && mediaEntry.height
+    ? getAspectPercantage(mediaEntry.width, mediaEntry.height)
+    : 56.25;
 ---
 
-<iframe
-  src={video}
-  title={mediaEntry.id}
-  style="border: none"
-  height="360"
-  width="640"
-  class={cn(className)}
-  allow="accelerometer; gyroscope; autoplay; encrypted-media;"
-  allowfullscreen="false"
-  loading="lazy"></iframe>
+<div style=`position: relative; padding-top: ${paddingTopPercent.toFixed(2)}%`>
+  <iframe
+    title={mediaEntry.id}
+    src={video}
+    style="border: none; position: absolute; top: 0; height: 100%; width: 100%"
+    allow="autoplay;"
+    allowfullscreen="false"
+    loading={loadingOrder}></iframe>
+</div>

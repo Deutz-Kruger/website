@@ -1,8 +1,6 @@
 ---
 // TODO: Implement ImageWrapper using <img> and srcset in combination with Cloudflare Images variants
 
-import { Image } from "astro:assets";
-
 import { cn } from "@/utils/cn";
 import { getMedia } from "@/utils/media";
 import { getImageSet } from "@/utils/media";
@@ -11,9 +9,7 @@ interface Props {
   src: string;
   altText: string;
   className?: string;
-  loading?: "eager" | "lazy";
-  sizes?: string;
-  width?: number;
+  loading?: string;
 }
 
 const { src, altText, className = "", loading = "lazy" } = Astro.props;
@@ -22,14 +18,18 @@ const mediaEntry = getMedia(src);
 const image = getImageSet(mediaEntry.id) ?? {
   baseImage: "/public/web-app-manifest-512x512.png",
 };
+
+const loadingOrder =
+  loading === "lazy" || loading === "eager" ? loading : "lazy";
 ---
 
-<Image
+<img
   src={image.baseImage}
   alt={altText}
-  inferSize
+  width={mediaEntry.width}
+  height={mediaEntry.height}
   class={cn(className)}
-  loading={loading}
+  loading={loadingOrder}
 />
 
 <!-- <img

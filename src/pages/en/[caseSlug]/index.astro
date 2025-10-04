@@ -38,8 +38,8 @@ const { client, blocks } = caseEntry;
   <main>
     <div>
       {
-        blocks.map((block) => {
-          return <BlockRenderer block={block} />;
+        blocks.map((block, index) => {
+          return <BlockRenderer block={block} index={index} />;
         })
       }
     </div>

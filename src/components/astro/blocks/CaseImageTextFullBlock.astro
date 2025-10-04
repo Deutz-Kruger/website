@@ -3,17 +3,22 @@ import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import type { z } from "astro:content";
 
 import type { caseImageTextFullBlock } from "@/content/config";
+import { cn } from "@/utils/cn";
 
 type CaseImageTextFullBlock = z.infer<typeof caseImageTextFullBlock>;
 
 interface Props {
   block: CaseImageTextFullBlock;
+  loading: string;
+  className?: string;
 }
 
-const { block } = Astro.props;
+const { block, loading, className = "" } = Astro.props;
 const { image, text, textRight } = block;
 console.log(textRight);
 ---
 
-<ImageWrapper src={image.image} altText={image.alt} />
-<p>{text}</p>
+<div class={cn(className)}>
+  <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+  <p>{text}</p>
+</div>

@@ -1,6 +1,4 @@
 ---
-// TODO: Implement index based loading strategy
-
 import { type z } from "astro:content";
 
 import { blocksUnion } from "@/content/config";
@@ -16,18 +14,37 @@ type Block = z.infer<typeof blocksUnion>;
 
 interface Props {
   block: Block;
+  index: number;
 }
 
-const { block } = Astro.props;
+const { block, index } = Astro.props;
+
+const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
 {block._block === "caseTitle" && <CaseTitleBlock block={block} />}
-{block._block === "caseVideo" && <CaseVideoBlock block={block} />}
-{block._block === "caseImage" && <CaseImageBlock block={block} />}
-{block._block === "caseImageText" && <CaseImageTextBlock block={block} />}
-{block._block === "caseImageFull" && <CaseImageFullBlock block={block} />}
+{
+  block._block === "caseVideo" && (
+    <CaseVideoBlock block={block} loading={loadingOrder} />
+  )
+}
+{
+  block._block === "caseImage" && (
+    <CaseImageBlock block={block} loading={loadingOrder} />
+  )
+}
+{
+  block._block === "caseImageText" && (
+    <CaseImageTextBlock block={block} loading={loadingOrder} />
+  )
+}
+{
+  block._block === "caseImageFull" && (
+    <CaseImageFullBlock block={block} loading={loadingOrder} />
+  )
+}
 {
   block._block === "caseImageTextFull" && (
-    <CaseImageTextFullBlock block={block} />
+    <CaseImageTextFullBlock block={block} loading={loadingOrder} />
   )
 }

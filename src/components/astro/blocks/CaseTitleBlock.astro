@@ -2,17 +2,19 @@
 import type { z } from "astro:content";
 
 import type { caseTitleBlock } from "@/content/config";
+import { cn } from "@/utils/cn";
 
 type CaseTitleBlock = z.infer<typeof caseTitleBlock>;
 
 interface Props {
   block: CaseTitleBlock;
+  className?: string;
 }
 
-const { block } = Astro.props;
+const { block, className = "" } = Astro.props;
 ---
 
-<section>
+<section class={cn(className)}>
   <h1 class="text-4xl">{block.title}</h1>
   <sub class="text-xl">{block.subHeading}</sub>
 </section>

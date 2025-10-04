@@ -38,8 +38,8 @@ const { client, blocks, casePreview } = caseEntry;
   <main>
     <ImageWrapper src={casePreview.previewImage.image} altText={client} />
     {
-      blocks.map((block) => {
-        return <BlockRenderer block={block} />;
+      blocks.map((block, index) => {
+        return <BlockRenderer block={block} index={index} />;
       })
     }
   </main>

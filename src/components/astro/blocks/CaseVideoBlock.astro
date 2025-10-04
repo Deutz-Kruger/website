@@ -2,6 +2,7 @@
 import type { z } from "astro:content";
 
 import type { caseVideoBlock } from "@/content/config";
+import { cn } from "@/utils/cn";
 
 import VideoWrapper from "../util/VideoWrapper.astro";
 
@@ -9,9 +10,13 @@ type CaseVideoBlock = z.infer<typeof caseVideoBlock>;
 
 interface Props {
   block: CaseVideoBlock;
+  loading: string;
+  className?: string;
 }
 
-const { block } = Astro.props;
+const { block, loading, className = "" } = Astro.props;
 ---
 
-<VideoWrapper src={block.video} />
+<div class={cn(className, "w-1/2")}>
+  <VideoWrapper src={block.video} loading={loading} />
+</div>
