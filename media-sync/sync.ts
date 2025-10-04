@@ -1,3 +1,8 @@
+// TODO: Implement writing metadata to manifest
+// TODO: Sanitize file path to only use _ instead of spaces, -, etc.
+// TODO: Implement manifest updating
+// TODO: Implement deletion detection
+
 import { readFile, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 
@@ -16,6 +21,10 @@ const ROOT = resolve(".");
 const MANIFEST_PATH = resolve(ROOT, "./media-sync/manifest.json");
 const MEDIA_PATH = resolve("./src/content/media");
 
+/**
+ * Reads and parses the media manifest file.
+ * @returns A promise that resolves to the parsed manifest object, or an empty object if the manifest is not found or invalid.
+ */
 export const getManifest = async (): Promise<Manifest> => {
   try {
     const fileContent = await readFile(MANIFEST_PATH, "utf-8");
@@ -38,12 +47,20 @@ export const getManifest = async (): Promise<Manifest> => {
   return {};
 };
 
+/**
+ * Retrieves a list of all media file paths relative to the project root.
+ * @returns A promise that resolves to an array of relative file paths.
+ */
 export const getMediaPaths = async (): Promise<string[]> => {
   const absolutePaths = await glob(`${MEDIA_PATH}/**`, { nodir: true });
   const relativePaths = absolutePaths.map((absPath) => relative(ROOT, absPath));
   return relativePaths;
 };
 
+/**
+ * Checks the local media files against the manifest, uploads new or modified files to Cloudflare,
+ * and updates the manifest accordingly.
+ */
 export const checkManifest = async () => {
   const manifest = await getManifest();
   const paths = await getMediaPaths();
@@ -105,6 +122,10 @@ export const checkManifest = async () => {
   }
 };
 
+/**
+ * Writes the given manifest object to the manifest.json file.
+ * @param manifest - The manifest object to write.
+ */
 const writeManifest = async (manifest: Manifest) => {
   const jsonManifest = JSON.stringify(manifest);
   console.log(`Writing manifest to ${MANIFEST_PATH}`);

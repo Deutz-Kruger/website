@@ -1,3 +1,6 @@
+// TODO: Implement passing metadata like height and width to sync.ts
+// TODO: Implement media deletion
+
 import "dotenv/config";
 
 import { openAsBlob } from "node:fs";
@@ -5,6 +8,9 @@ import { basename, resolve } from "node:path";
 
 import { type MediaType } from "./schema";
 
+/**
+ * Represents the response structure for a Cloudflare Image upload.
+ */
 interface CFImageUploadResponse {
   result: {
     id: string;
@@ -21,6 +27,10 @@ interface CFVideoUploadResponse {
   errors: unknown[];
 }
 
+/**
+ * Cloudflare account ID, retrieved from environment variables.
+ * @throws {Error} If CLOUDFLARE_ACCOUNT_ID is not defined.
+ */
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const API_TOKEN = process.env.CLOUDFLARE_MEDIA_API_TOKEN;
 if (!API_TOKEN || !ACCOUNT_ID) {
@@ -29,6 +39,13 @@ if (!API_TOKEN || !ACCOUNT_ID) {
   );
 }
 
+/**
+ * Uploads a media file to Cloudflare based on its type.
+ * @param filePath - The absolute path to the media file.
+ * @param mediaType - The type of media (e.g., 'image', 'video').
+ * @returns A promise that resolves to an object containing the ID of the uploaded media.
+ * @throws {Error} If the media type is unsupported or the upload fails.
+ */
 export const uploadMedia = async (
   filePath: string,
   mediaType: MediaType,
@@ -48,6 +65,12 @@ export const uploadMedia = async (
   return uploadResult;
 };
 
+/**
+ * Uploads an image file to Cloudflare Images.
+ * @param filePath - The absolute path to the image file.
+ * @returns A promise that resolves to an object containing the ID of the uploaded image.
+ * @throws {Error} If the upload fails.
+ */
 const uploadImage = async (filePath: string) => {
   const fileBlob = await openAsBlob(filePath, {});
   const formData = new FormData();
@@ -73,6 +96,12 @@ const uploadImage = async (filePath: string) => {
   }
 };
 
+/**
+ * Uploads a video file to Cloudflare Stream.
+ * @param filePath - The absolute path to the video file.
+ * @returns A promise that resolves to an object containing the UID of the uploaded video.
+ * @throws {Error} If the upload fails.
+ */
 const uploadVideo = async (filePath: string) => {
   const fileBlob = await openAsBlob(filePath, {});
   const formData = new FormData();
