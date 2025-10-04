@@ -69,9 +69,11 @@ export const getImageSet = (id: string) => {
 const getSrcSet = (id: string) => {
   const encodedId = encodeURIComponent(id);
   const srcSetParts = IMAGE_VARIANTS.map((variant) => {
-    return `${CLOUDFLARE_IMAGE_URL}/${encodedId}/${variant.name} ${variant.width}w`;
+    if (variant.name !== "thumbnail") {
+      return `${CLOUDFLARE_IMAGE_URL}/${encodedId}/${variant.name} ${variant.width}w`;
+    }
   });
-  return srcSetParts.join(",\n");
+  return srcSetParts.join(",");
 };
 
 /**
