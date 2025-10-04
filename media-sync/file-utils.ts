@@ -1,8 +1,11 @@
 import { readFile } from "node:fs/promises";
 
+import ffprobe from "ffprobe";
+import ffprobeStatic from "ffprobe-static";
+import sharp from "sharp";
 import xxhash from "xxhash-wasm";
 
-const { h64 } = await xxhash();
+const { h64Raw } = await xxhash();
 
 import { extname } from "node:path";
 
@@ -16,7 +19,7 @@ const VIDEO_EXTENSIONS = [".mp4", ".webm"];
  * @param filePath - The path to the file.
  * @returns The media type ('image', 'video', or 'unknown').
  */
-export const getMediaType = (filePath: string): MediaType => {
+const getMediaType = (filePath: string): MediaType => {
   const extension = extname(filePath);
   if (IMAGE_EXTENSIONS.includes(extension)) return "image";
   if (VIDEO_EXTENSIONS.includes(extension)) return "video";
@@ -28,8 +31,40 @@ export const getMediaType = (filePath: string): MediaType => {
  * @param filePath - The path to the file.
  * @returns A promise that resolves to the hash as a string.
  */
-export const generateFileHash = async (filePath: string): Promise<string> => {
-  const file = await readFile(filePath, "utf-8");
-  const hash = h64(file).toString();
-  return hash;
+const generateFileHash = async (file: Buffer): Promise<string> => {
+  // const file = await readFile(filePath, "utf-8");
+  const uInt8arr = new Uint8Array(file);
+  const hash = h64Raw(uInt8arr);
+  return hash.toString();
+};
+
+export const generateMetaData = async (filePath: string) => {
+  const mediaType = getMediaType(filePath);
+  const file = await readFile(filePath);
+  const hash = await generateFileHash(file);
+  try {
+    if (mediaType === "image") {
+      const metaData = await sharp(file).metadata();
+      const { width, height } = metaData;
+      return { hash, mediaType, width, height };
+    }
+    if (mediaType === "video") {
+      const metaData = await ffprobe(filePath, { path: ffprobeStatic.path });
+      const videoStream = metaData.streams.find(
+        (s) => s.codec_type === "video",
+      );
+      if (videoStream) {
+        return {
+          hash,
+          mediaType,
+          width: videoStream.width,
+          height: videoStream.height,
+        };
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to generate metadata for ${filePath}:`, error);
+  }
+
+  return { hash, mediaType, width: undefined, height: undefined };
 };

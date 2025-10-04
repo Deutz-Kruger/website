@@ -1,4 +1,3 @@
-// TODO: Implement passing metadata like height and width to sync.ts
 // TODO: Implement media deletion
 
 import "dotenv/config";

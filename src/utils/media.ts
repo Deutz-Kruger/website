@@ -4,7 +4,6 @@ import type { ManifestEntry } from "../../media-sync/sync.ts";
 const CLOUDFLARE_IMAGE_URL = "https://imagedelivery.net/MdnPOFk9l0bFpoVPozEWbw";
 const CLOUDFLARE_STREAM_URL =
   "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
-// TODO: Implement video fetching+
 
 const IMAGE_VARIANTS = [
   { name: "thumbnail", width: 200 },

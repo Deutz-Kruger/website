@@ -1,4 +1,3 @@
-// TODO: Implement writing metadata to manifest
 // TODO: Sanitize file path to only use _ instead of spaces, -, etc.
 // TODO: Implement manifest updating
 // TODO: Implement deletion detection
@@ -10,7 +9,7 @@ import { glob } from "glob";
 import { type z } from "zod";
 
 import { uploadMedia } from "./cloudflare";
-import { generateFileHash, getMediaType } from "./file-utils";
+import { generateMetaData } from "./file-utils";
 import { isErrorWithCode } from "./guards";
 import { manifestSchema, manifestValueSchema } from "./schema";
 
@@ -71,10 +70,10 @@ export const checkManifest = async () => {
 
   for (const path of paths) {
     console.log(`############# Checking ${path}: #############\n`);
-    const fileHash = await generateFileHash(path);
+    const { hash, mediaType, width, height } = await generateMetaData(path);
     const existingEntry = manifest[path];
 
-    if (existingEntry && existingEntry.hash === fileHash) {
+    if (existingEntry && existingEntry.hash === hash) {
       console.log(`File already uploaded.\nSkipping...\n`);
       console.log(
         `------------------------------------------------------------------------\n`,
@@ -84,24 +83,24 @@ export const checkManifest = async () => {
 
     console.log(`[${path}] New or modified file detected.\n`);
 
-    const mediaType = getMediaType(path);
-
-    if (mediaType === "unknown") {
-      console.error(
-        `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
-      );
-      console.log(
-        `------------------------------------------------------------------------\n`,
-      );
-      continue;
-    }
+    // if (mediaType === "unknown") {
+    //   console.error(
+    //     `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
+    //   );
+    //   console.log(
+    //     `------------------------------------------------------------------------\n`,
+    //   );
+    //   continue;
+    // }
     try {
       const status = await uploadMedia(path, mediaType);
       const mediaEntry: ManifestEntry = {
         id: status.id,
         type: mediaType,
         createdAt: new Date().toISOString(),
-        hash: fileHash,
+        hash: hash,
+        width: width,
+        height: height,
       };
       manifest[path] = mediaEntry;
       await writeManifest(manifest);

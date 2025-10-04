@@ -1,5 +1,3 @@
-// TODO: Add metadata to manifestValueSchema
-
 import { z } from "zod";
 
 /**
@@ -24,6 +22,8 @@ export const manifestValueSchema = z.object({
   type: z.enum(VALID_MEDIA_TYPES),
   createdAt: z.string(),
   hash: z.string(),
+  width: z.number().optional(),
+  height: z.number().optional(),
 });
 
 /**
