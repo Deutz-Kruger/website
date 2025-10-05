@@ -18,12 +18,14 @@ export const caseVideoBlock = z.object({
   _block: z.literal("caseVideo"),
   video: z.string(),
   animatedBg: z.boolean(),
+  bgAnimation: z.string().optional(),
 });
 
 export const caseImageBlock = z.object({
   _block: z.literal("caseImage"),
   image: imageField,
   animatedBg: z.boolean(),
+  bgAnimation: z.string().optional(),
 });
 
 export const caseImageTextBlock = z.object({
@@ -44,6 +46,7 @@ export const caseImageFullBlock = z.object({
   _block: z.literal("caseImageFull"),
   image: imageField,
   animatedBg: z.boolean(),
+  bgAnimation: z.string().optional(),
 });
 
 export const blocksUnion = z.discriminatedUnion("_block", [

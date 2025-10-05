@@ -1,5 +1,6 @@
 ---
 import type { z } from "astro:content";
+import LottieAnimation from "astro-integration-lottie/Lottie.astro";
 
 import type { caseVideoBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
@@ -15,8 +16,20 @@ interface Props {
 }
 
 const { block, loading, className = "" } = Astro.props;
+const animatedBackground = block.animatedBg && block.bgAnimation;
 ---
 
-<div class={cn(className, "w-1/2")}>
-  <VideoWrapper src={block.video} loading={loading} />
-</div>
+{
+  animatedBackground ? (
+    <div class={cn(className, "w-1/2")}>
+      <div class="container">
+        <LottieAnimation src={block.bgAnimation ?? ""} autoplay="visible" />
+      </div>
+      <VideoWrapper src={block.video} loading={loading} />
+    </div>
+  ) : (
+    <div class={cn(className, "w-1/2")}>
+      <VideoWrapper src={block.video} loading={loading} />
+    </div>
+  )
+}
