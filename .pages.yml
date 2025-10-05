@@ -244,6 +244,11 @@ components:
         label: Animated Background?
         type: boolean
         default: false
+      - name: bgAnimation
+        label: Background Animation
+        type: file
+        options:
+          media: lottie
         
   caseImage:
     label: Image Block
