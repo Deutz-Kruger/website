@@ -11,12 +11,13 @@
     {
       "_block": "caseVideo",
       "video": "/src/content/media/key_visual 3-compressed.mp4",
-      "animatedBg": false
+      "animatedBg": true,
+      "bgAnimation": "/documents/lottie/gradmob.json"
     },
     {
       "_block": "caseVideo",
       "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
-      "animatedBg": true
+      "animatedBg": false
     },
     {
       "_block": "caseVideo",
