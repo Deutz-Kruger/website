@@ -339,3 +339,7 @@ media:
     input: public/documents
     output: /documents
     categories: [document]
+  - name: lottie
+    label: Lottie Files
+    input: public/documents/lottie
+    output:  /documents/lottie
