@@ -5,7 +5,6 @@ import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-import lottie from "astro-integration-lottie";
 import robotsTxt from "astro-robots-txt";
 import { loadEnv } from "vite";
 
@@ -38,7 +37,6 @@ export default defineConfig({
           ? [{ userAgent: "*", allow: "/" }]
           : [{ userAgent: "*", disallow: "/" }],
     }),
-    lottie(),
   ],
   vite: {
     resolve: {
