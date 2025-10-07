@@ -1,6 +1,9 @@
 import lottie from "lottie-web";
 import * as THREE from "three";
 
+// import heatdistortion from "@/shaders/heatdistortion.glsl";
+import gooydistortion from "../../shaders/gooyshader.glsl";
+
 const vertexShader = `
   varying vec2 vUv;
   void main() {
@@ -9,13 +12,13 @@ const vertexShader = `
   }
 `;
 
-const fragmentShader = `
-  uniform sampler2D uLottieTexture;
-  varying vec2 vUv;
-  void main() {
-    gl_FragColor = texture2D(uLottieTexture, vUv);
-  }
-`;
+// const fragmentShader = `
+//   uniform sampler2D uLottieTexture;
+//   varying vec2 vUv;
+//   void main() {
+//     gl_FragColor = texture2D(uLottieTexture, vUv);
+//   }
+// `;
 
 const container = document.getElementById("lottie-1");
 
@@ -104,21 +107,44 @@ async function init() {
 
   lottieContainer.style.display = "none";
 
+  const canvas = document.getElementById("lottie-1");
+
   const geometry = new THREE.PlaneGeometry(1 * animationAspect, 1);
   const material = new THREE.ShaderMaterial({
     uniforms: {
       uLottieTexture: { value: texture },
+      uTime: { value: 0.0 },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uRes: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    },
+    defines: {
+      PR: window.devicePixelRatio.toFixed(1),
     },
     vertexShader,
-    fragmentShader,
+    fragmentShader: gooydistortion,
     transparent: true,
+  });
+
+  canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+
+    const xRelative = e.clientX - rect.left;
+    const yRelative = e.clientY - rect.top;
+
+    const x = xRelative / rect.width;
+    const y = 1.0 - yRelative / rect.height;
+
+    material.uniforms.uMouse.value.set(x, y);
   });
 
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
+  const clock = new THREE.Clock(true);
+
   function animate() {
     requestAnimationFrame(animate);
+    material.uniforms.uTime.value = clock.getElapsedTime();
     renderer.render(scene, camera);
   }
   animate();

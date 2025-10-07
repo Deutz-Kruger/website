@@ -7,6 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import robotsTxt from "astro-robots-txt";
 import { loadEnv } from "vite";
+import glsl from "vite-plugin-glsl";
 
 const { SITE_URL, APP_ENV } = loadEnv(
   process.env.NODE_ENV || "development",
@@ -53,7 +54,7 @@ export default defineConfig({
       },
     },
     // @ts-expect-error Compat issues with vite 7 and plugin typing
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), glsl()],
   },
   adapter: cloudflare({
     imageService: "passthrough",

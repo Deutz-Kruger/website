@@ -1,12 +1,12 @@
 ---
-// import img1 from "src/placeholder/iPhone 16 - 1.png";
-// import img2 from "src/placeholder/iPhone 16 - 2.png";
-// import img3 from "src/placeholder/iPhone 16 - 3.png";
-// import img4 from "src/placeholder/iPhone 16 - 4.png";
+import img1 from "src/placeholder/iPhone 16 - 1.png";
+import img2 from "src/placeholder/iPhone 16 - 2.png";
+import img3 from "src/placeholder/iPhone 16 - 3.png";
+import img4 from "src/placeholder/iPhone 16 - 4.png";
 
-// const images = [img1, img2, img3, img4];
+const images = [img1, img2, img3, img4];
 
-// import Image from "astro/components/Image.astro";
+import Image from "astro/components/Image.astro";
 
 import Layout from "@/layouts/Layout.astro";
 
@@ -16,11 +16,7 @@ import Layout from "@/layouts/Layout.astro";
 <Layout>
   <h1 class="text-4xl">Lottie Test</h1>
   <hr />
-  <!-- <h2 class="mt-8 text-3xl">Base Animation:</h2>
-  <div class="relative mt-8 grid w-full content-center">
-    <div class="w-full">
-      <LottieAnimation src={anim} autoplay="visible" />
-    </div>
+  <!-- 
     <div
       class="absolute top-0 flex h-full w-full items-center justify-between py-4">
       {
@@ -36,26 +32,27 @@ import Layout from "@/layouts/Layout.astro";
         })
       }
     </div>
-  </div> -->
+  -->
   <hr />
-  <h2 class="mt-8 text-3xl">Shader 1:</h2>
+  <h2 class="mt-8 text-3xl">Shader</h2>
   <div>
-    <div id="lottie-1" class=""></div>
-    <div
-      class="absolute top-0 flex h-full w-full items-center justify-between py-4"
-    >
-      <!-- {
-        images.map((image, index) => {
-          return (
-            <Image
-              class="h-full object-contain"
-              src={image}
-              alt={`Lottie - ${index}`}
-              loading={"eager"}
-            />
-          );
-        })
-      } -->
+    <div id="lottie-1" class="relative">
+      <div
+        class="absolute top-0 flex h-full w-full items-center justify-between py-4"
+      >
+        {
+          images.map((image, index) => {
+            return (
+              <Image
+                class="h-full object-contain"
+                src={image}
+                alt={`Lottie - ${index}`}
+                loading={"eager"}
+              />
+            );
+          })
+        }
+      </div>
     </div>
   </div>
 </Layout>
