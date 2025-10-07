@@ -108,19 +108,12 @@ float circle(in vec2 _st, in float _radius, in float blurriness) {
 }
 
 void main() {
-  // vec2 res = uRes * PR;
-
   vec2 st = vUv - 0.5;
-  // tip: use the following formula to keep the good ratio of your coordinates
   st.y *= uRes.y / uRes.x;
 
-  // We readjust the mouse coordinates
   vec2 mouse = uMouse * -0.5;
-	// tip2: do the same for your mouse
   mouse.y *= uRes.y / uRes.x;
   mouse *= -1.;
-
-  float mouseMod = smoothstep(0.1, 0.8, mouse.x);
 
   float offx = vUv.x + sin(vUv.y + uTime * .1);
   float offy = vUv.y - uTime * 0.03 - cos(uTime * .1) * .25;
@@ -140,6 +133,5 @@ void main() {
   vec4 finalImage = mix(texture1, texture2, finalMask);
 
   gl_FragColor = finalImage;
-	// gl_FragColor = vec4(vec3(c), 1.);
 
 }

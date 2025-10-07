@@ -29,8 +29,8 @@ async function init() {
   const data = await response.json();
   const animationAspect = data.w / data.h;
 
-  const finalWidth = window.innerWidth / 2;
-  const finalHeight = 400;
+  const finalWidth = window.innerWidth - 100;
+  const finalHeight = 410;
 
   container.style.width = `${finalWidth}px`;
   container.style.height = `${finalHeight}px`;
