@@ -115,7 +115,7 @@ async function init() {
       uLottieTexture: { value: texture },
       uTime: { value: 0.0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      uRes: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      uRes: { value: new THREE.Vector2(finalWidth, finalHeight) },
     },
     defines: {
       PR: window.devicePixelRatio.toFixed(1),

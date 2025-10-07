@@ -108,9 +108,9 @@ float circle(in vec2 _st, in float _radius, in float blurriness) {
 }
 
 void main() {
-  vec2 res = uRes * PR;
+  // vec2 res = uRes * PR;
 
-  vec2 st = gl_FragCoord.xy / res.xy - vec2(0.5);
+  vec2 st = vUv - 0.5;
   // tip: use the following formula to keep the good ratio of your coordinates
   st.y *= uRes.y / uRes.x;
 
@@ -120,19 +120,19 @@ void main() {
   mouse.y *= uRes.y / uRes.x;
   mouse *= -1.;
 
-  float mouseMod = smoothstep(uRes.y, mouse.y, mouse.x);
+  float mouseMod = smoothstep(0.1, 0.8, mouse.x);
 
-  float offx = vUv.x + sin(vUv.y + uTime * .01);
-  float offy = vUv.y - uTime * 0.03 - cos(uTime * .1) * (.25 * mouseMod);
+  float offx = vUv.x + sin(vUv.y + uTime * .1);
+  float offy = vUv.y - uTime * 0.03 - cos(uTime * .1) * .25;
 
-  float n = snoise(vec3(offx, offy, uTime * .05) * 2.) * .85;
+  float n = snoise(vec3(offx, offy, uTime * .05) * 2.) * .45;
 
-  vec2 circlePos = st + (n) * .75;
-  float c = circle(circlePos, 0.9, 0.5) * 2.5;
+  vec2 circlePos = st + n * .15;
+  float c = circle(circlePos, 0.3, 0.1) * .5;
 
-  float finalMask = smoothstep(0.4, 0.5, n + c);
+  float finalMask = smoothstep(0.01, 0.99, n + c);
 
-  vec2 distortedUv = vUv + vec2(n * .075);
+  vec2 distortedUv = vUv + vec2(n * .25);
 
   vec4 texture1 = texture2D(uLottieTexture, vUv);
   vec4 texture2 = texture2D(uLottieTexture, distortedUv);
