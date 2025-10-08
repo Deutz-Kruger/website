@@ -8,6 +8,7 @@ const images = [img1, img2, img3, img4];
 
 import { Image } from "astro:assets";
 
+import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import Layout from "@/layouts/Layout.astro";
 
 // const anim = "/documents/lottie/gradmob.json";
@@ -18,7 +19,7 @@ import Layout from "@/layouts/Layout.astro";
   <hr />
 
   <hr />
-  <h2 class="mt-8 text-3xl">Shader</h2>
+  <h2 class="mt-8 text-3xl">Shader + Lottie</h2>
   <div class="">
     <div id="lottie-1" class="relative mx-auto">
       <div
@@ -39,6 +40,10 @@ import Layout from "@/layouts/Layout.astro";
       </div>
     </div>
   </div>
-</Layout>
+  <h2 class="mt-8 text-3xl">Pure Shader + R3F</h2>
+  <div class="">
+    <BackgroundGradient gradientCol="BLUE" client:visible />
+  </div>
 
-<script src="../../three_old/_three.js"></script>
+  <script src="../../three_old/_three.js"></script>
+</Layout>

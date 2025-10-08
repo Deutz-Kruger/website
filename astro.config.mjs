@@ -2,11 +2,13 @@
 import { fileURLToPath, URL } from "node:url";
 
 import cloudflare from "@astrojs/cloudflare";
+import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import robotsTxt from "astro-robots-txt";
 import { loadEnv } from "vite";
+import glsl from "vite-plugin-glslify-inject";
 
 const { SITE_URL, APP_ENV } = loadEnv(
   process.env.NODE_ENV || "development",
@@ -37,11 +39,23 @@ export default defineConfig({
           ? [{ userAgent: "*", allow: "/" }]
           : [{ userAgent: "*", disallow: "/" }],
     }),
+    react(),
   ],
   vite: {
+    plugins: [
+      // @ts-expect-error Compat issues with vite 7 and plugin typing
+      glsl({
+        include: "./src/shaders/**/*.(vert|frag|glsl)",
+        exclude: "node_modules/**",
+        types: { alias: "@shaders", library: "threejs" },
+      }),
+      // @ts-expect-error Compat issues with vite 7 and plugin typing
+      tailwindcss(),
+    ],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
+        "@shaders": "/src/shaders/",
       },
     },
     ssr: {
@@ -52,8 +66,6 @@ export default defineConfig({
         ignored: ["**/*.astro.tsx"],
       },
     },
-    // @ts-expect-error Compat issues with vite 7 and plugin typing
-    plugins: [tailwindcss()],
   },
   adapter: cloudflare({
     imageService: "passthrough",
