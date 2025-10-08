@@ -10,6 +10,7 @@ import { Image } from "astro:assets";
 
 import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import Layout from "@/layouts/Layout.astro";
+import { cn } from "@/utils/cn";
 
 // const anim = "/documents/lottie/gradmob.json";
 ---
@@ -41,8 +42,25 @@ import Layout from "@/layouts/Layout.astro";
     </div>
   </div>
   <h2 class="mt-8 text-3xl">Pure Shader + R3F</h2>
-  <div class="">
-    <BackgroundGradient gradientCol="BLUE" client:visible />
+  <div class="h-[450px]">
+    <BackgroundGradient
+      gradientCol="BLUE"
+      className={cn("py-4")}
+      client:visible
+    >
+      {
+        images.map((image, index) => {
+          return (
+            <Image
+              class="h-full object-contain"
+              src={image}
+              alt={`Lottie - ${index}`}
+              loading={"eager"}
+            />
+          );
+        })
+      }
+    </BackgroundGradient>
   </div>
 
   <script src="../../three_old/_three.js"></script>

@@ -24,6 +24,7 @@ export const GRADIENT_SPECS: Record<GradientNames, CosGradientSpec> = {
 };
 
 /**
+ * @deprecated
  * An object containing functions to generate cosine gradients for each defined `GradientNames`.
  */
 export const COS_GRADIENT = {
