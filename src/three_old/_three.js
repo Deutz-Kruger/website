@@ -1,8 +1,7 @@
 import lottie from "lottie-web";
-import * as THREE from "three";
-
 // import heatdistortion from "@/shaders/heatdistortion.glsl";
-import gooydistortion from "../../shaders/gooyshader.glsl";
+import gooydistortion from "src/three_old/shaders/gooyshader.glsl?raw";
+import * as THREE from "three";
 
 const vertexShader = `
   varying vec2 vUv;
