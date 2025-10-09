@@ -236,7 +236,6 @@ components:
     type: string
     list: 
      collapsible: false
-     min: 2
     
   caseVideo:
     label: Video Block
