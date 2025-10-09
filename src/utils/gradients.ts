@@ -73,9 +73,6 @@ export const generateGradientUniforms = (hexColors: string[]) => {
   const cVec = new Vector3(...coeffs.c);
   const dVec = new Vector3(...coeffs.d);
 
-  // Log the coefficients for debugging
-  console.log("Cosine Coefficients:", { aVec, bVec, cVec, dVec });
-
   // Return the coefficients as an array of Vector3
   return [aVec, bVec, cVec, dVec];
 };
