@@ -33,16 +33,6 @@ const loadingOrder =
   alt={altText}
   width={mediaEntry.width}
   height={mediaEntry.height}
-  class={cn(className)}
+  class={cn("max-h-92 w-fit object-contain", className)}
   loading={loadingOrder}
 />
-
-<!-- <img
-  src={image.baseImage}
-  srcset={image.srcSet}
-  sizes={sizes}
-  alt={altText}
-  class={cn(className)}
-  loading={loading}
-  decoding="async"
-/> -->

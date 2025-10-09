@@ -1,6 +1,7 @@
 ---
 import type { z } from "astro:content";
 
+import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { caseVideoBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
@@ -15,17 +16,25 @@ interface Props {
 }
 
 const { block, loading, className = "" } = Astro.props;
-const animatedBackground = block.animatedBg && block.bgCols;
+const { video, animatedBg, bgCols } = block;
 ---
 
 {
-  animatedBackground ? (
+  animatedBg ? (
     <div class={cn(className, "w-1/2")}>
-      <VideoWrapper src={block.video} loading={loading} />
+      <BackgroundGradient
+        className="p-8"
+        client:visible
+        contentType="video"
+        video={video}
+        gradientCols={bgCols}
+      >
+        <VideoWrapper src={video} loading={loading} />
+      </BackgroundGradient>
     </div>
   ) : (
     <div class={cn(className, "w-1/2")}>
-      <VideoWrapper src={block.video} loading={loading} />
+      <VideoWrapper src={video} loading={loading} />
     </div>
   )
 }

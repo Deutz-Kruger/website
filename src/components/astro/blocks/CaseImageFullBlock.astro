@@ -2,6 +2,7 @@
 import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import type { z } from "astro:content";
 
+import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { caseImageFullBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
@@ -14,13 +15,31 @@ interface Props {
 }
 
 const { block, loading, className = "" } = Astro.props;
-const { images } = block;
+const { images, animatedBg, bgCols } = block;
+console.log(block);
 ---
 
 <div class={cn(className)}>
   {
-    images.map((image) => (
-      <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
-    ))
+    animatedBg ? (
+      <BackgroundGradient
+        client:visible
+        contentType="images"
+        images={images}
+        gradientCols={bgCols}
+      >
+        {images.map((image) => (
+          <ImageWrapper
+            src={image.image}
+            altText={image.alt}
+            loading={loading}
+          />
+        ))}
+      </BackgroundGradient>
+    ) : (
+      images.map((image) => (
+        <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+      ))
+    )
   }
 </div>
