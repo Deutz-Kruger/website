@@ -41,10 +41,31 @@ import { cn } from "@/utils/cn";
       </div>
     </div>
   </div>
-  <h2 class="mt-8 text-3xl">Pure Shader + R3F</h2>
+  <h2 class="mt-8 text-3xl">Pure Shader + R3F - Blue Colors</h2>
   <div class="h-[450px]">
     <BackgroundGradient
-      gradientCol="BLUE"
+      gradientCols={["#000F79", "#053CA1", "#2586F7", "#FFFFFF"]}
+      className={cn("py-4")}
+      client:visible
+    >
+      {
+        images.map((image, index) => {
+          return (
+            <Image
+              class="h-full object-contain"
+              src={image}
+              alt={`Lottie - ${index}`}
+              loading={"eager"}
+            />
+          );
+        })
+      }
+    </BackgroundGradient>
+  </div>
+  <h2 class="mt-8 text-3xl">Pure Shader + R3F - Blue Colors</h2>
+  <div class="h-[450px]">
+    <BackgroundGradient
+      gradientCols={["#D92C2E", "#FFC6A9", "#F8E0C8", "#FEF1E0"]}
       className={cn("py-4")}
       client:visible
     >

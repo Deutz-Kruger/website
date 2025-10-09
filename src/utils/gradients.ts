@@ -11,11 +11,13 @@ import { Vector3 } from "three";
 
 /**
  * Defines the available gradient names.
+ * @deprecated
  */
 export type GradientNames = "RED" | "BLUE";
 
 /**
  * A record of cosine gradient specifications, indexed by `GradientNames`.
+ * @deprecated
  */
 export const GRADIENT_SPECS: Record<GradientNames, CosGradientSpec> = {
   RED: [
@@ -45,9 +47,7 @@ export const COS_GRADIENT = {
 
 /**
  * @description: Accepts an array of hex color strings and returns a gradient uniform, to be processed by a fragment shader
- * @returns {[Vector3, Vector3, Vector3, Vector3]}
  */
-
 export const generateGradientUniforms = (hexColors: string[]) => {
   // Generate lighter and darker variations
   const allVariations = hexColors.flatMap((color) => {
@@ -100,7 +100,3 @@ const cosineCoefficients = (col1: SRGB, col2: SRGB) => {
   const phase = [0.0, 0.0, 0.0];
   return { a: offset, b: amp, c: freq, d: phase };
 };
-
-console.log(
-  generateGradientUniforms(["#000F79", "#053CA1", "#2586F7", "#FFFFFF"]),
-);

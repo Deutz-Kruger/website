@@ -6,7 +6,7 @@ import { useControls } from "leva";
 import { useRef } from "react";
 import { ShaderMaterial, Vector3 } from "three";
 
-import { GRADIENT_SPECS, type GradientNames } from "@/utils/gradients";
+import { GRADIENT_SPECS } from "@/utils/gradients";
 
 type Uniforms = {
   uTime: number;
@@ -17,7 +17,7 @@ type Uniforms = {
 };
 
 interface Props {
-  gradientPreset: GradientNames;
+  gradient: Vector3[];
 }
 
 const DEFAULT_COLOUR_PALETTE: Vector3[] = GRADIENT_SPECS["BLUE"].map(
@@ -47,19 +47,11 @@ declare module "@react-three/fiber" {
   }
 }
 
-// TODO: enable passing of color
-export const GradientPlane = ({ gradientPreset }: Props) => {
-  console.log(gradientPreset);
-
+export const GradientPlane = ({ gradient }: Props) => {
   const gradientShader = useRef<ShaderMaterial & Partial<Uniforms>>(null);
 
-  const {
-    colourPalette,
-    timeMultiplier,
-    scale,
-    distortionIterations,
-    distortionIntensity,
-  } = useConfig();
+  const { timeMultiplier, scale, distortionIterations, distortionIntensity } =
+    useConfig();
 
   useFrame(({ clock }) => {
     if (!gradientShader.current) return;
@@ -73,7 +65,7 @@ export const GradientPlane = ({ gradientPreset }: Props) => {
         ref={gradientShader}
         // Uniforms
         uTime={0}
-        uColourPalette={colourPalette}
+        uColourPalette={gradient}
         uUvScale={scale}
         uUvDistortionIterations={distortionIterations}
         uUvDistortionIntensity={distortionIntensity}
@@ -83,7 +75,6 @@ export const GradientPlane = ({ gradientPreset }: Props) => {
 };
 
 type Config = {
-  colourPalette: Vector3[];
   timeMultiplier: number;
   scale: number;
   distortionIterations: number;
@@ -92,55 +83,40 @@ type Config = {
 
 function useConfig(): Config {
   // Config for the shader
-  const {
-    paletteKey,
-    timeMultiplier,
-    scale,
-    distortionIterations,
-    distortionIntensity,
-  } = useControls({
-    paletteKey: {
-      label: "Palette",
-      value: "BLUE" as GradientNames,
-      options: Object.keys(GRADIENT_SPECS),
-    },
-    timeMultiplier: {
-      label: "Time Multiplier",
-      value: 0.1,
-      min: 0,
-      max: 1,
-      step: 0.05,
-    },
-    scale: {
-      label: "Scale",
-      value: 1,
-      min: 0.1,
-      max: 4,
-      step: 0.1,
-    },
-    distortionIterations: {
-      label: "Iterations",
-      value: 6,
-      min: 0,
-      max: 14,
-      step: 1,
-    },
-    distortionIntensity: {
-      label: "Intensity",
-      value: 0.3,
-      min: 0,
-      max: 1,
-      step: 0.02,
-      render: (get) => get("distortionIterations") > 0,
-    },
-  });
-
-  const colourPaletteVec3 = GRADIENT_SPECS[paletteKey as GradientNames].map(
-    (color) => new Vector3(...color),
-  );
+  const { timeMultiplier, scale, distortionIterations, distortionIntensity } =
+    useControls({
+      timeMultiplier: {
+        label: "Time Multiplier",
+        value: 0.1,
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
+      scale: {
+        label: "Scale",
+        value: 1,
+        min: 0.1,
+        max: 4,
+        step: 0.1,
+      },
+      distortionIterations: {
+        label: "Iterations",
+        value: 6,
+        min: 0,
+        max: 14,
+        step: 1,
+      },
+      distortionIntensity: {
+        label: "Intensity",
+        value: 0.3,
+        min: 0,
+        max: 1,
+        step: 0.02,
+        render: (get) => get("distortionIterations") > 0,
+      },
+    });
 
   return {
-    colourPalette: colourPaletteVec3,
     timeMultiplier,
     scale,
     distortionIterations,

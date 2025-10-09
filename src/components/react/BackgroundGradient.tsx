@@ -1,20 +1,25 @@
 import { Canvas } from "@react-three/fiber";
+import { Vector3 } from "three";
 
 import { cn } from "@/utils/cn";
-import { type GradientNames } from "@/utils/gradients";
+import { generateGradientUniforms, GRADIENT_SPECS } from "@/utils/gradients";
 
 import { GradientPlane } from "../r3f/GradientPlane";
 
 interface Props extends React.PropsWithChildren {
-  gradientCol: GradientNames;
+  gradientCols?: string[];
   className?: string;
 }
 
 export const BackgroundGradient = ({
-  gradientCol,
+  gradientCols,
   className,
   children,
 }: Props) => {
+  const gradient =
+    gradientCols && gradientCols?.length > 1
+      ? generateGradientUniforms(gradientCols)
+      : GRADIENT_SPECS["BLUE"].map((color) => new Vector3(...color));
   return (
     <div
       aria-label="Gradient Container"
@@ -25,7 +30,7 @@ export const BackgroundGradient = ({
         className="z-1 absolute left-0 top-0 h-full w-full"
       >
         <Canvas>
-          <GradientPlane gradientPreset={gradientCol} />
+          <GradientPlane gradient={gradient} />
         </Canvas>
       </div>
       <div
