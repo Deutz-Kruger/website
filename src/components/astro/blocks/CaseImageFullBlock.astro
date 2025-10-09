@@ -14,9 +14,13 @@ interface Props {
 }
 
 const { block, loading, className = "" } = Astro.props;
-const { image } = block;
+const { images } = block;
 ---
 
 <div class={cn(className)}>
-  <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+  {
+    images.map((image) => (
+      <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+    ))
+  }
 </div>
