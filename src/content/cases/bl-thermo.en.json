@@ -12,7 +12,12 @@
       "_block": "caseVideo",
       "video": "/src/content/media/key_visual 3-compressed.mp4",
       "animatedBg": true,
-      "bgAnimation": "/documents/lottie/gradmob.json"
+      "bgCols": [
+        "#D92C2E",
+        "#FFC6A9",
+        "#F8E0C8",
+        "#FEF1E0"
+      ]
     },
     {
       "_block": "caseVideo",
