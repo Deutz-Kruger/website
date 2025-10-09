@@ -11,6 +11,11 @@
     {
       "_block": "caseVideo",
       "video": "/src/content/media/key_visual 3-compressed.mp4",
+      "animatedBg": false
+    },
+    {
+      "_block": "caseVideo",
+      "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
       "animatedBg": true,
       "bgCols": [
         "#D92C2E",
@@ -18,11 +23,6 @@
         "#F8E0C8",
         "#FEF1E0"
       ]
-    },
-    {
-      "_block": "caseVideo",
-      "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
-      "animatedBg": false
     },
     {
       "_block": "caseVideo",
