@@ -301,6 +301,8 @@ components:
         label: Animated Background?
         type: boolean
         default: false
+      - name: bgCols
+        component: bgGradientCol
         
   caseImageTextFull:
     label: Image & Text Full Width
@@ -354,7 +356,3 @@ media:
     input: public/documents
     output: /documents
     categories: [document]
-  - name: lottie
-    label: Lottie Files
-    input: public/documents/lottie
-    output:  /documents/lottie
