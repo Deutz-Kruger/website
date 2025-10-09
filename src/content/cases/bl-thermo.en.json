@@ -63,7 +63,13 @@
           "alt": "Screenshot of BL thermodynamics website on mobile"
         }
       ],
-      "animatedBg": false
+      "animatedBg": true,
+      "bgCols": [
+        "#000F79",
+        "#053CA1",
+        "#2586F7",
+        "#FFFFFF"
+      ]
     },
     {
       "_block": "caseImage",
