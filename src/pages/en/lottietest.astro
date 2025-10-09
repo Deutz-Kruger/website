@@ -11,36 +11,11 @@ import { Image } from "astro:assets";
 import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import Layout from "@/layouts/Layout.astro";
 import { cn } from "@/utils/cn";
-
-// const anim = "/documents/lottie/gradmob.json";
 ---
 
 <Layout>
-  <h1 class="text-4xl">Lottie Test</h1>
+  <h1 class="text-4xl">Gradient Test</h1>
   <hr />
-
-  <hr />
-  <h2 class="mt-8 text-3xl">Shader + Lottie</h2>
-  <div class="">
-    <div id="lottie-1" class="relative mx-auto">
-      <div
-        class="absolute top-0 flex h-full w-full items-center justify-between py-4"
-      >
-        {
-          images.map((image, index) => {
-            return (
-              <Image
-                class="h-full object-contain"
-                src={image}
-                alt={`Lottie - ${index}`}
-                loading={"eager"}
-              />
-            );
-          })
-        }
-      </div>
-    </div>
-  </div>
   <h2 class="mt-8 text-3xl">Pure Shader + R3F - Blue Colors</h2>
   <div class="h-[450px]">
     <BackgroundGradient
@@ -83,6 +58,4 @@ import { cn } from "@/utils/cn";
       }
     </BackgroundGradient>
   </div>
-
-  <script src="../../three_old/_three.js"></script>
 </Layout>
