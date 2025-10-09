@@ -90,6 +90,12 @@ importers:
       '@eslint/js':
         specifier: ^9.35.0
         version: 9.36.0
+      '@thi.ng/math':
+        specifier: ^5.12.0
+        version: 5.12.0
+      '@thi.ng/vectors':
+        specifier: ^8.6.6
+        version: 8.6.6
       '@types/ffprobe':
         specifier: ^1.1.8
         version: 1.1.8
