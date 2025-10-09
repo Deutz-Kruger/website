@@ -293,8 +293,11 @@ components:
     description: This is a whole screen wide
     type: object
     fields:
-      - name: image
-        label: Image File
+      - name: images
+        label: Image Files
+        list:
+          collapsible: false
+          max: 4
         component: image
       - name: animatedBg
         label: Animated Background?
