@@ -230,6 +230,14 @@ content:
                   media: files
                   categories: [document]
 components:
+  bgGradientCol:
+    label: Background Gradient Colors
+    description: List of colors to generate the animated gradient background. The c must be included per color.
+    type: string
+    list: 
+     collapsible: false
+     min: 2
+    
   caseVideo:
     label: Video Block
     description: This is as big as a case block
@@ -244,12 +252,11 @@ components:
         label: Animated Background?
         type: boolean
         default: false
-      - name: bgColors
-        label: Background Gradient Colors
-        description: List of colors to generate the animated gradient background. The c must be included per color.
-        type: file
-        options:
-          media: lottie
+      - name: bgCols
+        component: bgGradientCol
+        
+        
+
         
   caseImage:
     label: Image Block
