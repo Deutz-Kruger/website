@@ -1,0 +1,21 @@
+.dynamicGrid {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .dynamicGrid {
+    grid-template-columns: repeat(var(--sm-grid-cols, 1), minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .dynamicGrid {
+    grid-template-columns: repeat(var(--md-grid-cols, 1), minmax(0, 1fr));
+  }
+}

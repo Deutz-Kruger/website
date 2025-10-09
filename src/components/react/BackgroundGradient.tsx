@@ -6,6 +6,7 @@ import { cn } from "@/utils/cn";
 import { generateGradientUniforms, GRADIENT_SPECS } from "@/utils/gradients";
 
 import { GradientPlane } from "../r3f/GradientPlane";
+import styles from "./BackgroundGradient.module.css";
 
 interface BaseProps extends React.PropsWithChildren {
   gradientCols?: string[];
@@ -37,6 +38,11 @@ export const BackgroundGradient = (props: Props) => {
 
   const numberOfItems = contentType === "images" ? props.images.length : 1;
 
+  const gridStyle = {
+    "--sm-grid-cols": Math.min(numberOfItems, 2),
+    "--md-grid-cols": Math.min(numberOfItems, 4),
+  } as React.CSSProperties;
+
   return (
     <div
       aria-label="Gradient Container"
@@ -51,10 +57,9 @@ export const BackgroundGradient = (props: Props) => {
         </Canvas>
       </div>
       <div
+        style={gridStyle}
         aria-label="Content Wrapper"
-        className={cn(
-          `z-2 relative grid h-full grid-cols-1 items-center gap-8 sm:grid-cols-${Math.min(numberOfItems, 2)} md:grid-cols-${Math.min(numberOfItems, 4)}`,
-        )}
+        className={cn(className, "z-2 relative h-full", styles.dynamicGrid)}
       >
         {children}
       </div>
