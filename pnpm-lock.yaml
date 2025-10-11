@@ -90,6 +90,9 @@ importers:
       '@eslint/js':
         specifier: ^9.35.0
         version: 9.36.0
+      '@hono/node-server':
+        specifier: ^1.19.5
+        version: 1.19.5(hono@4.9.10)
       '@thi.ng/math':
         specifier: ^5.12.0
         version: 5.12.0
@@ -135,6 +138,9 @@ importers:
       globals:
         specifier: ^16.4.0
         version: 16.4.0
+      hono:
+        specifier: ^4.9.10
+        version: 4.9.10
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -794,6 +800,12 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
+
+  '@hono/node-server@1.19.5':
+    resolution: {integrity: sha512-iBuhh+uaaggeAuf+TftcjZyWh2GEgZcVGXkNtskLVoWaXhnJtC5HLHrU8W1KHDoucqO1MswwglmkWLFyiDn4WQ==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2765,6 +2777,10 @@ packages:
 
   hls.js@1.6.13:
     resolution: {integrity: sha512-hNEzjZNHf5bFrUNvdS4/1RjIanuJ6szpWNfTaX5I6WfGynWXGT7K/YQLYtemSvFExzeMdgdE4SsyVLJbd5PcZA==}
+
+  hono@4.9.10:
+    resolution: {integrity: sha512-AlI15ijFyKTXR7eHo7QK7OR4RoKIedZvBuRjO8iy4zrxvlY5oFCdiRG/V/lFJHCNXJ0k72ATgnyzx8Yqa5arug==}
+    engines: {node: '>=16.9.0'}
 
   html-escaper@3.0.3:
     resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
@@ -5437,6 +5453,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@hono/node-server@1.19.5(hono@4.9.10)':
+    dependencies:
+      hono: 4.9.10
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -7773,6 +7793,8 @@ snapshots:
       space-separated-tokens: 2.0.2
 
   hls.js@1.6.13: {}
+
+  hono@4.9.10: {}
 
   html-escaper@3.0.3: {}
 

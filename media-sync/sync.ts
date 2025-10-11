@@ -153,11 +153,9 @@ export const checkLocalMediaFiles = async () => {
  * Writes the given manifest object to the manifest.json file.
  * @param manifest - The manifest object to write.
  */
-const writeManifest = async (manifest: Manifest) => {
+export const writeManifest = async (manifest: Manifest) => {
   const jsonManifest = JSON.stringify(manifest);
   console.log(`Writing manifest to ${MANIFEST_PATH}`);
   await writeFile(MANIFEST_PATH, jsonManifest, { encoding: "utf-8" });
   console.log("Sucessfully written manifest.");
 };
-
-await checkLocalMediaFiles();
