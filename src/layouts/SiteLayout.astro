@@ -15,7 +15,7 @@ const lang = Astro.currentLocale ?? "en";
 const { navItems, footerItems, logo } = layoutEntry.data;
 ---
 
-<header>
+<header class="flex items-center">
   <a href={getRelativeLocaleUrl(lang, "/")}>
     <ImageWrapper
       src={logo.image}

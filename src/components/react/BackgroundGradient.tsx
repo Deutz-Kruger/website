@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import { Leva } from "leva";
 import React from "react";
 import { Vector3 } from "three";
 
@@ -63,6 +64,7 @@ export const BackgroundGradient = (props: Props) => {
       >
         {children}
       </div>
+      <Leva hidden={true} />
     </div>
   );
 };

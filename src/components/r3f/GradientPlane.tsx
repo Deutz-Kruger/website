@@ -87,7 +87,7 @@ function useConfig(): Config {
     useControls({
       timeMultiplier: {
         label: "Time Multiplier",
-        value: 0.1,
+        value: 0.03,
         min: 0,
         max: 1,
         step: 0.05,
@@ -101,7 +101,7 @@ function useConfig(): Config {
       },
       distortionIterations: {
         label: "Iterations",
-        value: 6,
+        value: 10,
         min: 0,
         max: 14,
         step: 1,

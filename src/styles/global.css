@@ -8,11 +8,15 @@
 
   /* Typo */
   --font-sans: "Arial", "sans-serif";
-  --text-largest: var(--text-5xl);
-  --text-large: var(--text-3xl);
-  --text-big: var(--text-2xl);
-  --text-medium: var(--text-lg);
-  --text-base: var(--text-base);
+  --text-largest: 3rem;
+  --text-large: 1.875rem;
+  --text-big: 1.5rem;
+  --text-medium: 1.125rem;
+  --text-base: 1rem;
+
+  /* Spacing */
+  --spacing-big: 4rem;
+  --spacing-sub: 1.125rem;
 }
 
 @layer components {
@@ -20,4 +24,17 @@
     text-decoration: underline;
     font-style: italic;
   }
+}
+
+html {
+  @apply tracking-[1%];
+}
+
+h1 {
+  @apply leading-9;
+}
+
+h1 + p {
+  @apply leading-5;
+  @apply mt-sub;
 }

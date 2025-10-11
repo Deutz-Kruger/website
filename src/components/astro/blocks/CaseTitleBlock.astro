@@ -14,7 +14,8 @@ interface Props {
 const { block, className = "" } = Astro.props;
 ---
 
-<section class={cn(className)}>
-  <h1 class="text-4xl">{block.title}</h1>
-  <sub class="text-xl">{block.subHeading}</sub>
+<section class={cn("my-big", className)}>
+  <hr />
+  <h1 class="text-large md:text-largest">{block.title}</h1>
+  <p class="md:text-big leading text-base">{block.subHeading}</p>
 </section>
