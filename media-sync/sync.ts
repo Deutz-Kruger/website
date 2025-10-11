@@ -50,7 +50,7 @@ export const getManifest = async (): Promise<Manifest> => {
  * Retrieves a list of all media file paths relative to the project root.
  * @returns A promise that resolves to an array of relative file paths.
  */
-export const getMediaPaths = async (): Promise<string[]> => {
+const getMediaPaths = async (): Promise<string[]> => {
   const absolutePaths = await glob(`${MEDIA_PATH}/**`, { nodir: true });
   const relativePaths = absolutePaths.map((absPath) => relative(ROOT, absPath));
   return relativePaths;
@@ -69,7 +69,7 @@ export const getMediaPaths = async (): Promise<string[]> => {
  *    d. Handles unsupported media types by skipping them.
  *    e. Logs the process and any errors encountered.
  */
-export const checkManifest = async () => {
+export const checkLocalMediaFiles = async () => {
   const manifest = await getManifest();
   const paths = await getMediaPaths();
 
@@ -90,8 +90,6 @@ export const checkManifest = async () => {
       continue;
     }
 
-    console.log(`[${path}] New or modified file detected.\n`);
-
     if (mediaType === "unknown") {
       console.error(
         `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
@@ -101,8 +99,18 @@ export const checkManifest = async () => {
       );
       continue;
     }
+
+    if (existingEntry && existingEntry.hash !== hash) {
+      console.log(`[${path}] Modified file detected.\n`);
+    } else {
+      console.log(`[${path}] New file detected.\n`);
+    }
+
     try {
       const status = await uploadMedia(path, mediaType);
+      if (!status) {
+        throw new Error(`Upload for ${path} failed`);
+      }
       const mediaEntry: ManifestEntry = {
         id: status.id,
         type: mediaType,
@@ -141,4 +149,4 @@ const writeManifest = async (manifest: Manifest) => {
   console.log("Sucessfully written manifest.");
 };
 
-await checkManifest();
+await checkLocalMediaFiles();

@@ -48,20 +48,18 @@ if (!API_TOKEN || !ACCOUNT_ID) {
 export const uploadMedia = async (
   filePath: string,
   mediaType: MediaType,
-): Promise<{ id: string }> => {
+): Promise<{ id: string } | null> => {
   const absolutePath = resolve(filePath);
-  let uploadResult: { id: string };
 
   if (mediaType === "image") {
-    uploadResult = await uploadImage(absolutePath);
-  } else if (mediaType === "video") {
-    uploadResult = await uploadVideo(absolutePath);
-  } else {
-    throw new Error(
-      `Unsupported media type provided to uploadMedia: ${mediaType}`,
-    );
+    return await uploadImage(absolutePath);
   }
-  return uploadResult;
+  if (mediaType === "video") {
+    return await uploadVideo(absolutePath);
+  }
+  throw new Error(
+    `Unsupported media type provided to uploadMedia: ${mediaType}`,
+  );
 };
 
 /**
@@ -73,7 +71,7 @@ export const uploadMedia = async (
 const uploadImage = async (filePath: string) => {
   const fileBlob = await openAsBlob(filePath, {});
   const formData = new FormData();
-  formData.append("file", fileBlob, basename(filePath).replace(" ", "_"));
+  formData.append("file", fileBlob, basename(filePath));
 
   try {
     const response = await fetch(
