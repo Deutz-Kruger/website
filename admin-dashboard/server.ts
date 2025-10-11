@@ -3,11 +3,7 @@ import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 
 import { deleteMedia } from "../media-sync/cloudflare";
-import {
-  checkLocalMediaFiles,
-  getManifest,
-  writeManifest,
-} from "../media-sync/sync";
+import { getManifest, syncMedia, writeManifest } from "../media-sync/sync";
 
 const app = new Hono();
 const port = 3000;
@@ -32,7 +28,7 @@ app.post("/api/delete-all", async (c) => {
 
 app.post("/api/sync-media", async (c) => {
   try {
-    await checkLocalMediaFiles();
+    await syncMedia();
     console.log("Sucessfully synced manifest");
     return c.text("Sucessfully synced manifest");
   } catch (e) {

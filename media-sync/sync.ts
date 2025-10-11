@@ -10,10 +10,15 @@ import { type z } from "zod";
 import { deleteMedia, uploadMedia } from "./cloudflare";
 import { generateMetaData } from "./file-utils";
 import { isErrorWithCode } from "./guards";
-import { manifestSchema, manifestValueSchema } from "./schema";
+import { manifestSchema, manifestValueSchema, type MediaType } from "./schema";
 
 type Manifest = z.infer<typeof manifestSchema>;
 export type ManifestEntry = z.infer<typeof manifestValueSchema>;
+
+interface SyncContext {
+  manifest: Manifest;
+  hasChanged: boolean;
+}
 
 const ROOT = resolve(".");
 const MANIFEST_PATH = resolve(ROOT, "./media-sync/manifest.json");
@@ -49,103 +54,155 @@ export const getManifest = async (): Promise<Manifest> => {
  * Retrieves a list of all media file paths relative to the project root.
  * @returns A promise that resolves to an array of relative file paths.
  */
-const getMediaPaths = async (): Promise<string[]> => {
+const getLocalMediaPaths = async (): Promise<string[]> => {
   const absolutePaths = await glob(`${MEDIA_PATH}/**`, { nodir: true });
   const relativePaths = absolutePaths.map((absPath) => relative(ROOT, absPath));
   return relativePaths;
 };
 
-/**
- * Checks the local media files against the manifest, uploads new or modified files to Cloudflare,
- * and updates the manifest accordingly.
- *
- * This function performs the following steps:
- * 1. Retrieves the existing media manifest and a list of all local media file paths.
- * 2. Iterates through each local media file:
- *    a. Generates metadata (hash, media type, dimensions).
- *    b. If the file is new or has been modified (hash mismatch), it uploads the file to Cloudflare.
- *    c. Updates the manifest with the new or updated media entry.
- *    d. Handles unsupported media types by skipping them.
- *    e. Logs the process and any errors encountered.
- */
-export const checkLocalMediaFiles = async () => {
-  const manifest = await getManifest();
-  const paths = await getMediaPaths();
+const getManifestPaths = (manifest: Manifest) => {
+  return Object.keys(manifest);
+};
 
+export const syncMedia = async () => {
+  const manifest = await getManifest();
+  const localPaths = await getLocalMediaPaths();
+
+  let syncContext: SyncContext = {
+    manifest,
+    hasChanged: false,
+  };
+
+  try {
+    syncContext = await handleDeleted(syncContext, localPaths);
+    syncContext = await handleAddedAndUpdated(syncContext, localPaths);
+  } catch (error) {
+    console.log("--- ❗ SYNC FAILED ---");
+    console.log("The process was stopped due to a critical error:");
+    console.error(error);
+  }
+
+  if (syncContext.hasChanged) {
+    console.log("Changes detected. Writing to manifest...");
+    await writeManifest(syncContext.manifest);
+  } else {
+    console.log("No changes detected.");
+  }
+  console.log("Sync Complete ✅");
+};
+
+const handleDeleted = async (context: SyncContext, localPaths: string[]) => {
+  console.log("Checking for deletions... 🔍");
+  const manifestPaths = getManifestPaths(context.manifest);
+  const localPathsSet = new Set(localPaths);
+
+  for (const path of manifestPaths) {
+    if (!localPathsSet.has(path)) {
+      await deleteUploadedMedia(
+        context.manifest[path].id,
+        context.manifest[path].type,
+      );
+      delete context.manifest[path];
+      context.hasChanged = true;
+    }
+  }
+  return context;
+};
+
+const handleAddedAndUpdated = async (
+  context: SyncContext,
+  localPaths: string[],
+) => {
   console.log(
-    `\n____________________ Found ${paths.length} local media files. Checking... ____________________\n`,
+    `Checking for new and updated files 🔍.\nFound ${localPaths.length} local media files.`,
   );
 
-  for (const path of paths) {
-    console.log(`############# Checking ${path}: #############\n`);
-    const { hash, mediaType, width, height } = await generateMetaData(path);
-    const existingEntry = manifest[path];
+  const manifest = context.manifest;
 
-    if (existingEntry && existingEntry.hash === hash) {
-      console.log(`File already uploaded.\nSkipping...\n`);
-      console.log(
-        `------------------------------------------------------------------------\n`,
-      );
-      continue;
-    }
+  for (const path of localPaths) {
+    console.log(`############# Checking ${path}: #############\n`);
+
+    const { hash, mediaType, width, height } = await generateMetaData(path);
 
     if (mediaType === "unknown") {
       console.error(
         `⚠️ Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
       );
-      console.log(
-        `------------------------------------------------------------------------\n`,
-      );
       continue;
     }
 
-    if (existingEntry && existingEntry.hash !== hash) {
-      console.log(
-        `[${path}] Modified file detected. Deleting stale remote file. 🚮\n`,
-      );
-      try {
-        await deleteMedia(existingEntry.id, existingEntry.type);
-        console.log(
-          `✅ Sucessfully deleted  ${existingEntry.type} at ${path}: ${existingEntry.id}`,
-        );
-      } catch (error) {
-        throw new Error(
-          `❗ Error while deleting ${existingEntry.type} at ${path}: ${existingEntry.id}\n Error: ${error}`,
-        );
+    const manifestEntry = manifest[path];
+
+    if (manifestEntry) {
+      const modified = isModified(manifestEntry.hash, hash);
+
+      if (modified) {
+        await deleteUploadedMedia(manifestEntry.id, manifestEntry.type);
+      } else {
+        continue;
       }
-    } else {
-      console.log(`[${path}] New file detected.\n`);
     }
 
-    try {
-      const status = await uploadMedia(path, mediaType);
-      if (!status) {
-        throw new Error(`❗ Upload for ${path} failed`);
-      }
-      const mediaEntry: ManifestEntry = {
-        id: status.id,
-        type: mediaType,
-        createdAt: new Date().toISOString(),
-        hash: hash,
-        width: width,
-        height: height,
-      };
-      manifest[path] = mediaEntry;
-      await writeManifest(manifest);
-      console.log(
-        `------------------------------------------------------------------------\n`,
-      );
-    } catch (error) {
-      console.error(
-        `❗ [${path}] FAILED: Upload process failed.\nError details:`,
-        error,
-        "\n",
-      );
-      console.log(
-        `------------------------------------------------------------------------\n`,
-      );
-      break;
+    console.log(`Uploading ${path}...`);
+
+    const uploadResponse = await uploadMedia(path, mediaType);
+
+    if (!uploadResponse) {
+      throw new Error(`❗ Upload for ${path} failed`);
     }
+
+    console.log("✅ File sucessfully uploaded");
+
+    const entry = generateMediaEntry(
+      uploadResponse.id,
+      mediaType,
+      hash,
+      width,
+      height,
+    );
+
+    console.log("Updating manifest...");
+
+    context.manifest[path] = entry;
+    context.hasChanged = true;
+  }
+  return context;
+};
+
+const isModified = (manifestHash: string, localHash: string) => {
+  if (manifestHash !== localHash) {
+    console.log(`Modified file detected.`);
+    return true;
+  }
+  return false;
+};
+
+const generateMediaEntry = (
+  mediaId: string,
+  mediaType: MediaType,
+  hash: string,
+  width?: number,
+  height?: number,
+): ManifestEntry => {
+  const entry = {
+    id: mediaId,
+    type: mediaType,
+    createdAt: new Date().toISOString(),
+    hash: hash,
+    width: width,
+    height: height,
+  };
+  return entry;
+};
+
+const deleteUploadedMedia = async (mediaId: string, mediaType: MediaType) => {
+  try {
+    await deleteMedia(mediaId, mediaType);
+    console.log(`✅ Sucessfully deleted  ${mediaType}: ${mediaId}`);
+  } catch (error) {
+    throw new Error(
+      `❗ Error while deleting ${mediaType}: ${mediaId}\n Error: ${error}`,
+    );
   }
 };
 
