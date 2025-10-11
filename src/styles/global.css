@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-blue: #425e6b;
+  --color-green: #618667;
+  --color-red: #9a2b5a;
+
+  /* Typo */
+  --font-sans: "Arial", "sans-serif";
+  --text-largest: var(--text-5xl);
+  --text-large: var(--text-3xl);
+  --text-big: var(--text-2xl);
+  --text-medium: var(--text-lg);
+  --text-base: var(--text-base);
+}
+
+@layer components {
+  .keyword {
+    text-decoration: underline;
+    font-style: italic;
+  }
+}
