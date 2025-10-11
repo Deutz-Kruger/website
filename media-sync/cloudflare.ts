@@ -8,7 +8,7 @@ import { basename, resolve } from "node:path";
 import { type MediaType } from "./schema";
 
 /**
- * Represents the response structure for a Cloudflare Image upload.
+ * Represents the response structure for a Cloudflare Images upload.
  */
 interface CFImageUploadResponse {
   result: {
@@ -18,6 +18,9 @@ interface CFImageUploadResponse {
   errors: unknown[];
 }
 
+/**
+ * Represents the response structure for a Cloudflare Stream upload.
+ */
 interface CFVideoUploadResponse {
   result: {
     uid: string;
@@ -58,7 +61,7 @@ export const uploadMedia = async (
     return await uploadVideo(absolutePath);
   }
   throw new Error(
-    `Unsupported media type provided to uploadMedia: ${mediaType}`,
+    `❗ Unsupported media type provided to uploadMedia: ${mediaType}`,
   );
 };
 
@@ -89,7 +92,7 @@ const uploadImage = async (filePath: string) => {
 
     return { id: jsonResponse.result.id };
   } catch (error) {
-    throw new Error(`Upload for ${filePath} failed.\nDetails:${error}`);
+    throw new Error(`❗ Upload for ${filePath} failed.\nDetails:${error}`);
   }
 };
 
@@ -119,6 +122,69 @@ const uploadVideo = async (filePath: string) => {
 
     return { id: jsonResponse.result.uid };
   } catch (error) {
-    throw new Error(`Upload for ${filePath} failed.\nDetails:${error}`);
+    throw new Error(`❗ Upload for ${filePath} failed.\nDetails:${error}`);
+  }
+};
+
+export const deleteMedia = async (mediaId: string, mediaType: MediaType) => {
+  if (mediaType === "image") {
+    return await deleteImage(mediaId);
+  }
+  if (mediaType === "video") {
+    return await deleteVideo(mediaId);
+  }
+
+  throw new Error(
+    `❗ Unsupported media type or ID provided to deleteMedia: \nMedia type: ${mediaType}\nID: ${mediaId}`,
+  );
+};
+
+const deleteImage = async (imageId: string) => {
+  try {
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/images/v1/${imageId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      },
+    );
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(
+        `Cloudflare API error: ${response.status} ${response.statusText}\nDetails: ${errorDetails}`,
+      );
+    }
+    return response.ok;
+  } catch (error) {
+    throw new Error(
+      `❗ Deletion of image ${imageId} failed.\nDetails:${error}`,
+    );
+  }
+};
+
+const deleteVideo = async (videoId: string) => {
+  try {
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/stream/${videoId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      },
+    );
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(
+        `Cloudflare API error: ${response.status} ${response.statusText}\nDetails: ${errorDetails}`,
+      );
+    }
+    return response.ok;
+  } catch (error) {
+    throw new Error(
+      `❗ Deletion of video ${videoId} failed.\nDetails:${error}`,
+    );
   }
 };

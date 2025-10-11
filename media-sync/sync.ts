@@ -1,4 +1,3 @@
-// TODO: Sanitize file path to only use _ instead of spaces, -, etc.
 // TODO: Implement manifest updating
 // TODO: Implement deletion detection
 
@@ -8,7 +7,7 @@ import { relative, resolve } from "node:path";
 import { glob } from "glob";
 import { type z } from "zod";
 
-import { uploadMedia } from "./cloudflare";
+import { deleteMedia, uploadMedia } from "./cloudflare";
 import { generateMetaData } from "./file-utils";
 import { isErrorWithCode } from "./guards";
 import { manifestSchema, manifestValueSchema } from "./schema";
@@ -31,15 +30,15 @@ export const getManifest = async (): Promise<Manifest> => {
     return manifestSchema.parse(jsonData);
   } catch (error) {
     if (isErrorWithCode(error) && error.code === "ENOENT") {
-      console.log("Manifest not found. A new one will be created.");
+      console.log("⚠️ Manifest not found. A new one will be created.");
     } else {
       console.warn(
-        "An error occurred while reading or parsing manifest.json. Starting fresh.",
+        "⚠️ An error occurred while reading or parsing manifest.json. Starting fresh.",
       );
       if (error instanceof Error) {
-        console.error("Details:", error.message, "\n");
+        console.error("❗ Details:", error.message, "\n");
       } else {
-        console.error("Caught an unknown error type:", error);
+        console.error("❗ Caught an unknown error type:", error);
       }
     }
   }
@@ -92,7 +91,7 @@ export const checkLocalMediaFiles = async () => {
 
     if (mediaType === "unknown") {
       console.error(
-        `Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
+        `⚠️ Invalid media type. Media typ: ${mediaType}.\nSkipping...`,
       );
       console.log(
         `------------------------------------------------------------------------\n`,
@@ -101,7 +100,19 @@ export const checkLocalMediaFiles = async () => {
     }
 
     if (existingEntry && existingEntry.hash !== hash) {
-      console.log(`[${path}] Modified file detected.\n`);
+      console.log(
+        `[${path}] Modified file detected. Deleting stale remote file. 🚮\n`,
+      );
+      try {
+        await deleteMedia(existingEntry.id, existingEntry.type);
+        console.log(
+          `✅ Sucessfully deleted  ${existingEntry.type} at ${path}: ${existingEntry.id}`,
+        );
+      } catch (error) {
+        throw new Error(
+          `❗ Error while deleting ${existingEntry.type} at ${path}: ${existingEntry.id}\n Error: ${error}`,
+        );
+      }
     } else {
       console.log(`[${path}] New file detected.\n`);
     }
@@ -109,7 +120,7 @@ export const checkLocalMediaFiles = async () => {
     try {
       const status = await uploadMedia(path, mediaType);
       if (!status) {
-        throw new Error(`Upload for ${path} failed`);
+        throw new Error(`❗ Upload for ${path} failed`);
       }
       const mediaEntry: ManifestEntry = {
         id: status.id,
@@ -126,7 +137,7 @@ export const checkLocalMediaFiles = async () => {
       );
     } catch (error) {
       console.error(
-        `[${path}] FAILED: Upload process failed.\nError details:`,
+        `❗ [${path}] FAILED: Upload process failed.\nError details:`,
         error,
         "\n",
       );
