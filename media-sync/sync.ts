@@ -98,10 +98,12 @@ const handleDeleted = async (context: SyncContext, localPaths: string[]) => {
 
   for (const path of manifestPaths) {
     if (!localPathsSet.has(path)) {
+      console.log("Found delted file...");
       await deleteUploadedMedia(
         context.manifest[path].id,
         context.manifest[path].type,
       );
+      console.log("File sucessfully deleted ❌");
       delete context.manifest[path];
       context.hasChanged = true;
     }
