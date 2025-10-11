@@ -19,11 +19,11 @@ const { block, loading, className = "" } = Astro.props;
 const { video, animatedBg, bgCols } = block;
 ---
 
-{
-  animatedBg ? (
-    <div class={cn(className, "w-1/2")}>
+<div class={cn(className, "w-full md:w-1/2 mb-4 md:mb-6 h-52 md:h-96")}>
+  {
+    animatedBg ? (
       <BackgroundGradient
-        className="p-12"
+        className="py-2 px-4 md:py-4 md:px-8"
         client:visible
         contentType="video"
         video={video}
@@ -31,10 +31,8 @@ const { video, animatedBg, bgCols } = block;
       >
         <VideoWrapper src={video} loading={loading} />
       </BackgroundGradient>
-    </div>
-  ) : (
-    <div class={cn(className, "w-1/2")}>
+    ) : (
       <VideoWrapper src={video} loading={loading} />
-    </div>
-  )
-}
+    )
+  }
+</div>

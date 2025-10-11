@@ -1,7 +1,4 @@
 .dynamicGrid {
-  /* position: relative;
-  z-index: 2;
-  height: 100%; */
   display: grid;
   align-items: center;
   gap: 2rem;

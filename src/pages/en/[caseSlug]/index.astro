@@ -35,8 +35,8 @@ const { client, blocks } = caseEntry;
 ---
 
 <Layout title={client}>
-  <main>
-    <div>
+  <main class="bg-blue">
+    <div class="flex flex-wrap">
       {
         blocks.map((block, index) => {
           return <BlockRenderer block={block} index={index} />;

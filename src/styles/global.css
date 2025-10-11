@@ -17,12 +17,19 @@
   /* Spacing */
   --spacing-big: 4rem;
   --spacing-sub: 1.125rem;
+  --spacing-gradient-y: --spacing-gradient-x: ;
 }
 
 @layer components {
   .keyword {
     text-decoration: underline;
     font-style: italic;
+  }
+  .gradient-background {
+    @apply px-[2.5rem];
+    @apply py-[1.5rem];
+    @apply md:px-[5rem];
+    @apply md:py-[2.75rem];
   }
 }
 
@@ -31,10 +38,14 @@ html {
 }
 
 h1 {
+  @apply md:tracking-[2%];
   @apply leading-9;
+  @apply md:leading-13;
+  font-weight: lighter;
 }
 
 h1 + p {
   @apply leading-5;
+  @apply md:leading-8;
   @apply mt-sub;
 }
