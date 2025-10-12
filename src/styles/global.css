@@ -49,16 +49,16 @@
     font-style: italic;
   }
   .gradient-background {
-    @apply px-[2.5rem];
-    @apply py-[1.5rem];
+    @apply px-[1rem];
+    @apply py-[0.5rem];
     @apply md:px-[2rem];
     @apply md:py-[1.125rem];
   }
   .case-block {
-    @apply min-h-52 w-screen md:min-h-96 md:w-[47vw];
+    @apply min-h-56 w-screen md:min-h-96 md:w-[47vw];
   }
   .case-block-full {
-    @apply min-h-52 w-screen md:max-h-96;
+    @apply min-h-56 w-screen md:max-h-96;
   }
 }
 

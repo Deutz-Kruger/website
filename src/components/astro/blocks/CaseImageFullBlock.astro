@@ -34,13 +34,18 @@ const { images, animatedBg, bgCols } = block;
             src={image.image}
             altText={image.alt}
             loading={loading}
-            className="md:h-96"
+            className="w-2/3 mx-auto md:w-fit md:h-96"
           />
         ))}
       </BackgroundGradient>
     ) : (
       images.map((image) => (
-        <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+        <ImageWrapper
+          src={image.image}
+          altText={image.alt}
+          loading={loading}
+          className="w-2/3 mx-auto md:w-fit md:h-96"
+        />
       ))
     )
   }
