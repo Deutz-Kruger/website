@@ -24,7 +24,7 @@
     }
   ],
   "logo": {
-    "image": "/src/content/media/dk-logo.png",
+    "image": "/src/content/media/logo.svg",
     "alt": "DK Logo"
   }
 }
