@@ -15,10 +15,19 @@ interface Props {
 
 const { block, loading, className = "" } = Astro.props;
 const { image, text, textRight } = block;
-console.log(textRight);
 ---
 
-<div class={cn(className)}>
-  <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
-  <p>{text}</p>
+<div
+  class={cn(
+    "flex justify-between mb-4 md:mb-6 w-screen md:w-screen/2 min-h-52 md:h-96",
+    className,
+  )}
+>
+  <p class="md:text-medium w-1/2 pr-6 text-base">{text}</p>
+  <ImageWrapper
+    className={cn(textRight ? "order-first" : "order-last", "w-1/2")}
+    src={image.image}
+    altText={image.alt}
+    loading={loading}
+  />
 </div>

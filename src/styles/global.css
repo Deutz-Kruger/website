@@ -49,3 +49,8 @@ h1 + p {
   @apply md:leading-8;
   @apply mt-sub;
 }
+
+p {
+  @apply leading-5;
+  @apply md:leading-8;
+}

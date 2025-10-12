@@ -18,7 +18,7 @@ const { block, loading, className = "" } = Astro.props;
 const { images, animatedBg, bgCols } = block;
 ---
 
-<div class={cn(className)}>
+<div class={cn("w-screen md:h-96", className)}>
   {
     animatedBg ? (
       <BackgroundGradient
