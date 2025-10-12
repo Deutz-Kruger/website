@@ -1,0 +1,45 @@
+---
+import { cn } from "@/utils/cn";
+
+interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props;
+---
+
+<div class={cn(className, "swiper min-h-56 w-full")}>
+  <div class="swiper-wrapper">
+    <slot />
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+
+<script>
+  import "swiper/css";
+  import "swiper/css/autoplay";
+  import "swiper/css/a11y";
+
+  import Swiper from "swiper";
+  import { A11y, Autoplay } from "swiper/modules";
+
+  const swiper = new Swiper(".swiper", {
+    modules: [Autoplay, A11y],
+    direction: "horizontal",
+    loop: true,
+
+    speed: 700,
+    spaceBetween: 100,
+
+    autoHeight: true,
+    observer: true,
+    observeParents: true,
+
+    autoplay: {
+      delay: 5000,
+      pauseOnMouseEnter: true,
+    },
+  });
+
+  swiper.init();
+</script>

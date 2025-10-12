@@ -6,6 +6,8 @@ import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { caseImageFullBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
+import Carousel from "../Carousel.astro";
+
 type CaseImageFullBlock = z.infer<typeof caseImageFullBlock>;
 
 interface Props {
@@ -29,14 +31,18 @@ const { images, animatedBg, bgCols } = block;
         images={images}
         gradientCols={bgCols}
       >
-        {images.map((image) => (
-          <ImageWrapper
-            src={image.image}
-            altText={image.alt}
-            loading={loading}
-            className="w-2/3 mx-auto md:w-fit md:h-96"
-          />
-        ))}
+        <Carousel>
+          {images.map((image) => (
+            <div class="swiper-slide">
+              <ImageWrapper
+                src={image.image}
+                altText={image.alt}
+                loading={loading}
+                className="w-2/3 mx-auto md:w-fit md:h-96"
+              />
+            </div>
+          ))}
+        </Carousel>
       </BackgroundGradient>
     ) : (
       images.map((image) => (
