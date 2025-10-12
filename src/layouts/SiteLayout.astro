@@ -2,7 +2,9 @@
 import { type CollectionEntry, getEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
+import NavItem from "@/components/astro/NavItem.astro";
 import ImageWrapper from "@/components/astro/util/ImageWrapper.astro";
+import { getMedia } from "@/utils/media";
 
 export type LayoutData = CollectionEntry<"layout">;
 
@@ -13,34 +15,61 @@ if (!layoutEntry) {
 const lang = Astro.currentLocale ?? "en";
 
 const { navItems, footerItems, logo } = layoutEntry.data;
+
+const { width, height } = getMedia(logo.image);
+
+const logoWidthInRem = 3.5;
+let navMinHeight = logoWidthInRem;
+
+if (width && height) {
+  const aspectRatio = height / width;
+  navMinHeight = logoWidthInRem * aspectRatio;
+}
 ---
 
 <header>
-  <nav class="flex items-center">
-    <a href={getRelativeLocaleUrl(lang, "/")}>
-      <ImageWrapper
-        src={logo.image}
-        altText="Deutz & Krüger Logo"
-        loading="eager"
-        className="w-16"
-      />
-    </a>
-
+  <a
+    href={getRelativeLocaleUrl(lang, "/")}
+    class="fixed left-2.5 top-2.5 md:left-6 md:top-6"
+    style={`width: ${logoWidthInRem}rem;`}
+  >
+    <ImageWrapper
+      src={logo.image}
+      altText="Deutz & Krüger Logo"
+      loading="eager"
+      className="h-full w-full"
+    />
+  </a>
+  <nav
+    class="mb-big flex w-screen items-center justify-center gap-3 md:mb-6"
+    style={`min-height: ${navMinHeight}rem`}
+  >
     {
       navItems.map((item) => {
         const { href, title } = item;
-        return <a href={getRelativeLocaleUrl(lang, href)}>{title}</a>;
+        const link = getRelativeLocaleUrl(lang, href);
+        return <NavItem link={link} title={title} />;
       })
     }
   </nav>
-  <hr class="mb-4" />
+  <hr class="mt-big mb-4 md:mt-6" />
 </header>
 <slot />
-<footer>
+<footer
+  class="flex w-full items-center justify-center gap-3 md:mt-6"
+  style={`margin-top: ${navMinHeight * 2}rem; min-height: ${navMinHeight}rem`}
+>
   {
     footerItems.map((item) => {
       const { href, title } = item;
-      return <a href={getRelativeLocaleUrl(lang, href)}>{title}</a>;
+      const link = getRelativeLocaleUrl(lang, href);
+      return (
+        <NavItem
+          link={link}
+          title={title}
+          style={`margin-bottom: ${navMinHeight / 2}rem`}
+        />
+      );
     })
   }
 </footer>

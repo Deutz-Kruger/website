@@ -11,21 +11,25 @@ interface Props {
   block: CaseImageTextBlock;
   loading: string;
   className?: string;
+  index: number;
 }
 
-const { block, loading, className = "" } = Astro.props;
+const { block, loading, className = "", index } = Astro.props;
 const { image, text, textRight } = block;
+
+const marginRight = index % 2 === 0;
 ---
 
 <div
   class={cn(
-    "flex justify-between mb-4 md:mb-6 w-screen md:w-screen/2 min-h-52 md:h-96",
+    "flex justify-between mb-4 md:mb-6 case-block",
+    marginRight ? "md:mr-auto" : "",
     className,
   )}
 >
-  <p class="md:text-medium w-1/2 pr-6 text-base">{text}</p>
+  <p class="md:text-medium leading-[1.125]! w-1/2 pr-6 text-base">{text}</p>
   <ImageWrapper
-    className={cn(textRight ? "order-first" : "order-last", "w-1/2")}
+    className={cn(textRight ? "order-first" : "order-last", "w-fit", "w-fit")}
     src={image.image}
     altText={image.alt}
     loading={loading}

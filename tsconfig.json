@@ -12,6 +12,7 @@
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"]
     },
+    "noUnusedLocals": false,
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   }

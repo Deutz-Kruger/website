@@ -1,0 +1,24 @@
+---
+import { cn } from "@/utils/cn";
+
+interface Props {
+  link: string;
+  title: string;
+  className?: string;
+  style?: string;
+}
+
+const { link, title, className, style } = Astro.props;
+---
+
+<a href={link} class="">
+  <div
+    class={cn(
+      "rounded-nav shadow-nav py-1.4 text-medium px-2.5 w-fit h-fit hover:scale-103 transition ease-in-out duration-300",
+      className,
+    )}
+    style={style}
+  >
+    {title}
+  </div>
+</a>

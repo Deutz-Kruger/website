@@ -22,29 +22,33 @@ const { block, index } = Astro.props;
 const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
-{block._block === "caseTitle" && <CaseTitleBlock block={block} />}
+{block._block === "caseTitle" && <CaseTitleBlock block={block} index={index} />}
 {
   block._block === "caseVideo" && (
-    <CaseVideoBlock block={block} loading={loadingOrder} />
+    <CaseVideoBlock block={block} loading={loadingOrder} index={index} />
   )
 }
 {
   block._block === "caseImage" && (
-    <CaseImageBlock block={block} loading={loadingOrder} />
+    <CaseImageBlock block={block} loading={loadingOrder} index={index} />
   )
 }
 {
   block._block === "caseImageText" && (
-    <CaseImageTextBlock block={block} loading={loadingOrder} />
+    <CaseImageTextBlock block={block} loading={loadingOrder} index={index} />
   )
 }
 {
   block._block === "caseImageFull" && (
-    <CaseImageFullBlock block={block} loading={loadingOrder} />
+    <CaseImageFullBlock block={block} loading={loadingOrder} index={index} />
   )
 }
 {
   block._block === "caseImageTextFull" && (
-    <CaseImageTextFullBlock block={block} loading={loadingOrder} />
+    <CaseImageTextFullBlock
+      block={block}
+      loading={loadingOrder}
+      index={index}
+    />
   )
 }

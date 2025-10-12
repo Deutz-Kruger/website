@@ -13,17 +13,26 @@ interface Props {
   block: CaseVideoBlock;
   loading: string;
   className?: string;
+  index: number;
 }
 
-const { block, loading, className = "" } = Astro.props;
+const { block, loading, className = "", index } = Astro.props;
 const { video, animatedBg, bgCols } = block;
+
+const marginRight = index % 2 === 0;
 ---
 
-<div class={cn(className, "w-full md:w-1/2 mb-4 md:mb-6 h-52 md:h-96")}>
+<div
+  class={cn(
+    className,
+    "case-block mb-4 md:mb-6",
+    marginRight ? "md:mr-auto" : "",
+  )}
+>
   {
     animatedBg ? (
       <BackgroundGradient
-        className="py-2 px-4 md:py-4 md:px-8"
+        className="gradient-background"
         client:visible
         contentType="video"
         video={video}

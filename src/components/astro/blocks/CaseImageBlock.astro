@@ -11,12 +11,14 @@ interface Props {
   block: CaseImageBlock;
   loading: string;
   className?: string;
+  index: number;
 }
 
-const { block, loading, className = "" } = Astro.props;
+const { block, loading, className = "", index } = Astro.props;
 const { image } = block;
+const marginRight = index % 2 === 0;
 ---
 
-<div class={cn(className)}>
+<div class={cn(className, marginRight ? "md:mr-auto" : "")}>
   <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
 </div>

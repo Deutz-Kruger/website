@@ -20,7 +20,6 @@ const {
 } = Astro.props;
 
 const mediaEntry = getMedia(src);
-console.log(mediaEntry);
 const image = getImageSet(mediaEntry?.id);
 
 const loadingOrder =
@@ -34,6 +33,6 @@ const loadingOrder =
   alt={altText}
   width={mediaEntry?.width}
   height={mediaEntry?.height}
-  class={cn("max-h-92 w-fit object-contain", className)}
+  class={cn("object-contain", className)}
   loading={loadingOrder}
 />
