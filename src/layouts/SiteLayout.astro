@@ -15,16 +15,17 @@ const lang = Astro.currentLocale ?? "en";
 const { navItems, footerItems, logo } = layoutEntry.data;
 ---
 
-<header class="flex items-center">
-  <a href={getRelativeLocaleUrl(lang, "/")}>
-    <ImageWrapper
-      src={logo.image}
-      altText="Deutz & Krüger Logo"
-      loading="eager"
-      className="w-16"
-    />
-  </a>
-  <nav>
+<header>
+  <nav class="flex items-center">
+    <a href={getRelativeLocaleUrl(lang, "/")}>
+      <ImageWrapper
+        src={logo.image}
+        altText="Deutz & Krüger Logo"
+        loading="eager"
+        className="w-16"
+      />
+    </a>
+
     {
       navItems.map((item) => {
         const { href, title } = item;
@@ -32,6 +33,7 @@ const { navItems, footerItems, logo } = layoutEntry.data;
       })
     }
   </nav>
+  <hr class="mb-4" />
 </header>
 <slot />
 <footer>
