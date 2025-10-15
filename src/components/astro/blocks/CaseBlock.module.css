@@ -1,0 +1,12 @@
+.mobileView,
+.desktopView {
+  display: none;
+}
+
+:global(.mobile) .mobileView {
+  display: block;
+}
+
+:global(.desktop) .desktopView {
+  display: contents;
+}

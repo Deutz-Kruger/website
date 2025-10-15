@@ -6,58 +6,70 @@ interface Props {
 }
 
 const { className } = Astro.props;
+
+const uniqueId = `swiper-${crypto.randomUUID()}`;
 ---
 
-<div class={cn(className, "swiper min-h-56 w-full")} id="carousel">
+<div id={uniqueId} class={cn(className, "swiper min-h-56 w-full")}>
   <div class="swiper-wrapper h-full p-4">
     <slot />
   </div>
 </div>
 
-<slot id="non-carousel" />
+<script define:vars={{ uniqueId }} is:inline>
+  /*global uniqueId */
+  const swiperElement = document.getElementById(uniqueId);
 
-<script>
-  import "swiper/css";
-  import "swiper/css/autoplay";
-  import "swiper/css/a11y";
+  if (!window.swiperLoader) {
+    const loadJs = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
 
-  import { useUserAgent } from "astro-useragent";
+      script.onload = () => {
+        resolve();
+      };
+      script.onerror = reject;
+      script.src =
+        "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
+      document.head.appendChild(script);
+    });
 
-  const { isMobile } = useUserAgent(navigator.userAgent);
+    const loadCss = new Promise((resolve, reject) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.onload = () => {
+        resolve();
+      };
+      link.onerror = reject;
 
-  const carousel = document.getElementById("carousel");
-  const nonCarousel = document.getElementById("non-carousel");
-  const swiperSlides = document.getElementsByClassName("swiper-slide");
+      link.href =
+        "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css";
+      document.head.appendChild(link);
+    });
 
-  if (isMobile) {
-    nonCarousel?.remove();
-  } else {
-    carousel?.remove();
-    for (const slide of swiperSlides) {
-      slide.classList.remove("swiper-slide");
-    }
+    window.swiperLoader = Promise.all([loadJs, loadCss]);
   }
 
-  import Swiper from "swiper";
-  import { A11y, Autoplay } from "swiper/modules";
+  window.swiperLoader
+    .then(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const swiper = new window.Swiper(swiperElement, {
+        direction: "horizontal",
+        loop: true,
 
-  const swiper = new Swiper(".swiper", {
-    modules: [Autoplay, A11y],
-    direction: "horizontal",
-    loop: true,
+        speed: 700,
+        spaceBetween: 100,
 
-    speed: 700,
-    spaceBetween: 100,
+        autoHeight: true,
+        observer: true,
+        observeParents: true,
 
-    autoHeight: true,
-    observer: true,
-    observeParents: true,
-
-    autoplay: {
-      delay: 5000,
-      pauseOnMouseEnter: true,
-    },
-  });
-
-  swiper.init();
+        autoplay: {
+          delay: 5000,
+          pauseOnMouseEnter: true,
+        },
+      });
+    })
+    .catch((err) => {
+      console.error("Failed to load Swiper", err);
+    });
 </script>
