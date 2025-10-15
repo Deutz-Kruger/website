@@ -11,7 +11,7 @@ const uniqueId = `swiper-${crypto.randomUUID()}`;
 ---
 
 <div id={uniqueId} class={cn(className, "swiper min-h-56 w-full")}>
-  <div class="swiper-wrapper h-full p-4">
+  <div class="swiper-wrapper h-full">
     <slot />
   </div>
 </div>
@@ -54,11 +54,13 @@ const uniqueId = `swiper-${crypto.randomUUID()}`;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const swiper = new window.Swiper(swiperElement, {
         direction: "horizontal",
-        loop: true,
+        // loop: true,
 
         speed: 700,
-        spaceBetween: 100,
+        spaceBetween: 200,
 
+        slidesPerView: "auto",
+        centeredSlides: true,
         autoHeight: true,
         observer: true,
         observeParents: true,
