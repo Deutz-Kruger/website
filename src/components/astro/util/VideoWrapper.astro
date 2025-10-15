@@ -13,7 +13,6 @@ const mediaEntry = getMedia(src);
 const videoId = mediaEntry.id;
 
 const iframeId = `player-${videoId}`;
-// const video = getVideoPlayerUrl(mediaEntry.id);
 
 const iframeSrc = `2`;
 
@@ -36,6 +35,7 @@ const paddingTopPercent =
 <script is:inline src="https://embed.cloudflarestream.com/embed/sdk.latest.js"
 ></script>
 <script define:vars={{ iframeId }}>
+  /*global Stream, iframeId*/
   const iframe = document.getElementById(iframeId);
 
   const player = Stream(iframe);
