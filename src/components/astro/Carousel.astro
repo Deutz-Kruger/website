@@ -8,17 +8,35 @@ interface Props {
 const { className } = Astro.props;
 ---
 
-<div class={cn(className, "swiper min-h-56 w-full")}>
-  <div class="swiper-wrapper">
+<div class={cn(className, "swiper min-h-56 w-full")} id="carousel">
+  <div class="swiper-wrapper h-full p-4">
     <slot />
   </div>
-  <div class="swiper-pagination"></div>
 </div>
+
+<slot id="non-carousel" />
 
 <script>
   import "swiper/css";
   import "swiper/css/autoplay";
   import "swiper/css/a11y";
+
+  import { useUserAgent } from "astro-useragent";
+
+  const { isMobile } = useUserAgent(navigator.userAgent);
+
+  const carousel = document.getElementById("carousel");
+  const nonCarousel = document.getElementById("non-carousel");
+  const swiperSlides = document.getElementsByClassName("swiper-slide");
+
+  if (isMobile) {
+    nonCarousel?.remove();
+  } else {
+    carousel?.remove();
+    for (const slide of swiperSlides) {
+      slide.classList.remove("swiper-slide");
+    }
+  }
 
   import Swiper from "swiper";
   import { A11y, Autoplay } from "swiper/modules";

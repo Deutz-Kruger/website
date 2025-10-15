@@ -26,14 +26,14 @@ const { images, animatedBg, bgCols } = block;
     animatedBg ? (
       <BackgroundGradient
         client:visible
-        className={cn("p-4")}
+        className={cn()}
         contentType="images"
         images={images}
         gradientCols={bgCols}
       >
         <Carousel>
           {images.map((image) => (
-            <div class="swiper-slide">
+            <div class="swiper-slide py-4">
               <ImageWrapper
                 src={image.image}
                 altText={image.alt}

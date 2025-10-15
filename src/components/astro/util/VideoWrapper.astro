@@ -1,6 +1,6 @@
 ---
 import { getAspectPercantage } from "@/utils/aspectRatio";
-import { getMedia, getVideoPlayerUrl } from "@/utils/media";
+import { getMedia } from "@/utils/media";
 
 interface Props {
   src: string;
@@ -10,10 +10,12 @@ interface Props {
 const { src, loading } = Astro.props;
 
 const mediaEntry = getMedia(src);
-const video = getVideoPlayerUrl(mediaEntry.id);
+const videoId = mediaEntry.id;
 
-const loadingOrder =
-  loading === "lazy" || loading === "eager" ? loading : "lazy";
+const iframeId = `player-${videoId}`;
+// const video = getVideoPlayerUrl(mediaEntry.id);
+
+const iframeSrc = `2`;
 
 const paddingTopPercent =
   mediaEntry.width && mediaEntry.height
@@ -23,10 +25,26 @@ const paddingTopPercent =
 
 <div style=`position: relative; padding-top: ${paddingTopPercent.toFixed(2)}%`>
   <iframe
+    id={iframeId}
     title={mediaEntry.id}
-    src={video}
+    src={iframeSrc}
     style="border: none; position: absolute; top: 0; height: 100%; width: 100%"
-    allow="autoplay;"
-    allowfullscreen="false"
-    loading={loadingOrder}></iframe>
+    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+    allowfullscreen="true"
+    loading={loading === "eager" ? "eager" : "lazy"}></iframe>
 </div>
+<script is:inline src="https://embed.cloudflarestream.com/embed/sdk.latest.js"
+></script>
+<script define:vars={{ iframeId }}>
+  const iframe = document.getElementById(iframeId);
+
+  const player = Stream(iframe);
+  player.muted = true;
+  player.autoplay = true;
+  player.controls = false;
+  player.play().catch(() => {
+    console.log("Playback failed");
+    player.muted = true;
+    player.play();
+  });
+</script>

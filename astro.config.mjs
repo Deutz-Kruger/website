@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import robotsTxt from "astro-robots-txt";
+import Sonda from "sonda/astro";
 import { loadEnv } from "vite";
 import glsl from "vite-plugin-glslify-inject";
 
@@ -40,6 +41,7 @@ export default defineConfig({
           : [{ userAgent: "*", disallow: "/" }],
     }),
     react(),
+    Sonda(),
   ],
   vite: {
     plugins: [
@@ -65,6 +67,9 @@ export default defineConfig({
       watch: {
         ignored: ["**/*.astro.tsx"],
       },
+    },
+    build: {
+      sourcemap: true,
     },
   },
   adapter: cloudflare({

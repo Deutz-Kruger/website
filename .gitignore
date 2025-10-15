@@ -28,3 +28,6 @@ backup.pages.yml
 manifest.json
 
 src/placeholder
+
+.sonda
+.wrangler
