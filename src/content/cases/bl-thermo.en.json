@@ -6,28 +6,41 @@
     {
       "_block": "caseTitle",
       "title": "BL thermodynamics Website Re-Design",
-      "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features. Hi."
+      "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features."
     },
     {
       "_block": "caseVideo",
       "video": "/src/content/media/key_visual 3-compressed.mp4",
-      "animatedBg": false
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": false
+        }
+      }
     },
     {
       "_block": "caseVideo",
       "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
-      "animatedBg": true,
-      "bgCols": [
-        "#D92C2E",
-        "#FFC6A9",
-        "#F8E0C8",
-        "#FEF1E0"
-      ]
+      "background": {
+        "bgBools": {
+          "animatedBg": true,
+          "staticBg": false
+        },
+        "bgCols": [
+          "#F0202D",
+          "#FFA48D"
+        ]
+      }
     },
     {
       "_block": "caseVideo",
       "video": "/src/content/media/concept_reality 1-compressed.mp4",
-      "animatedBg": false
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": false
+        }
+      }
     },
     {
       "_block": "caseImageText",
@@ -36,12 +49,88 @@
         "alt": "A rectification column in an industrial setting"
       },
       "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
-      "textRight": false
+      "textRight": false,
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": false
+        }
+      }
     },
     {
       "_block": "caseVideo",
       "video": "/src/content/media/mission 4-compressed.mp4",
-      "animatedBg": false
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": false
+        }
+      }
+    },
+    {
+      "_block": "caseImage",
+      "image": {
+        "image": "/src/content/media/services.png",
+        "alt": "BL thermodynamics service section"
+      },
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
+    },
+    {
+      "_block": "caseImageText",
+      "image": {
+        "image": "/src/content/media/services_mobile.png",
+        "alt": "BL thermodynamics service section on mobile phone"
+      },
+      "textRight": true,
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
+    },
+    {
+      "_block": "caseImage",
+      "image": {
+        "image": "/src/content/media/infocard_collapsed.png",
+        "alt": "BL thermodynamics info card section collapsed"
+      },
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
+    },
+    {
+      "_block": "caseImage",
+      "image": {
+        "image": "/src/content/media/infocard_expanded.png",
+        "alt": "BL thermodynamics infocard section expanded"
+      },
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
     },
     {
       "_block": "caseImageFull",
@@ -63,13 +152,29 @@
           "alt": "Screenshot of BL thermodynamics website on mobile"
         }
       ],
-      "animatedBg": true,
-      "bgCols": [
-        "#000F79",
-        "#053CA1",
-        "#2586F7",
-        "#FFFFFF"
-      ]
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": false
+        }
+      }
+    },
+    {
+      "_block": "caseImageText",
+      "image": {
+        "image": "/src/content/media/infocard_mobile.png",
+        "alt": "BL thermodynamics infocard section on mobile"
+      },
+      "textRight": false,
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
     }
   ],
   "casePreview": {
