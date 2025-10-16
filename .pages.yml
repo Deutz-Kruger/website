@@ -339,6 +339,7 @@ components:
         type: text
       - name: textRight
         label: Text align right?
+        description: By default the image will be alligned right. If no text is present, this can still be used to allign the image left.
         type: boolean
         default: false
         
