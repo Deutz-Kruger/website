@@ -233,8 +233,8 @@ components:
   background:
     label: Background Settings
     description: | 
-      | All settings used to set the background of images and videos.
-      | If a background is wanted choose either static or animated.
+      All settings used to set the background of images and videos.
+      If a background is wanted choose either static or animated.
       Static: A solid color. If there is more than 1 color provided, the background will always be the first color
       Animated: Based on the provided colors a gradient will be generated which animates.
     type: object
