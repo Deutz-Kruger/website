@@ -230,12 +230,38 @@ content:
                   media: files
                   categories: [document]
 components:
-  bgGradientCol:
-    label: Background Gradient Colors
-    description: List of colors to generate the animated gradient background. The "#" must be included per color.
+  background:
+    label: Background Settings
+    description: All settings used to set the background of images and videos
+    type: object
+    fields:
+      - name: bgBools
+        component: bgBools
+      - name: bgCols
+        component: bgCols
+      
+  
+  bgBools:
+    label: Enable background variant
+    type: object
+    fields:
+      - name: animatedBg
+        label: Animated Background?
+        type: boolean
+        default: false
+      - name: staticBg
+        label: Static Background?
+        type: boolean
+        default: false
+
+  bgCols:
+    label: Background Color(s)
+    description: List of colors to use for the media background. If the background is animated it generates a gradient. If the background is static, the first color provided is used. The "#" must be included per color.
     type: string
+    default: \#EBEBEB
     list: 
      collapsible: false
+
     
   caseVideo:
     label: Video Block
@@ -247,15 +273,8 @@ components:
         type: file
         options:
           categories: [video]
-      - name: animatedBg
-        label: Animated Background?
-        type: boolean
-        default: false
-      - name: bgCols
-        component: bgGradientCol
-        
-        
-
+      - name: background
+        component: background
         
   caseImage:
     label: Image Block
@@ -265,12 +284,8 @@ components:
       - name: image
         label: Image File
         component: image
-      - name: animatedBg
-        label: Animated Background?
-        type: boolean
-        default: false
-      - name: bgCols
-        component: bgGradientCol
+      - name: background
+        component: background
 
   caseImageText:
     label: Image & Text
@@ -287,6 +302,8 @@ components:
         label: Text align right?
         type: boolean
         default: false
+      - name: background
+        component: background
         
   caseImageFull:
     label: Image Full Width
@@ -299,12 +316,8 @@ components:
           collapsible: false
           max: 4
         component: image
-      - name: animatedBg
-        label: Animated Background?
-        type: boolean
-        default: false
-      - name: bgCols
-        component: bgGradientCol
+      - name: background
+        component: background
         
   caseImageTextFull:
     label: Image & Text Full Width
@@ -314,6 +327,8 @@ components:
       - name: image
         label: Image File
         component: image
+      - name: background
+        component: background
       - name: text
         label: Text next to image
         type: text
