@@ -258,7 +258,7 @@ components:
     label: Background Color(s)
     description: List of colors to use for the media background. If the background is animated it generates a gradient. If the background is static, the first color provided is used. The "#" must be included per color.
     type: string
-    default: #EBEBEB
+    default: "#EBEBEB"
     list: 
      collapsible: false
 
