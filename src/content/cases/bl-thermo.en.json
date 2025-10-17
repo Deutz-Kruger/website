@@ -133,6 +133,23 @@
       }
     },
     {
+      "_block": "caseImageText",
+      "image": {
+        "image": "/src/content/media/infocard_mobile.png",
+        "alt": "BL thermodynamics infocard section on mobile"
+      },
+      "textRight": false,
+      "background": {
+        "bgBools": {
+          "animatedBg": false,
+          "staticBg": true
+        },
+        "bgCols": [
+          "#EBEBEB"
+        ]
+      }
+    },
+    {
       "_block": "caseImageFull",
       "images": [
         {
@@ -160,21 +177,19 @@
       }
     },
     {
-      "_block": "caseImageText",
+      "_block": "caseImageTextFull",
       "image": {
-        "image": "/src/content/media/infocard_mobile.png",
-        "alt": "BL thermodynamics infocard section on mobile"
+        "image": "/src/content/media/construction_site.png",
+        "alt": "Construction site with multiple people in front of a building"
       },
-      "textRight": false,
       "background": {
         "bgBools": {
           "animatedBg": false,
-          "staticBg": true
-        },
-        "bgCols": [
-          "#EBEBEB"
-        ]
-      }
+          "staticBg": false
+        }
+      },
+      "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+      "textRight": false
     }
   ],
   "casePreview": {
