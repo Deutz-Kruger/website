@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { block, loading, className = "", index } = Astro.props;
-const { video, animatedBg, bgCols } = block;
+const { video, background } = block;
 
 const marginRight = index % 2 === 0;
 ---
@@ -30,13 +30,13 @@ const marginRight = index % 2 === 0;
   )}
 >
   {
-    animatedBg ? (
+    background.bgBools.animatedBg ? (
       <BackgroundGradient
         className="gradient-background"
         client:visible
         contentType="video"
         video={video}
-        gradientCols={bgCols}
+        gradientCols={background.bgCols}
       >
         <VideoWrapper src={video} loading={loading} />
       </BackgroundGradient>

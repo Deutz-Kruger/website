@@ -8,6 +8,14 @@ export const imageField = z.object({
   alt: z.string(),
 });
 
+export const backgroundField = z.object({
+  bgBools: z.object({
+    animatedBg: z.boolean(),
+    staticBg: z.boolean(),
+  }),
+  bgCols: z.array(z.string()).optional(),
+});
+
 export const caseTitleBlock = z.object({
   _block: z.literal("caseTitle"),
   title: z.string(),
@@ -17,36 +25,33 @@ export const caseTitleBlock = z.object({
 export const caseVideoBlock = z.object({
   _block: z.literal("caseVideo"),
   video: z.string(),
-  animatedBg: z.boolean(),
-  bgCols: z.array(z.string()).optional(),
+  background: backgroundField,
 });
 
 export const caseImageBlock = z.object({
   _block: z.literal("caseImage"),
   image: imageField,
-  animatedBg: z.boolean(),
-  bgCols: z.array(z.string()).optional(),
+  background: backgroundField,
 });
 
 export const caseImageTextBlock = z.object({
   _block: z.literal("caseImageText"),
   image: imageField,
-  text: z.string(),
+  text: z.string().optional(),
   textRight: z.boolean(),
 });
 
 export const caseImageTextFullBlock = z.object({
   _block: z.literal("caseImageTextFull"),
   image: imageField,
-  text: z.string(),
+  text: z.string().optional(),
   textRight: z.boolean(),
 });
 
 export const caseImageFullBlock = z.object({
   _block: z.literal("caseImageFull"),
   images: z.array(imageField),
-  animatedBg: z.boolean(),
-  bgCols: z.array(z.string()).optional(),
+  background: backgroundField,
 });
 
 export const blocksUnion = z.discriminatedUnion("_block", [

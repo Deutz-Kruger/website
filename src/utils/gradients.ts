@@ -11,13 +11,13 @@ import { Vector3 } from "three";
 
 /**
  * Defines the available gradient names.
- * @deprecated
+ * Only used as fallback.
  */
 export type GradientNames = "RED" | "BLUE";
 
 /**
  * A record of cosine gradient specifications, indexed by `GradientNames`.
- * @deprecated
+ * Only used as fallback.
  */
 export const GRADIENT_SPECS: Record<GradientNames, CosGradientSpec> = {
   RED: [
