@@ -24,7 +24,11 @@ content:
       - name: blocks
         label: Blocks
         type: block
-        list: true
+        list:
+          collapsible:
+            collapsed: true 
+            summary: "{label} ({index})"
+            multiple: true
         blocks:
           - name: caseTitle
             label: Case Title
@@ -170,7 +174,6 @@ content:
           - name: title
             label: Displayed text
             type: string
-
       - name: logo
         label: Header Logo
         component: image
@@ -184,22 +187,18 @@ content:
       - name: title
         label: Website title
         type: string
-
       - name: description
         label: Website description
         type: string
         description: Will be used for any page with no description.
-
       - name: url
         label: Website URL
         type: string
         pattern: ^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$
-
       - name: cover
         label: Preview image
         component: image
         description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
-
       - name: legal
         label: Legal Stuff
         description: Stuff like privacy policy, Impressum, etc.
@@ -229,6 +228,7 @@ content:
                 options:
                   media: files
                   categories: [document]
+
 components:
   background:
     label: Background Settings
@@ -243,7 +243,6 @@ components:
         component: bgBools
       - name: bgCols
         component: bgCols
-      
   
   bgBools:
     label: Enable background variant
@@ -266,7 +265,6 @@ components:
     list: 
      collapsible: false
 
-    
   caseVideo:
     label: Video Block
     description: This is as big as a case block
@@ -366,7 +364,6 @@ components:
       - name: alt
         label: Alt Text
         type: string
-        
 
 media:
   - name: media
