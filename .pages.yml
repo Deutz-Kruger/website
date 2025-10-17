@@ -27,7 +27,7 @@ content:
         list:
           collapsible:
             collapsed: true 
-            summary: "{blocks.label} ({index})"
+            summary: "Block #{index}"
             multiple: true
         blocks:
           - name: caseTitle
