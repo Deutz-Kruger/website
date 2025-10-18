@@ -171,9 +171,13 @@
       ],
       "background": {
         "bgBools": {
-          "animatedBg": false,
+          "animatedBg": true,
           "staticBg": false
-        }
+        },
+        "bgCols": [
+          "#0D47AA",
+          "#6F88BB"
+        ]
       }
     },
     {

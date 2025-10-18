@@ -1,13 +1,15 @@
 ---
 import { getAspectPercantage } from "@/utils/aspectRatio";
+import { cn } from "@/utils/cn";
 import { getMedia } from "@/utils/media";
 
 interface Props {
   src: string;
   loading: string;
+  className?: string;
 }
 
-const { src, loading } = Astro.props;
+const { src, loading, className = "" } = Astro.props;
 
 const mediaEntry = getMedia(src);
 const videoId = mediaEntry.id;
@@ -22,17 +24,22 @@ const paddingTopPercent =
     : 56.25;
 ---
 
-<div style=`position: relative; padding-top: ${paddingTopPercent.toFixed(2)}%`>
-  <iframe
-    id={iframeId}
-    title={mediaEntry.id}
-    src={iframeSrc}
-    style="border: none; position: absolute; top: 0; height: 100%; width: 100%"
-    allowfullscreen="true"
-    loading={loading === "eager" ? "eager" : "lazy"}></iframe>
+<div class={cn(className)}>
+  <div
+    style=`position: relative; padding-top: ${paddingTopPercent.toFixed(2)}%`
+  >
+    <iframe
+      id={iframeId}
+      title={mediaEntry.id}
+      src={iframeSrc}
+      style="border: none; position: absolute; top: 0; height: 100%; width: 100%"
+      allowfullscreen="true"
+      loading={loading === "eager" ? "eager" : "lazy"}></iframe>
+  </div>
 </div>
 <script is:inline src="https://embed.cloudflarestream.com/embed/sdk.latest.js"
 ></script>
+
 <script define:vars={{ iframeId }} is:inline>
   /*global Stream, iframeId*/
   const iframe = document.getElementById(iframeId);

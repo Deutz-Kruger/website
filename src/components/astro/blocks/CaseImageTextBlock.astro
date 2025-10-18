@@ -5,6 +5,8 @@ import type { z } from "astro:content";
 import type { caseImageTextBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
+import Background from "./utils/Background.astro";
+
 type CaseImageTextBlock = z.infer<typeof caseImageTextBlock>;
 
 interface Props {
@@ -15,7 +17,9 @@ interface Props {
 }
 
 const { block, loading, className = "", index } = Astro.props;
-const { image, text, textRight } = block;
+const { image, text, textRight, background } = block;
+
+const side = textRight ? "order-first" : "order-last";
 
 const marginRight = index % 2 === 0;
 ---
@@ -28,10 +32,11 @@ const marginRight = index % 2 === 0;
   )}
 >
   <p class="md:text-medium leading-[1.125]! w-1/2 pr-6 text-base">{text}</p>
-  <ImageWrapper
-    className={cn(textRight ? "order-first" : "order-last", "w-fit", "w-fit")}
-    src={image.image}
-    altText={image.alt}
-    loading={loading}
-  />
+  <Background
+    background={background}
+    numberOfItems={1}
+    className={cn("block-background-half grid w-[25vw] items-center", side)}
+  >
+    <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+  </Background>
 </div>

@@ -5,6 +5,8 @@ import type { z } from "astro:content";
 import type { caseImageBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
+import Background from "./utils/Background.astro";
+
 type CaseImageBlock = z.infer<typeof caseImageBlock>;
 
 interface Props {
@@ -15,10 +17,16 @@ interface Props {
 }
 
 const { block, loading, className = "", index } = Astro.props;
-const { image } = block;
+const { image, background } = block;
 const marginRight = index % 2 === 0;
 ---
 
-<div class={cn(className, marginRight ? "md:mr-auto" : "")}>
-  <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
-</div>
+<section class={cn("case-block", className, marginRight ? "md:mr-auto" : "")}>
+  <Background
+    background={background}
+    numberOfItems={1}
+    className="block-background"
+  >
+    <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+  </Background>
+</section>

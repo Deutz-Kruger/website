@@ -1,11 +1,11 @@
 ---
 import type { z } from "astro:content";
 
-import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { caseVideoBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
 import VideoWrapper from "../util/VideoWrapper.astro";
+import Background from "./utils/Background.astro";
 
 type CaseVideoBlock = z.infer<typeof caseVideoBlock>;
 
@@ -22,26 +22,12 @@ const { video, background } = block;
 const marginRight = index % 2 === 0;
 ---
 
-<div
-  class={cn(
-    className,
-    "case-block mb-4 md:mb-6",
-    marginRight ? "md:mr-auto" : "",
-  )}
->
-  {
-    background.bgBools.animatedBg ? (
-      <BackgroundGradient
-        className="gradient-background"
-        client:visible
-        contentType="video"
-        video={video}
-        gradientCols={background.bgCols}
-      >
-        <VideoWrapper src={video} loading={loading} />
-      </BackgroundGradient>
-    ) : (
-      <VideoWrapper src={video} loading={loading} />
-    )
-  }
-</div>
+<section class={cn(className, "case-block", marginRight ? "md:mr-auto" : "")}>
+  <Background numberOfItems={1} background={background}>
+    <VideoWrapper
+      src={video}
+      loading={loading}
+      className={cn("rounded-media")}
+    />
+  </Background>
+</section>

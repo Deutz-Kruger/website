@@ -3,5 +3,6 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - workerd
-# publicHoistPattern:
+publicHoistPattern:
+  - "linkedoms"
 #   - "*types*"

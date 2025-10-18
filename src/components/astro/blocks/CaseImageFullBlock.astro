@@ -2,12 +2,12 @@
 import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import type { z } from "astro:content";
 
-import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { caseImageFullBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
 import Carousel from "../Carousel.astro";
 import caseBlockStyles from "./CaseBlock.module.css";
+import Background from "./utils/Background.astro";
 
 type CaseImageFullBlock = z.infer<typeof caseImageFullBlock>;
 
@@ -22,53 +22,42 @@ const { block, loading, className = "", index } = Astro.props;
 const { images, background } = block;
 ---
 
-<div class={cn("case-block-full md:h-96", className)}>
-  {
-    background.bgBools.animatedBg ? (
-      <BackgroundGradient
-        client:visible
-        className={cn()}
-        contentType="images"
-        images={images}
-        gradientCols={background.bgCols}
-      >
-        <div class={caseBlockStyles.mobileView}>
-          <Carousel>
-            {images.map((image) => (
-              <div class="swiper-slide !w-2/3 p-4">
-                <ImageWrapper
-                  src={image.image}
-                  altText={image.alt}
-                  loading={loading}
-                  className="w-full md:w-fit md:h-96"
-                />
-              </div>
-            ))}
-          </Carousel>
-        </div>
-
-        <div class={caseBlockStyles.desktopView}>
-          {images.map((image) => (
-            <div class="py-4">
+<div class="case-block-full">
+  <Background
+    background={background}
+    numberOfItems={images.length}
+    className="h-fit"
+  >
+    <div class={cn(caseBlockStyles.mobileView)}>
+      <Carousel>
+        {
+          images.map((image) => (
+            <div class="swiper-slide !w-2/3 p-4">
               <ImageWrapper
                 src={image.image}
                 altText={image.alt}
                 loading={loading}
-                className="w-2/3 mx-auto md:w-fit md:h-96"
+                className="w-screen md:w-fit h-60 md:h-96 rounded-media"
               />
             </div>
-          ))}
-        </div>
-      </BackgroundGradient>
-    ) : (
-      images.map((image) => (
-        <ImageWrapper
-          src={image.image}
-          altText={image.alt}
-          loading={loading}
-          className="w-2/3 mx-auto md:w-fit md:h-96"
-        />
-      ))
-    )
-  }
+          ))
+        }
+      </Carousel>
+    </div>
+
+    <div class={cn(caseBlockStyles.desktopView)}>
+      {
+        images.map((image) => (
+          <div class="py-4">
+            <ImageWrapper
+              src={image.image}
+              altText={image.alt}
+              loading={loading}
+              className="mx-auto md:w-fit md:h-fit max-h-96  object-contain rounded-media"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </Background>
 </div>

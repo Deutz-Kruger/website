@@ -39,6 +39,7 @@ export const caseImageTextBlock = z.object({
   image: imageField,
   text: z.string().optional(),
   textRight: z.boolean(),
+  background: backgroundField,
 });
 
 export const caseImageTextFullBlock = z.object({
