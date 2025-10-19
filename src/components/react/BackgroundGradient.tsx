@@ -11,7 +11,6 @@ import { GradientPlane } from "../r3f/GradientPlane";
 interface Props extends React.PropsWithChildren {
   gradientCols?: string[];
   className?: string;
-  numberOfItems: number;
 }
 
 export const BackgroundGradient = (props: Props) => {

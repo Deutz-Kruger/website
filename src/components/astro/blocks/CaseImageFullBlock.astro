@@ -21,12 +21,8 @@ const { block, loading, className = "", index } = Astro.props;
 const { images, background } = block;
 ---
 
-<div class={cn(className)}>
-  <Background
-    background={background}
-    numberOfItems={images.length}
-    className=""
-  >
+<div class={cn(className, "md:col-span-full")}>
+  <Background background={background} className="">
     <div class={cn("md:hidden")}>
       <Carousel>
         {

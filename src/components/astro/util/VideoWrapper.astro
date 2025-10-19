@@ -24,8 +24,9 @@ const paddingTopPercent =
     : 56.25;
 ---
 
-<div class={cn(className)}>
+<div class={cn(className, "")}>
   <div
+    class=""
     style=`position: relative; padding-top: ${paddingTopPercent.toFixed(2)}%`
   >
     <iframe
@@ -42,15 +43,33 @@ const paddingTopPercent =
 
 <script define:vars={{ iframeId }} is:inline>
   /*global Stream, iframeId*/
-  const iframe = document.getElementById(iframeId);
+  setTimeout(() => {
+    console.log(`[Player] Initializing for iframe ID: ${iframeId}`);
+    const iframe = document.getElementById(iframeId);
+    console.log(`[Player] Iframe element for ${iframeId}:`, iframe);
+    console.log(
+      `[Player] Cloudflare Stream SDK for ${iframeId}:`,
+      typeof Stream,
+    );
 
-  const player = Stream(iframe);
-  player.muted = true;
-  player.autoplay = true;
-  player.controls = false;
-  player.play().catch(() => {
-    console.log("Playback failed");
-    player.muted = true;
-    player.play();
-  });
+    if (iframe && typeof Stream === "function") {
+      try {
+        const player = Stream(iframe);
+        player.muted = true;
+        player.autoplay = true;
+        player.controls = false;
+        player.loop = true;
+        player.play().catch(() => {
+          console.error(`[Player] Playback failed for ${iframeId}`);
+          player.play();
+        });
+      } catch (e) {
+        console.error(`[Player] Error creating player for ${iframeId}:`, e);
+      }
+    } else {
+      console.error(
+        `[Player] Failed to initialize for ${iframeId}. Iframe or Stream SDK was not ready.`,
+      );
+    }
+  }, 0);
 </script>

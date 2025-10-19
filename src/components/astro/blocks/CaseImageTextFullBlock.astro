@@ -16,12 +16,19 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { block, loading, className = "", index } = Astro.props;
 const { image, text, textRight } = block;
+const textPosition = textRight ? "flex-row-reverse" : "";
 ---
 
-<div class={cn("flex", className)}>
+<div
+  class={cn(
+    "flex justify-end md:col-span-full w-full ",
+    textPosition,
+    className,
+  )}
+>
   <p>{text}</p>
   <ImageWrapper
-    className={cn(textRight ? "order-first" : "order-last")}
+    className={""}
     src={image.image}
     altText={image.alt}
     loading={loading}

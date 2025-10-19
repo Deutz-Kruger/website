@@ -9,11 +9,11 @@ type Background = z.infer<typeof backgroundField>;
 
 interface Props {
   background: Background;
-  numberOfItems: number;
+
   className?: string;
 }
 
-const { background, numberOfItems, className = "" } = Astro.props;
+const { background, className = "" } = Astro.props;
 const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
 ---
 
@@ -23,7 +23,6 @@ const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
       <BackgroundGradient
         className={cn(className, "block-background")}
         client:visible
-        numberOfItems={numberOfItems}
         gradientCols={background.bgCols}
       >
         <slot />
