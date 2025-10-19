@@ -18,10 +18,11 @@ interface Props {
 
 const { block, loading, className = "", index } = Astro.props;
 const { image, background } = block;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const marginRight = index % 2 === 0;
 ---
 
-<section class={cn("case-block", className, marginRight ? "md:mr-auto" : "")}>
+<section class={cn(className)}>
   <Background
     background={background}
     numberOfItems={1}

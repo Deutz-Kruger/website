@@ -7,7 +7,6 @@ import { cn } from "@/utils/cn";
 import { generateGradientUniforms, GRADIENT_SPECS } from "@/utils/gradients";
 
 import { GradientPlane } from "../r3f/GradientPlane";
-import styles from "./BackgroundGradient.module.css";
 
 interface Props extends React.PropsWithChildren {
   gradientCols?: string[];
@@ -16,17 +15,12 @@ interface Props extends React.PropsWithChildren {
 }
 
 export const BackgroundGradient = (props: Props) => {
-  const { className, gradientCols, children, numberOfItems } = props;
+  const { className, gradientCols, children } = props;
 
   const gradient =
     gradientCols && gradientCols?.length > 1
       ? generateGradientUniforms(gradientCols)
       : GRADIENT_SPECS["BLUE"].map((color) => new Vector3(...color));
-
-  const gridStyle = {
-    "--sm-grid-cols": Math.min(numberOfItems, 2),
-    "--md-grid-cols": Math.min(numberOfItems, 4),
-  } as React.CSSProperties;
 
   return (
     <div
@@ -42,9 +36,8 @@ export const BackgroundGradient = (props: Props) => {
         </Canvas>
       </div>
       <div
-        style={gridStyle}
         aria-label="Content Wrapper"
-        className={cn(className, "z-2 relative h-full", styles.dynamicGrid)}
+        className={cn(className, "z-2 relative h-full")}
       >
         {children}
       </div>

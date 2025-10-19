@@ -13,18 +13,11 @@ interface Props {
 }
 
 const { block, className = "", index } = Astro.props;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const marginRight = index % 2 === 0;
 ---
 
-<section
-  class={cn(
-    "mb-big md:mb-0 case-block",
-    marginRight ? "md:mr-auto" : "",
-    className,
-  )}
->
-  <section class="w-full md:w-4/5">
-    <h1 class="text-large md:text-largest">{block.title}</h1>
-    <p class="md:text-big leading text-base">{block.subHeading}</p>
-  </section>
+<section class={cn("w-full", className)}>
+  <h1 class="text-large md:text-largest">{block.title}</h1>
+  <p class="md:text-big leading text-base">{block.subHeading}</p>
 </section>

@@ -18,7 +18,7 @@ const { block, loading, className = "", index } = Astro.props;
 const { image, text, textRight } = block;
 ---
 
-<div class={cn("w-screen flex", className)}>
+<div class={cn("flex", className)}>
   <p>{text}</p>
   <ImageWrapper
     className={cn(textRight ? "order-first" : "order-last")}

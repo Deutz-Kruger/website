@@ -6,7 +6,6 @@ import type { caseImageFullBlock } from "@/content/config";
 import { cn } from "@/utils/cn";
 
 import Carousel from "../Carousel.astro";
-import caseBlockStyles from "./CaseBlock.module.css";
 import Background from "./utils/Background.astro";
 
 type CaseImageFullBlock = z.infer<typeof caseImageFullBlock>;
@@ -22,13 +21,13 @@ const { block, loading, className = "", index } = Astro.props;
 const { images, background } = block;
 ---
 
-<div class="case-block-full">
+<div class={cn(className)}>
   <Background
     background={background}
     numberOfItems={images.length}
-    className="h-fit"
+    className=""
   >
-    <div class={cn(caseBlockStyles.mobileView)}>
+    <div class={cn("md:hidden")}>
       <Carousel>
         {
           images.map((image) => (
@@ -37,7 +36,7 @@ const { images, background } = block;
                 src={image.image}
                 altText={image.alt}
                 loading={loading}
-                className="w-screen md:w-fit h-60 md:h-96 rounded-media"
+                className="w-full md:w-fit rounded-media"
               />
             </div>
           ))
@@ -45,7 +44,7 @@ const { images, background } = block;
       </Carousel>
     </div>
 
-    <div class={cn(caseBlockStyles.desktopView)}>
+    <div class={cn("hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4")}>
       {
         images.map((image) => (
           <div class="py-4">
@@ -53,7 +52,7 @@ const { images, background } = block;
               src={image.image}
               altText={image.alt}
               loading={loading}
-              className="mx-auto md:w-fit md:h-fit max-h-96  object-contain rounded-media"
+              className="mx-auto md:w-fit object-contain rounded-media"
             />
           </div>
         ))

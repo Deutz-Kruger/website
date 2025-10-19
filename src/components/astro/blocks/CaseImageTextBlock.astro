@@ -20,22 +20,16 @@ const { block, loading, className = "", index } = Astro.props;
 const { image, text, textRight, background } = block;
 
 const side = textRight ? "order-first" : "order-last";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const marginRight = index % 2 === 0;
 ---
 
-<div
-  class={cn(
-    "flex justify-between mb-4 md:mb-6 case-block",
-    marginRight ? "md:mr-auto" : "",
-    className,
-  )}
->
-  <p class="md:text-medium leading-[1.125]! w-1/2 pr-6 text-base">{text}</p>
+<div class={cn("flex justify-between", className)}>
+  <p class="md:text-medium w-1/2 text-base leading-[1.125]">{text}</p>
   <Background
     background={background}
     numberOfItems={1}
-    className={cn("block-background-half grid w-[25vw] items-center", side)}
+    className={cn("block-background-half grid w-1/2 items-center", side)}
   >
     <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
   </Background>

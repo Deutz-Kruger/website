@@ -10,7 +10,7 @@ const { className } = Astro.props;
 const uniqueId = `swiper-${crypto.randomUUID()}`;
 ---
 
-<div id={uniqueId} class={cn(className, "swiper min-h-56 w-full")}>
+<div id={uniqueId} class={cn(className, "swiper w-full")}>
   <div class="swiper-wrapper h-full">
     <slot />
   </div>

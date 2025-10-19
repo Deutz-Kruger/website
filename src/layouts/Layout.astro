@@ -102,13 +102,6 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Astro Starter";
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <script is:inline>
-      const isMobile =
-        /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|OperaMini/i.test(
-          navigator.userAgent,
-        );
-      document.documentElement.classList.add(isMobile ? "mobile" : "desktop");
-    </script>
   </head>
   <body class="bg-blue p-2.5 md:p-6">
     <SiteLayout>
