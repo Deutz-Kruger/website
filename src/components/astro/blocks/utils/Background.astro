@@ -21,7 +21,7 @@ const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
   {
     background.bgBools.animatedBg ? (
       <BackgroundGradient
-        className={cn(className, "block-background")}
+        className={cn(className, "padding-background")}
         client:visible
         gradientCols={background.bgCols}
       >
@@ -32,7 +32,7 @@ const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
         <slot />
       </div>
     ) : (
-      <div class={cn(className, "block-background h-full !p-0")}>
+      <div class={cn(className, "padding-background h-full !p-0")}>
         <slot />
       </div>
     )

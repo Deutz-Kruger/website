@@ -33,6 +33,8 @@
   /* Spacing */
   --spacing-big: 4rem;
   --spacing-sub: 1.125rem;
+
+  /* Radius */
   --radius-nav: 2.875rem;
   --radius-media: 1.5rem;
 
@@ -41,6 +43,7 @@
 }
 
 @layer components {
+  /* Highlighted Keywords Landingpage */
   .keyword {
     text-decoration: underline;
     font-style: italic;
@@ -50,27 +53,18 @@
     @apply px-2.5 py-0.5;
   }
 
-  .block-background {
+  .padding-background {
     @apply px-[1rem] py-[0.5rem] md:px-[2rem] md:py-[1.125rem];
   }
-  .block-background-half {
+  .padding-background-half {
     @apply px-[0.5rem] py-[0.25rem] md:px-[1rem] md:py-[0.5625rem];
   }
 }
 
-html {
-  @apply tracking-[1%] antialiased;
-  overflow-x: hidden;
+@utility scrollbar-hidden {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-/* 
-h1 {
-  @apply md:leading-13 leading-[1.125] md:tracking-[2%];
-}
-
-h1 + p {
-  @apply mt-sub leading-[1.3]! tracking-[1.125%] md:leading-8;
-}
-
-p {
-  @apply leading-[1.125]! tracking-[1%] md:leading-8;
-} */
