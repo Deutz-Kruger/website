@@ -18,21 +18,27 @@ interface Props {
 
 const { block, loading, className = "" } = Astro.props;
 const { image, text, textRight, background } = block;
-
-const textPosition = textRight ? "flex-row-reverse" : "";
 ---
 
-<div class={cn("flex justify-between gap-8", textPosition, className)}>
-  <p class="md:text-medium w-1/2 text-base leading-[1.125]">{text}</p>
+<div class={cn("grid grid-cols-2 gap-8 aspect-block", className)}>
+  <p
+    class={cn("md:text-medium  text-base leading-[1.125]", {
+      "order-last": textRight,
+    })}
+  >
+    {text}
+  </p>
+
   <Background
     background={background}
-    className={cn("padding-background-half grid w-1/2 items-center")}
+    className={cn("padding-background-half grid h-full items-center")}
   >
     <ImageWrapper
       src={image.image}
       altText={image.alt}
       loading={loading}
       className="h-full w-full"
+      objectFit="contain"
     />
   </Background>
 </div>

@@ -34,6 +34,9 @@
   --spacing-big: 4rem;
   --spacing-sub: 1.125rem;
 
+  /* Aspect Ratio */
+  --aspect-block: 2 / 1;
+
   /* Radius */
   --radius-nav: 2.875rem;
   --radius-media: 1.5rem;
