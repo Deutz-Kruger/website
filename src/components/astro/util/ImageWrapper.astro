@@ -1,4 +1,5 @@
 ---
+import { getAspectRatio } from "@/utils/aspectRatio";
 import { cn } from "@/utils/cn";
 import { getMedia } from "@/utils/media";
 import { getImageSet } from "@/utils/media";
@@ -6,9 +7,11 @@ import { getImageSet } from "@/utils/media";
 interface Props {
   src: string;
   altText: string;
+  objectFit?: "contain" | "cover";
   className?: string;
   loading?: string;
   sizes?: string;
+  aspectRatio?: "16/9" | "4/3" | "1/1" | "auto";
 }
 
 const {
@@ -16,23 +19,38 @@ const {
   altText,
   className = "",
   loading = "lazy",
+  objectFit = "contain",
+  aspectRatio = "auto",
   sizes = "(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw",
 } = Astro.props;
 
 const mediaEntry = getMedia(src);
 const image = getImageSet(mediaEntry?.id);
 
-const loadingOrder =
-  loading === "lazy" || loading === "eager" ? loading : "lazy";
+const loadingOrder = loading === "eager" ? loading : "lazy";
+
+if (!(mediaEntry.width && mediaEntry.height)) {
+  throw new Error(`[IMAGE ${mediaEntry.id}]: height and / or width missing`);
+}
+
+const { width, height } = getAspectRatio(mediaEntry.width, mediaEntry.height);
+
+const autoStyle =
+  aspectRatio === "auto" ? `aspect-ratio: ${width} / ${height};` : "";
 ---
 
-<img
-  src={image.baseImage}
-  srcset={image.srcSet}
-  sizes={sizes}
-  alt={altText}
-  width={mediaEntry?.width}
-  height={mediaEntry?.height}
-  class={cn("object-contain", className)}
-  loading={loadingOrder}
-/>
+<div role="presentation" class={cn(className)} style={autoStyle}>
+  <img
+    src={image.baseImage}
+    srcset={image.srcSet}
+    sizes={sizes}
+    alt={altText}
+    width={mediaEntry?.width}
+    height={mediaEntry?.height}
+    class={cn("w-full h-full", {
+      "object-contain": objectFit === "contain",
+      "object-cover": objectFit === "cover",
+    })}
+    loading={loadingOrder}
+  />
+</div>
