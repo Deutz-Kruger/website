@@ -30,6 +30,11 @@
   --text-medium: 1.125rem;
   --text-base: 1rem;
 
+  --tracking-landing-mobile: -0.045em;
+  --leading-landing-mobile: 1.125;
+
+  /* --leading- */
+
   /* Spacing */
   --spacing-big: 4rem;
   --spacing-sub: 1.125rem;
@@ -49,6 +54,12 @@
   /* Highlighted Keywords Landingpage */
   .keyword {
     text-decoration: underline;
+    font-style: italic;
+  }
+
+  .keyword-active {
+    text-decoration: underline;
+    text-decoration-color: rgba(0 0 0 / 0.4);
     font-style: italic;
   }
 

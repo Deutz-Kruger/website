@@ -10,8 +10,18 @@ interface Props {
 }
 
 const { hero } = Astro.props;
+
+const keywords = ["development", "brands", "digital experiences"];
+
+const highlightedHeadline = hero.headline.replace(
+  new RegExp(`(${keywords.join("|")})`, "gi"),
+  (match) => `<span class="keyword">${match}</span>`,
+);
 ---
 
-<header>
-  <h1>{hero.headline}</h1>
-</header>
+<section class="mb-8 flex flex-col justify-end">
+  <h1
+    class="text-large md:text-largest tracking-landing-mobile leading-landing-mobile w-5/6"
+    set:html={highlightedHeadline}
+  />
+</section>
