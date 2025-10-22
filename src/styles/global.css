@@ -16,12 +16,14 @@
   src: url("/fonts/ArialItalic.woff") format("woff");
 }
 
-@theme {
+@theme static {
   /* Colors */
   --color-blue: #425e6b;
   --color-green: #618667;
   --color-red: #9a2b5a;
+}
 
+@theme {
   /* Typo */
   --font-sans: Arial, "sans-serif";
   --text-largest: 3rem;

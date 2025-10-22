@@ -14,11 +14,18 @@ const { title, description = "Deutz & Krüger" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SeoLayout title={title} description={description} />
   </head>
-  <body
-    class="bg-blue overflow-x-hidden p-2.5 tracking-[1%] antialiased md:p-6"
-  >
+  <body class="overflow-x-hidden p-2.5 tracking-[1%] antialiased md:p-6">
     <SiteLayout>
       <slot />
     </SiteLayout>
   </body>
 </html>
+
+<script>
+  import { keywordColor } from "@/stores/keywordStore";
+  keywordColor.subscribe((color) => {
+    const body = document.querySelector("body");
+    if (!body) return;
+    body.style.backgroundColor = `var(${color})`;
+  });
+</script>

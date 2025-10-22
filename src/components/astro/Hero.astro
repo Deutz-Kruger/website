@@ -9,19 +9,51 @@ interface Props {
   hero: Hero;
 }
 
-const { hero } = Astro.props;
-
 const keywords = ["development", "brands", "digital experiences"];
+
+const generateKeywords = (match: string) => {
+  let keywordColor = "--color-blue";
+  switch (match) {
+    case "brands":
+      keywordColor = "--color-blue";
+      break;
+    case "development":
+      keywordColor = "--color-green";
+      break;
+    case "digital experiences":
+      keywordColor = "--color-red";
+      break;
+  }
+  return `<span class="keyword" data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
+};
+
+const { hero } = Astro.props;
 
 const highlightedHeadline = hero.headline.replace(
   new RegExp(`(${keywords.join("|")})`, "gi"),
-  (match) => `<span class="keyword">${match}</span>`,
+  generateKeywords,
 );
 ---
 
 <section class="mb-8 flex flex-col justify-end">
+  <div id="store-test"></div>
   <h1
     class="text-large md:text-largest tracking-landing-mobile leading-landing-mobile w-5/6"
     set:html={highlightedHeadline}
   />
 </section>
+
+<script>
+  import { setKeyword } from "@/stores/keywordStore";
+
+  const keywordElements = document.querySelectorAll(".keyword");
+  keywordElements.forEach((el) => {
+    const element = el as HTMLElement;
+    if (element.dataset.color) {
+      el.addEventListener("click", () => {
+        if (!element.dataset.color) return;
+        setKeyword(element.dataset.color);
+      });
+    }
+  });
+</script>
