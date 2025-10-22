@@ -20,12 +20,12 @@ const { block, loading, className = "" } = Astro.props;
 const { video, background } = block;
 ---
 
-<section class={cn(className, "case-block")}>
+<section class={cn(className, "aspect-block")}>
   <Background background={background}>
     <VideoWrapper
       src={video}
       loading={loading}
-      className={cn("rounded-media")}
+      className={cn("rounded-media h-full")}
     />
   </Background>
 </section>

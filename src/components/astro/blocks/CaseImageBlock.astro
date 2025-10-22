@@ -22,8 +22,13 @@ const { image, background } = block;
 const marginRight = index % 2 === 0;
 ---
 
-<section class={cn(className)}>
-  <Background background={background} className="padding-background">
-    <ImageWrapper src={image.image} altText={image.alt} loading={loading} />
+<section class={cn("aspect-block", className)}>
+  <Background background={background} className="padding-background h-full">
+    <ImageWrapper
+      className="h-full w-full"
+      src={image.image}
+      altText={image.alt}
+      loading={loading}
+    />
   </Background>
 </section>

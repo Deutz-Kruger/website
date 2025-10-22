@@ -24,7 +24,7 @@ export const BackgroundGradient = (props: Props) => {
   return (
     <div
       aria-label="Gradient Container"
-      className={cn("relative h-fit w-full", className)}
+      className={cn("relative h-fit w-full backdrop-blur-md", className)}
     >
       <div
         aria-label="R3F Canvas Wrapper"

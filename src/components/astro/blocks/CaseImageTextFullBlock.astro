@@ -21,14 +21,14 @@ const textPosition = textRight ? "flex-row-reverse" : "";
 
 <div
   class={cn(
-    "flex justify-end md:col-span-full w-full ",
+    "md:col-span-full flex w-full aspect-block",
     textPosition,
     className,
   )}
 >
   <p>{text}</p>
   <ImageWrapper
-    className={""}
+    className={"h-full w-fit"}
     src={image.image}
     altText={image.alt}
     loading={loading}

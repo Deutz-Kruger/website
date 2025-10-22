@@ -17,7 +17,7 @@ const { block, className = "", index } = Astro.props;
 const marginRight = index % 2 === 0;
 ---
 
-<section class={cn("w-full", className)}>
-  <h1 class="text-large md:text-largest">{block.title}</h1>
-  <p class="md:text-big leading text-base">{block.subHeading}</p>
+<section class={cn("aspect-block", className)}>
+  <h1 class="text-large md:text-largest mb-2 leading-[1]">{block.title}</h1>
+  <p class="md:text-big text-base leading-[1.125]">{block.subHeading}</p>
 </section>

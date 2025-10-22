@@ -20,6 +20,7 @@ const { block, loading, className = "" } = Astro.props;
 const { image, text, textRight, background } = block;
 ---
 
+<!-- TODO: Fix height of image, especially without text -->
 <div class={cn("grid grid-cols-2 gap-8 aspect-block", className)}>
   <p
     class={cn("md:text-medium  text-base leading-[1.125]", {
@@ -31,14 +32,14 @@ const { image, text, textRight, background } = block;
 
   <Background
     background={background}
-    className={cn("padding-background-half grid h-full items-center")}
+    className={cn("padding-background-half grid h-full w-full items-center")}
   >
     <ImageWrapper
       src={image.image}
       altText={image.alt}
       loading={loading}
-      className="h-full w-full"
-      objectFit="contain"
+      className="ml-auto h-full w-fit"
+      objectFit="cover"
     />
   </Background>
 </div>

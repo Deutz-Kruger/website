@@ -28,11 +28,11 @@ const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
         <slot />
       </BackgroundGradient>
     ) : background.bgBools.staticBg ? (
-      <div style={`background: ${staticCol}`} class={cn(className, `h-full`)}>
+      <div style={`background: ${staticCol}`} class={cn(className)}>
         <slot />
       </div>
     ) : (
-      <div class={cn(className, "padding-background h-full !p-0")}>
+      <div class={cn(className, "h-full !p-0")}>
         <slot />
       </div>
     )

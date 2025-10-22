@@ -40,6 +40,8 @@ export const getAspectRatio = (width: number, height: number): AspectRatio => {
   };
 };
 
+console.log(getAspectRatio(3840, 2158));
+
 /**
  * Calculates the aspect ratio as a percentage, useful for the `padding-bottom` CSS trick
  * to maintain aspect ratio for responsive elements.
