@@ -17,6 +17,17 @@ const lang = Astro.currentLocale ?? "en";
 ---
 
 <a href={getRelativeLocaleUrl(lang, slug)}>
-  <h2>{title}</h2>
-  <ImageWrapper src={previewImage.image} altText={previewImage.alt} />
+  <div
+    class="p-page-mobile md:p-page-desktop flex w-screen flex-col justify-center"
+  >
+    <ImageWrapper
+      src={previewImage.image}
+      altText={previewImage.alt}
+      className="mx-auto w-full"
+    />
+    <h2 class="text-large tracking-case-mobile leading-case-mobile mt-2 w-4/5">
+      {title}
+    </h2>
+    <hr class="mb-big" />
+  </div>
 </a>

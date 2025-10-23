@@ -12,7 +12,7 @@ interface Props {
 const { services } = Astro.props;
 ---
 
-<section>
+<section class="-m-page-mobile md:-m-page-desktop bg-white pt-2">
   {
     services.map((service) => {
       const { title, body, icon } = service;

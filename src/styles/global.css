@@ -32,20 +32,28 @@
   --text-medium: 1.125rem;
   --text-base: 1rem;
 
-  --tracking-landing-mobile: -0.045em;
-  --leading-landing-mobile: 1.125;
+  --tracking-hero-mobile: -0.045em;
+  --leading-hero-mobile: 1.125;
+
+  --tracking-case-mobile: -0.04rem;
+  --leading-case-mobile: 1.225;
 
   /* --leading- */
 
   /* Spacing */
-  --spacing-big: 4rem;
+  --spacing-biggest: 16rem;
+  --spacing-bigger: 5rem;
+  --spacing-big: 3.125rem;
   --spacing-sub: 1.125rem;
+  --spacing-page-mobile: 0.625rem;
+  --spacing-page-desktop: 1.5rem;
 
   /* Aspect Ratio */
   --aspect-block: 16 / 9;
 
   /* Radius */
   --radius-nav: 2.875rem;
+  --radius-icon: 0.5rem;
   --radius-media: 1.5rem;
 
   /* Effects */

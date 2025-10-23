@@ -7,12 +7,35 @@ import { servicesSchema } from "@/content/config";
 type Props = z.infer<typeof servicesSchema.element>;
 
 const { title, body, icon } = Astro.props;
+
+let bgColorIcon = "#FFFFFF";
+
+switch (title) {
+  case "Branding":
+    bgColorIcon = "--color-blue";
+    break;
+  case "Design":
+    bgColorIcon = "--color-red";
+    break;
+  case "Development":
+    bgColorIcon = "--color-green";
+}
 ---
 
-<div>
-  <div>
-    <ImageWrapper src={icon.iconLogo.image} altText="Services Logo" />
+<div class="p-page-mobile md:p-page-desktop min-h-70">
+  <hr class="mb-2" />
+  <div class="flex items-center">
+    <div
+      class="rounded-icon mr-1.5 grid h-6 items-center p-0.5 px-1.5 py-1"
+      style={`background: var(${bgColorIcon})`}
+    >
+      <ImageWrapper
+        src={icon.iconLogo.image}
+        className="h-full self-center"
+        altText="Services Logo"
+      />
+    </div>
+    <h2 class="text-large">{title}</h2>
   </div>
-  <h2>{title}</h2>
-  <p>{body}</p>
+  <p class="w-40/41 text-base leading-tight tracking-[-0.0175em]">{body}</p>
 </div>

@@ -14,7 +14,9 @@ const { title, description = "Deutz & Krüger" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SeoLayout title={title} description={description} />
   </head>
-  <body class="overflow-x-hidden p-2.5 tracking-[1%] antialiased md:p-6">
+  <body
+    class="p-page-mobile md:p-page-desktop overflow-x-hidden tracking-[1%] antialiased"
+  >
     <SiteLayout>
       <slot />
     </SiteLayout>
