@@ -26,11 +26,15 @@
 @theme {
   /* Typo */
   --font-sans: Arial, "sans-serif";
-  --text-largest: 3rem;
+  --text-largest: 3.25rem;
   --text-large: 1.875rem;
   --text-big: 1.5rem;
-  --text-medium: 1.125rem;
+  --text-medium: 1.35rem;
   --text-base: 1rem;
+
+  /* Hero */
+  --tracking-hero-desktop: -0.025em;
+  --leading-hero-desktop: 1.4;
 
   --tracking-hero-mobile: -0.045em;
   --leading-hero-mobile: 1.125;
@@ -41,6 +45,7 @@
   /* --leading- */
 
   /* Spacing */
+  --spacing-huge: 28rem;
   --spacing-biggest: 16rem;
   --spacing-bigger: 5rem;
   --spacing-big: 3.125rem;
@@ -65,6 +70,7 @@
   .keyword {
     text-decoration: underline;
     font-style: italic;
+    @apply inline-block transition-all duration-200 hover:rotate-[0.25deg] hover:scale-[99.5%];
   }
 
   .keyword-active {
@@ -74,7 +80,7 @@
   }
 
   .padding-nav-item {
-    @apply px-2.5 py-0.5;
+    @apply px-2.5 py-0.5 md:px-3 md:py-1;
   }
 
   .padding-background {

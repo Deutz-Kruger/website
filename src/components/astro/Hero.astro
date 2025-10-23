@@ -24,7 +24,7 @@ const generateKeywords = (match: string) => {
       keywordColor = "--color-red";
       break;
   }
-  return `<span class="keyword" data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
+  return `<span class=" keyword " data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
 };
 
 const { hero } = Astro.props;
@@ -35,10 +35,10 @@ const highlightedHeadline = hero.headline.replace(
 );
 ---
 
-<section class="mt-biggest mb-12 flex flex-col justify-end">
+<section class="mt-biggest md:mt-huge mb-12 flex flex-col justify-end">
   <div id="store-test"></div>
   <h1
-    class="text-large md:text-largest tracking-hero-mobile leading-hero-mobile w-6/7"
+    class="text-large md:text-largest tracking-hero-mobile leading-hero-mobile md:leading-hero-desktop md:tracking-hero-desktop w-6/7 md:w-14/17"
     set:html={highlightedHeadline}
   />
 </section>
