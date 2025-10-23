@@ -22,11 +22,11 @@ switch (title) {
 }
 ---
 
-<div class="p-page-mobile md:p-page-desktop min-h-70">
-  <hr class="mb-2" />
+<div class="p-page-mobile min-h-70 md:even:border-x-1 md:border-h md:w-1/3">
+  <hr class="mb-2 md:mb-0 md:hidden" />
   <div class="flex items-center">
     <div
-      class="rounded-icon mr-1.5 grid h-6 items-center p-0.5 px-1.5 py-1"
+      class="rounded-icon mr-1.5 grid h-6 items-center p-0.5 px-1.5 py-1 md:h-9"
       style={`background: var(${bgColorIcon})`}
     >
       <ImageWrapper
@@ -35,7 +35,9 @@ switch (title) {
         altText="Services Logo"
       />
     </div>
-    <h2 class="text-large">{title}</h2>
+    <h2 class="text-large md:text-larger">{title}</h2>
   </div>
-  <p class="w-40/41 text-base leading-tight tracking-[-0.0175em]">{body}</p>
+  <p class="w-40/41 md:text-big text-base leading-tight tracking-[-0.0175em]">
+    {body}
+  </p>
 </div>
