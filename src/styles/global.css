@@ -39,13 +39,17 @@
   --tracking-hero-mobile: -0.045em;
   --leading-hero-mobile: 1.125;
 
+  /* CasePreview */
   --tracking-case-mobile: -0.04rem;
   --leading-case-mobile: 1.225;
+
+  --tracking-case-desktop: -0.03rem;
+  --leading-case-desktop: 1.125;
 
   /* --leading- */
 
   /* Spacing */
-  --spacing-huge: 28rem;
+  --spacing-huge: 24rem;
   --spacing-biggest: 16rem;
   --spacing-bigger: 5rem;
   --spacing-big: 3.125rem;
