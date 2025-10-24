@@ -84,6 +84,12 @@
     font-style: italic;
   }
 
+  /* Language Selection */
+  .inactive-lang {
+    color: rgba(0 0 0 / 0.4);
+  }
+
+  /* Padding Utils */
   .padding-nav-item {
     @apply px-2.5 py-0.5 md:px-3 md:py-1;
   }

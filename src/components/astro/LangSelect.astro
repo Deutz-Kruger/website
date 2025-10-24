@@ -1,0 +1,49 @@
+---
+
+---
+
+<div class="flex select-none justify-between gap-2 text-2xl">
+  <p
+    class="hover:scale-101 transition-all duration-75 hover:cursor-pointer"
+    id="en"
+  >
+    EN
+  </p>
+  <p
+    class="h-full cursor-default place-self-center text-base transition-transform hover:rotate-3"
+  >
+    |
+  </p>
+  <p
+    class="hover:scale-101 transition-transform duration-75 hover:cursor-pointer"
+    id="de"
+  >
+    DE
+  </p>
+</div>
+
+<script>
+  import { langSelection, setLang } from "@/stores/langStore";
+  const enElement = document.getElementById("en");
+  const deElement = document.getElementById("de");
+
+  langSelection.subscribe((selectedLang) => {
+    console.log(selectedLang);
+    if (selectedLang === "en") {
+      enElement?.classList.remove("inactive-lang");
+      deElement?.classList.add("inactive-lang");
+    }
+    if (selectedLang === "de") {
+      deElement?.classList.remove("inactive-lang");
+      enElement?.classList.add("inactive-lang");
+    }
+  });
+
+  enElement?.addEventListener("click", () => {
+    setLang("en");
+  });
+
+  deElement?.addEventListener("click", () => {
+    setLang("de");
+  });
+</script>

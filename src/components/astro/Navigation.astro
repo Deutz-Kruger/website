@@ -1,0 +1,29 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import NavItem from "./NavItem.astro";
+
+interface Props {
+  navItems: {
+    title: string;
+    href: string;
+  }[];
+  navMinHeight: number;
+  lang: string;
+}
+
+const { navItems, lang, navMinHeight } = Astro.props;
+---
+
+<nav
+  class="hidden w-screen items-center justify-center gap-3 md:flex"
+  style={`min-height: ${navMinHeight}rem`}
+>
+  {
+    navItems.map((item) => {
+      const { href, title } = item;
+      const link = getRelativeLocaleUrl(lang, href);
+      return <NavItem link={link} title={title} />;
+    })
+  }
+</nav>

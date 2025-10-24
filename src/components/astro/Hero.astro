@@ -24,7 +24,7 @@ const generateKeywords = (match: string) => {
       keywordColor = "--color-red";
       break;
   }
-  return `<span class=" keyword " data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
+  return `<span class="keyword" data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
 };
 
 const { hero } = Astro.props;

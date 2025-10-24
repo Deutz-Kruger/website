@@ -1,9 +1,8 @@
 ---
 import { type CollectionEntry, getEntry } from "astro:content";
-import { getRelativeLocaleUrl } from "astro:i18n";
 
-import NavItem from "@/components/astro/NavItem.astro";
-import ImageWrapper from "@/components/astro/util/ImageWrapper.astro";
+import Footer from "@/components/astro/Footer.astro";
+import NavBar from "@/components/astro/NavBar.astro";
 import { getMedia } from "@/utils/media";
 
 export type LayoutData = CollectionEntry<"layout">;
@@ -27,48 +26,12 @@ if (width && height) {
 }
 ---
 
-<header>
-  <a
-    href={getRelativeLocaleUrl(lang, "/")}
-    class="fixed left-2.5 top-2.5 md:left-6 md:top-6"
-    style={`width: ${logoWidthInRem}rem;`}
-  >
-    <ImageWrapper
-      src={logo.image}
-      altText="Deutz & Krüger Logo"
-      loading="eager"
-      className="z-100 h-full w-full"
-    />
-  </a>
-  <nav
-    class="mb-big hidden w-screen items-center justify-center gap-3 md:mb-6 md:flex"
-    style={`min-height: ${navMinHeight}rem`}
-  >
-    {
-      navItems.map((item) => {
-        const { href, title } = item;
-        const link = getRelativeLocaleUrl(lang, href);
-        return <NavItem link={link} title={title} />;
-      })
-    }
-  </nav>
-</header>
+<NavBar
+  navItems={navItems}
+  lang={lang}
+  navMinHeight={navMinHeight}
+  logoWidthInRem={logoWidthInRem}
+  logo={logo.image}
+/>
 <slot />
-<footer
-  class="hidden w-full items-center justify-center gap-3 md:mt-6 md:flex"
-  style={`margin-top: ${navMinHeight}rem; min-height: ${navMinHeight}rem`}
->
-  {
-    footerItems.map((item) => {
-      const { href, title } = item;
-      const link = getRelativeLocaleUrl(lang, href);
-      return (
-        <NavItem
-          link={link}
-          title={title}
-          style={`margin-bottom: ${navMinHeight / 2}rem`}
-        />
-      );
-    })
-  }
-</footer>
+<Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />

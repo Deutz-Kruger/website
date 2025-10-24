@@ -1,0 +1,35 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import NavItem from "./NavItem.astro";
+
+interface Props {
+  navMinHeight: number;
+  lang: string;
+  footerItems: {
+    title: string;
+    href: string;
+  }[];
+}
+
+const { footerItems, navMinHeight, lang } = Astro.props;
+---
+
+<footer
+  class="hidden w-full items-center justify-center gap-3 md:mt-6 md:flex"
+  style={`margin-top: ${navMinHeight}rem; min-height: ${navMinHeight}rem`}
+>
+  {
+    footerItems.map((item) => {
+      const { href, title } = item;
+      const link = getRelativeLocaleUrl(lang, href);
+      return (
+        <NavItem
+          link={link}
+          title={title}
+          style={`margin-bottom: ${navMinHeight / 4}rem`}
+        />
+      );
+    })
+  }
+</footer>
