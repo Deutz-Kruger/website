@@ -31,3 +31,6 @@ src/placeholder
 
 .sonda
 .wrangler
+
+# Documentation and migration files
+/docs/
