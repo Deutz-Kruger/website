@@ -25,7 +25,7 @@ export default defineConfig({
     defaultLocale: "en",
     routing: {
       prefixDefaultLocale: true,
-      // redirectToDefaultLocale: true,
+      redirectToDefaultLocale: false,
     },
   },
   integrations: [
@@ -75,7 +75,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "passthrough",
     platformProxy: {
-      enabled: true,
+      enabled: false,
       configPath: "wrangler.jsonc",
       persist: {
         path: "./.cache/wrangler/v3",

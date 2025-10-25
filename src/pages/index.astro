@@ -2,4 +2,13 @@
 
 ---
 
-<meta http-equiv="refresh" content="0;url=/en/" />
+<head>
+  <title>Redirecting...</title>
+  <script is:inline>
+    const savedLanguage = localStorage.getItem("lang");
+    const languageRedirect = savedLanguage || "en";
+    window.location.replace("/" + languageRedirect + "/");
+  </script>
+</head>
+
+<body> </body>
