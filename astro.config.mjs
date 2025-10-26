@@ -69,11 +69,11 @@ export default defineConfig({
       },
     },
     build: {
-      sourcemap: true,
+      sourcemap: false,
     },
   },
   adapter: cloudflare({
-    imageService: "passthrough",
+    imageService: "cloudflare",
     platformProxy: {
       enabled: false,
       configPath: "wrangler.jsonc",

@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "git pull && astro dev",
     "build": "astro build",
-    "preview": "astro build && wrangler dev --assets=./dist",
+    "preview": "astro build && wrangler dev",
     "deploy-cf": "pnpm astro build && pnpm wrangler deploy",
     "astro": "astro",
     "lint": "eslint . --ext .js,.ts,.astro",
