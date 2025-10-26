@@ -1,15 +1,9 @@
 ---
 export const prerender = false;
-console.log("Server:", Astro.preferredLocaleList);
 ---
 
 <head>
   <title>Redirecting...</title>
-  <script is:inline>
-    const savedLanguage = localStorage.getItem("lang");
-    const languageRedirect = savedLanguage || "en";
-    window.location.replace("/" + languageRedirect + "/");
-  </script>
 </head>
 
-<body> </body>
+<body></body>
