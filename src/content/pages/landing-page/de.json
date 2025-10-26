@@ -1,7 +1,7 @@
 {
   "lang": "de",
   "hero": {
-    "headline": "We are Manuel Krüger and Marvin Deutz, a design and creative development duo based in Berlin. Together, we create brands and digital experiences that connect clarity in design with creativity in technology."
+    "headline": "Wir sind Manuel Krüger und Marvin Deutz, ein Design- und Creative-Development-Duo mit Sitz in Berlin. Gemeinsam erschaffen wir Marken und digitale Erlebnisse, die Klarheit im Design mit Kreativität in der Technologie verbinden."
   },
   "cases": [
     "src/content/cases/bl-thermo.en.json",
