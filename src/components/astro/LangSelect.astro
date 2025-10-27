@@ -4,6 +4,10 @@
 
 <div class="flex select-none justify-between gap-2 text-2xl">
   <p
+    aria-label="Switch to English"
+    role="navigation"
+    lang="en"
+    data-listener-attached="false"
     class="hover:scale-101 transition-all duration-75 hover:cursor-pointer"
     id="en"
   >
@@ -15,6 +19,10 @@
     |
   </p>
   <p
+    aria-label="Switch to German"
+    role="navigation"
+    lang="de"
+    data-listener-attached="false"
     class="hover:scale-101 transition-transform duration-75 hover:cursor-pointer"
     id="de"
   >
@@ -22,20 +30,4 @@
   </p>
 </div>
 
-<script>
-  import { handleLanguageSwitch } from "@/utils/languageSelect";
-  const enElement = document.getElementById("en");
-  const deElement = document.getElementById("de");
-
-  enElement?.addEventListener("click", () => {
-    enElement?.classList.remove("inactive-lang");
-    deElement?.classList.add("inactive-lang");
-    handleLanguageSwitch("en");
-  });
-
-  deElement?.addEventListener("click", () => {
-    deElement?.classList.remove("inactive-lang");
-    enElement?.classList.add("inactive-lang");
-    handleLanguageSwitch("de");
-  });
-</script>
+<script src="@/scripts/languageSelect.ts"></script>

@@ -26,12 +26,17 @@ if (width && height) {
 }
 ---
 
-<NavBar
-  navItems={navItems}
-  lang={lang}
-  navMinHeight={navMinHeight}
-  logoWidthInRem={logoWidthInRem}
-  logo={logo.image}
-/>
-<slot />
-<Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
+<div
+  class="p-page-mobile md:p-page-desktop scrollbar-hidden h-screen overflow-x-hidden tracking-[1%] antialiased"
+  id="bg-col-wrapper"
+>
+  <NavBar
+    navItems={navItems}
+    lang={lang}
+    navMinHeight={navMinHeight}
+    logoWidthInRem={logoWidthInRem}
+    logo={logo.image}
+  />
+  <slot />
+  <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
+</div>

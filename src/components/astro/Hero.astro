@@ -46,14 +46,17 @@ const highlightedHeadline = hero.headline.replace(
 <script>
   import { setKeyword } from "@/stores/keywordStore";
 
-  const keywordElements = document.querySelectorAll(".keyword");
-  keywordElements.forEach((el) => {
-    const element = el as HTMLElement;
-    if (element.dataset.color) {
-      el.addEventListener("click", () => {
-        if (!element.dataset.color) return;
-        setKeyword(element.dataset.color);
-      });
-    }
+  document.addEventListener("astro:page-load", () => {
+    const keywordElements = document.querySelectorAll(".keyword");
+    keywordElements.forEach((el) => {
+      console.log("Clicked Color");
+      const element = el as HTMLElement;
+      if (element.dataset.color) {
+        el.addEventListener("click", () => {
+          if (!element.dataset.color) return;
+          setKeyword(element.dataset.color);
+        });
+      }
+    });
   });
 </script>
