@@ -1,36 +1,4 @@
 content:
-- name: test_collection
-  label: "TEST - Block Nesting"
-  type: collection
-  format: json
-  path: "src/content/test_collection"
-  fields:
-  - name: title
-    label: Title
-    type: string
-  - name: groups # The outer block field
-    label: Groups
-    type: block
-    list: true
-    blocks:
-    - name: group
-      label: Group
-      fields:
-      - name: group_title
-        label: Group Title
-        type: string
-      - name: items # The NESTED block field
-        label: Items
-        type: block
-        list: true
-        blocks:
-        - name: text_item
-          label: Text Item
-          fields:
-          - name: text
-            label: Text
-            type: string
-
 - name: cases
   label: Cases
   type: collection
@@ -86,9 +54,9 @@ content:
     - name: title
       label: Preview Title
       type: text
-    - name: previewImage
+    - name: preview_image
       label: Preview Image
-      component: image
+      component: image_component
 
 - name: landing_page
   label: Landing Page
