@@ -270,7 +270,7 @@ components:
       label: Starting Column
       type: select
       options:
-        values: [ { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 } ]
+        values: [ { value: 1, label: "Column 1" }, { value: 2, label: "Column 2" }, { value: 3, label: "Column 3" }, { value: 4, label: "Column 4" } ]
 
   base:
     type: object
