@@ -264,11 +264,13 @@ components:
     - name: width
       label: Block Width
       type: select
-      values: [ { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 } ]
+      options:
+        values: [ { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 } ]
     - name: position
       label: Starting Column
       type: select
-      values: [ { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 } ]
+      options:
+        values: [ { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 } ]
 
   base:
     type: object
