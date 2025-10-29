@@ -142,7 +142,7 @@ content:
   path: "src/content/settings/layout.json"
   format: json
   fields:
-  - name: navItems
+  - name: nav_items
     label: Navigation Links
     type: object
     list:
@@ -265,12 +265,12 @@ components:
       label: Block Width
       type: select
       options:
-        values: [ { value: "1", label: "1 Column" }, { value: 2, label: "2 Columns" }, { value: 3, label: "3 Columns" }, { value: 4, label: "4 Columns" } ]
+        values: [ { value: "1", label: "1 Column" }, { value: "2", label: "2 Columns" }, { value: "3", label: "3 Columns" }, { value: "4", label: "4 Columns" } ]
     - name: position
       label: Starting Column
       type: select
       options:
-        values: [ { value: 1, label: "Column 1" }, { value: 2, label: "Column 2" }, { value: 3, label: "Column 3" }, { value: 4, label: "Column 4" } ]
+        values: [ { value: "1", label: "Column 1" }, { value: "2", label: "Column 2" }, { value: "3", label: "Column 3" }, { value: "4", label: "Column 4" } ]
 
   base:
     type: object
