@@ -299,6 +299,7 @@ components:
     fields:
     - name: image
       label: Image File
+      list: true
       component: image_component
     - name: base
       component: base
