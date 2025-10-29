@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Test",
+      "blocks": [
+        {
+          "_block": "title",
+          "base": {
+            "layout": {
+              "width": "1"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
