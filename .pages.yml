@@ -113,10 +113,10 @@ content:
       label: Service Icon
       type: object
       fields:
-      - name: iconLogo
+      - name: icon_logo
         label: Logo for Icon
         component: image
-      - name: iconColor
+      - name: icon_color
         label: Icon Color
         description: The color as a hex value. eg. "#425E6B"
         type: string
@@ -161,7 +161,7 @@ content:
       label: Displayed text
       type: string
 
-  - name: footerItems
+  - name: footer_items
     label: Footer Links
     type: object
     list:
@@ -252,13 +252,15 @@ components:
           label: Static Background
         - value: gradient
           label: Gradient Background
-    - name: backgroundColors
+    - name: background_colors
       label: Background Color(s)
       description: "The # must be included per color. #EBEBEB is the default color."
       type: string
       default: "#EBEBEB"
       list:
-        collapsible: false
+        collapsible:
+          collapsed: false
+          summary: "{value}"
 
   layout:
     label: Block Layout
