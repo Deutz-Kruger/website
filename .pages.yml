@@ -115,7 +115,7 @@ content:
       fields:
       - name: icon_logo
         label: Logo for Icon
-        component: image
+        component: image_component
       - name: icon_color
         label: Icon Color
         description: The color as a hex value. eg. "#425E6B"
@@ -178,7 +178,7 @@ content:
       type: string
   - name: logo
     label: Header Logo
-    component: image
+    component: image_component
 
 - name: settings
   label: Site Settings
@@ -199,7 +199,7 @@ content:
     pattern: ^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$
   - name: cover
     label: Preview image
-    component: image
+    component: image_component
     description: Image used in the social preview on social networks (e.g. Facebook, Twitter...)
   - name: legal
     label: Legal Stuff
