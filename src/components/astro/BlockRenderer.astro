@@ -1,14 +1,14 @@
 ---
 import { type z } from "astro:content";
 
-import { blocksUnion } from "@/content/config";
+import { blocksUnion } from "@/content/schemas/blockSchemas";
 
-import CaseImageBlock from "./blocks/CaseImageBlock.astro";
-import CaseImageFullBlock from "./blocks/CaseImageFullBlock.astro";
-import CaseImageTextBlock from "./blocks/CaseImageTextBlock.astro";
-import CaseImageTextFullBlock from "./blocks/CaseImageTextFullBlock.astro";
-import CaseTitleBlock from "./blocks/CaseTitleBlock.astro";
-import CaseVideoBlock from "./blocks/CaseVideoBlock.astro";
+// import CaseImageBlock from "./blocks/CaseImageBlock.astro";
+// import CaseImageFullBlock from "./blocks/CaseImageFullBlock.astro";
+// import CaseImageTextBlock from "./blocks/CaseImageTextBlock.astro";
+// import CaseImageTextFullBlock from "./blocks/CaseImageTextFullBlock.astro";
+// import CaseTitleBlock from "./blocks/CaseTitleBlock.astro";
+// import CaseVideoBlock from "./blocks/CaseVideoBlock.astro";
 
 type Block = z.infer<typeof blocksUnion>;
 
@@ -17,11 +17,12 @@ interface Props {
   index: number;
 }
 
-const { block, index } = Astro.props;
+// const { block, index } = Astro.props;
 
-const loadingOrder = index < 4 ? "eager" : "lazy";
+// const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
+<!-- 
 {block._block === "caseTitle" && <CaseTitleBlock block={block} index={index} />}
 {
   block._block === "caseVideo" && (
@@ -51,4 +52,4 @@ const loadingOrder = index < 4 ? "eager" : "lazy";
       index={index}
     />
   )
-}
+} -->

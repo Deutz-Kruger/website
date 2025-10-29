@@ -2,8 +2,8 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection, type z } from "astro:content";
 
-import BlockRenderer from "@/components/astro/BlockRenderer.astro";
-import { caseSchema } from "@/content/config";
+// import BlockRenderer from "@/components/astro/BlockRenderer.astro";
+import { caseSchema } from "@/content/schemas/pageSchemas";
 import Layout from "@/layouts/Layout.astro";
 
 export const getStaticPaths = (async () => {
@@ -31,15 +31,15 @@ interface Props {
 }
 
 const { caseEntry } = Astro.props;
-const { client, blocks } = caseEntry;
+const { client } = caseEntry;
 ---
 
 <Layout title={client}>
   <main class="grid grid-cols-1 gap-8 md:grid-cols-2">
-    {
+    <!-- {
       blocks.map((block, index) => {
         return <BlockRenderer block={block} index={index} />;
       })
-    }
+    } -->
   </main>
 </Layout>

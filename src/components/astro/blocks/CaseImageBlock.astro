@@ -2,12 +2,12 @@
 import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import type { z } from "astro:content";
 
-import type { caseImageBlock } from "@/content/config";
+import type { imageBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 
 import Background from "./utils/Background.astro";
 
-type CaseImageBlock = z.infer<typeof caseImageBlock>;
+type CaseImageBlock = z.infer<typeof imageBlock>;
 
 interface Props {
   block: CaseImageBlock;
@@ -17,18 +17,25 @@ interface Props {
 }
 
 const { block, loading, className = "", index } = Astro.props;
-const { image, background } = block;
+const { images, base } = block;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const marginRight = index % 2 === 0;
 ---
 
 <section class={cn("aspect-block", className)}>
-  <Background background={background} className="padding-background h-full">
-    <ImageWrapper
-      className="h-full w-full"
-      src={image.image}
-      altText={image.alt}
-      loading={loading}
-    />
+  <Background
+    background={base.background}
+    className="padding-background h-full"
+  >
+    {
+      images.map((image) => {
+        <ImageWrapper
+          className="h-full w-full"
+          src={image.src}
+          altText={image.alt}
+          loading={loading}
+        />;
+      })
+    }
   </Background>
 </section>

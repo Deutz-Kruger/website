@@ -3,15 +3,15 @@ import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-import { caseSchema } from "@/content/config";
+import { caseSchema } from "@/content/schemas/pageSchemas";
 
-type CasePreview = z.infer<typeof caseSchema.shape.casePreview>;
+type CasePreview = z.infer<typeof caseSchema.shape.case_preview>;
 
 interface Props extends CasePreview {
   slug: string;
 }
 
-const { previewImage, title, slug } = Astro.props;
+const { preview_image, title, slug } = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
 ---
@@ -20,8 +20,8 @@ const lang = Astro.currentLocale ?? "en";
   <hr class="hide md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
-      src={previewImage.image}
-      altText={previewImage.alt}
+      src={preview_image.src}
+      altText={preview_image.alt}
       objectFit="contain"
       className="mx-auto block w-full md:mx-0 md:max-w-lg"
     />

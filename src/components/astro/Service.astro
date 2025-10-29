@@ -2,7 +2,7 @@
 import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 
-import { servicesSchema } from "@/content/config";
+import { servicesSchema } from "@/content/schemas/pageSchemas";
 
 type Props = z.infer<typeof servicesSchema.element>;
 
@@ -30,7 +30,7 @@ switch (title) {
       style={`background: var(${bgColorIcon})`}
     >
       <ImageWrapper
-        src={icon.iconLogo.image}
+        src={icon.icon_logo.src}
         className="h-full self-center"
         altText="Services Logo"
       />

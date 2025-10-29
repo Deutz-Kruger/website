@@ -1,7 +1,7 @@
 ---
 import { type z } from "astro:content";
 
-import { landingPageSchema } from "@/content/config";
+import { landingPageSchema } from "@/content/schemas/pageSchemas";
 
 type Hero = z.infer<typeof landingPageSchema.shape.hero>;
 

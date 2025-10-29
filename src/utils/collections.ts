@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import type { casePreviewSchema } from "@content/config.ts";
+import type { casePreviewSchema } from "@content/schemas/pageSchemas";
 import { type CollectionEntry, getEntries, getEntry, z } from "astro:content";
 
 export interface PageMetaData {

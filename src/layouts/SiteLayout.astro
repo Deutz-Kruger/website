@@ -15,7 +15,7 @@ const lang = Astro.currentLocale ?? "en";
 
 const { navItems, footerItems, logo } = layoutEntry.data;
 
-const { width, height } = getMedia(logo.image);
+const { width, height } = getMedia(logo.src);
 
 const logoWidthInRem = 4.5;
 let navMinHeight = logoWidthInRem;
@@ -35,7 +35,7 @@ if (width && height) {
     lang={lang}
     navMinHeight={navMinHeight}
     logoWidthInRem={logoWidthInRem}
-    logo={logo.image}
+    logo={logo.src}
   />
   <slot />
   <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />

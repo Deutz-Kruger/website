@@ -302,7 +302,7 @@ components:
     label: Image Block
     type: object
     fields:
-    - name: image
+    - name: images
       label: Image File
       list: true
       component: image_component

@@ -2,7 +2,7 @@
 import type { z } from "astro:content";
 
 import { BackgroundGradient } from "@/components/react/BackgroundGradient";
-import type { backgroundField } from "@/content/config";
+import type { backgroundField } from "@/content/schemas/fieldSchemas";
 import { cn } from "@/utils/cn";
 
 type Background = z.infer<typeof backgroundField>;
@@ -14,25 +14,27 @@ interface Props {
 }
 
 const { background, className = "" } = Astro.props;
-const staticCol = background?.bgCols ? background?.bgCols[0] : "#EBEBEB";
+const staticCol = background?.background_colors
+  ? background?.background_colors[0]
+  : "#EBEBEB";
 ---
 
 <>
   {
-    background.bgBools.animatedBg ? (
+    background.background === "gradient" ? (
       <BackgroundGradient
         className={cn(className, "padding-background")}
         client:visible
-        gradientCols={background.bgCols}
+        gradientCols={background.background_colors}
       >
         <slot />
       </BackgroundGradient>
-    ) : background.bgBools.staticBg ? (
+    ) : background.background === "static" ? (
       <div style={`background: ${staticCol}`} class={cn(className)}>
         <slot />
       </div>
     ) : (
-      <div class={cn(className, "h-full !p-0")}>
+      <div class={cn(className, "p-0! h-full")}>
         <slot />
       </div>
     )

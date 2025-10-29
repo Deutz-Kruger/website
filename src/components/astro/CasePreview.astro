@@ -21,11 +21,11 @@ const resolvedCasePreview = await resolveCasePreview(caseSlugs);
 >
   {
     resolvedCasePreview.map((preview) => {
-      const { slug, casePreview } = preview.data;
-      const { title, previewImage } = casePreview;
+      const { slug, case_preview } = preview.data;
+      const { title, preview_image } = case_preview;
       return (
         <CasePreviewCard
-          previewImage={previewImage}
+          preview_image={preview_image}
           title={title}
           slug={slug}
         />

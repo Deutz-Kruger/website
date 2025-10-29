@@ -1,139 +1,14 @@
 import path from "node:path";
 
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 
-export const imageField = z.object({
-  image: z.string(),
-  alt: z.string(),
-});
-
-export const backgroundField = z.object({
-  bgBools: z.object({
-    animatedBg: z.boolean(),
-    staticBg: z.boolean(),
-  }),
-  bgCols: z.array(z.string()).optional(),
-});
-
-export const caseTitleBlock = z.object({
-  _block: z.literal("caseTitle"),
-  title: z.string(),
-  subHeading: z.string(),
-});
-
-export const caseVideoBlock = z.object({
-  _block: z.literal("caseVideo"),
-  video: z.string(),
-  background: backgroundField,
-});
-
-export const caseImageBlock = z.object({
-  _block: z.literal("caseImage"),
-  image: imageField,
-  background: backgroundField,
-});
-
-export const caseImageTextBlock = z.object({
-  _block: z.literal("caseImageText"),
-  image: imageField,
-  text: z.string().optional(),
-  textRight: z.boolean(),
-  background: backgroundField,
-});
-
-export const caseImageTextFullBlock = z.object({
-  _block: z.literal("caseImageTextFull"),
-  image: imageField,
-  text: z.string().optional(),
-  textRight: z.boolean(),
-});
-
-export const caseImageFullBlock = z.object({
-  _block: z.literal("caseImageFull"),
-  images: z.array(imageField),
-  background: backgroundField,
-});
-
-export const blocksUnion = z.discriminatedUnion("_block", [
-  caseTitleBlock,
-  caseVideoBlock,
-  caseImageTextBlock,
-  caseImageBlock,
-  caseImageTextFullBlock,
-  caseImageFullBlock,
-]);
-
-export const settingsSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  url: z.string(),
-  legal: z.object({
-    impressum: z.object({
-      title: z.string(),
-      body: z.string(),
-    }),
-    privacy: z.object({
-      title: z.string(),
-      body: z.string(),
-    }),
-  }),
-});
-
-export const layoutSchema = z.object({
-  navItems: z.array(
-    z.object({
-      href: z.string(),
-      title: z.string(),
-    }),
-  ),
-  footerItems: z.array(
-    z.object({
-      href: z.string(),
-      title: z.string(),
-    }),
-  ),
-  logo: imageField,
-});
-
-export const caseSchema = z.object({
-  slug: z.string(),
-  lang: z.string(),
-  client: z.string(),
-  blocks: z.array(blocksUnion),
-  casePreview: z.object({
-    title: z.string(),
-    previewImage: imageField,
-  }),
-});
-
-export const servicesSchema = z.array(
-  z.object({
-    title: z.string(),
-    body: z.string(),
-    icon: z.object({
-      iconLogo: imageField,
-      iconColor: z.string(),
-    }),
-  }),
-);
-
-export const casePreviewSchema = z.array(z.string());
-
-export const landingPageSchema = z.object({
-  lang: z.string(),
-  hero: z.object({
-    headline: z.string(),
-  }),
-  cases: casePreviewSchema,
-  services: servicesSchema,
-});
-
-export const aboutSchema = z.object({
-  lang: z.string(),
-  headline: z.string(),
-  body: z.string(),
-});
+import {
+  aboutSchema,
+  caseSchema,
+  landingPageSchema,
+} from "./schemas/pageSchemas";
+import { layoutSchema, settingsSchema } from "./schemas/settingsSchemas";
 
 const cases = defineCollection({
   loader: glob({

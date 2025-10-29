@@ -1,6 +1,6 @@
 ---
 import Service from "@components/astro/Service.astro";
-import { servicesSchema } from "@content/config";
+import { servicesSchema } from "@content/schemas/pageSchemas";
 import { z } from "astro:content";
 
 export type Services = z.infer<typeof servicesSchema>;

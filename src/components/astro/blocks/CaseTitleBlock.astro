@@ -1,10 +1,10 @@
 ---
 import type { z } from "astro:content";
 
-import type { caseTitleBlock } from "@/content/config";
+import type { titleBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 
-type CaseTitleBlock = z.infer<typeof caseTitleBlock>;
+type CaseTitleBlock = z.infer<typeof titleBlock>;
 
 interface Props {
   block: CaseTitleBlock;
