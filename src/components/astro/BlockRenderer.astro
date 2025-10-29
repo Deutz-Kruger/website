@@ -3,12 +3,15 @@ import { type z } from "astro:content";
 
 import { blocksUnion } from "@/content/schemas/blockSchemas";
 
+// import CaseVideoBlock from "./blocks/CaseVideoBlock.astro";
+import ImageBlock from "./blocks/ImageBlock.astro";
+import TextBlock from "./blocks/TextBlock.astro";
 // import CaseImageBlock from "./blocks/CaseImageBlock.astro";
 // import CaseImageFullBlock from "./blocks/CaseImageFullBlock.astro";
 // import CaseImageTextBlock from "./blocks/CaseImageTextBlock.astro";
 // import CaseImageTextFullBlock from "./blocks/CaseImageTextFullBlock.astro";
-// import CaseTitleBlock from "./blocks/CaseTitleBlock.astro";
-// import CaseVideoBlock from "./blocks/CaseVideoBlock.astro";
+import TitleBlock from "./blocks/TitleBlock.astro";
+import VideoBlock from "./blocks/VideoBlock.astro";
 
 type Block = z.infer<typeof blocksUnion>;
 
@@ -17,39 +20,20 @@ interface Props {
   index: number;
 }
 
-// const { block, index } = Astro.props;
+const { block, index } = Astro.props;
 
-// const loadingOrder = index < 4 ? "eager" : "lazy";
+const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
-<!-- 
-{block._block === "caseTitle" && <CaseTitleBlock block={block} index={index} />}
+{block._block === "title" && <TitleBlock block={block} index={index} />}
 {
-  block._block === "caseVideo" && (
-    <CaseVideoBlock block={block} loading={loadingOrder} index={index} />
+  block._block === "video" && (
+    <VideoBlock block={block} loading={loadingOrder} index={index} />
   )
 }
 {
-  block._block === "caseImage" && (
-    <CaseImageBlock block={block} loading={loadingOrder} index={index} />
+  block._block === "image" && (
+    <ImageBlock block={block} loading={loadingOrder} index={index} />
   )
 }
-{
-  block._block === "caseImageText" && (
-    <CaseImageTextBlock block={block} loading={loadingOrder} index={index} />
-  )
-}
-{
-  block._block === "caseImageFull" && (
-    <CaseImageFullBlock block={block} loading={loadingOrder} index={index} />
-  )
-}
-{
-  block._block === "caseImageTextFull" && (
-    <CaseImageTextFullBlock
-      block={block}
-      loading={loadingOrder}
-      index={index}
-    />
-  )
-} -->
+{block._block === "text" && <TextBlock block={block} />}

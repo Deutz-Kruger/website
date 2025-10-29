@@ -27,6 +27,9 @@ const {
 const mediaEntry = getMedia(src);
 const image = getImageSet(mediaEntry?.id);
 
+console.log(mediaEntry);
+console.log(image);
+
 const loadingOrder = loading === "eager" ? loading : "lazy";
 
 if (!(mediaEntry.width && mediaEntry.height)) {

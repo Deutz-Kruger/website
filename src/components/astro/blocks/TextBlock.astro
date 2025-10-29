@@ -1,0 +1,26 @@
+---
+import type { z } from "astro:content";
+
+import { textBlock } from "@/content/schemas/blockSchemas";
+import { generateGridPosition } from "@/utils/layoutCalc";
+
+import Background from "./utils/Background.astro";
+
+type TextBlock = z.infer<typeof textBlock>;
+
+interface Props {
+  block: TextBlock;
+}
+
+const { block } = Astro.props;
+
+const { text, base } = block;
+const { layout, background } = base;
+const positioning = generateGridPosition(layout);
+---
+
+<section style={positioning}>
+  <Background background={background}>
+    <p>{text}</p>
+  </Background>
+</section>

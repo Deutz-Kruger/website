@@ -1,0 +1,17 @@
+---
+import { type z } from "astro:content";
+
+import { groupSchema } from "@/content/schemas/blockSchemas";
+
+import BlockRenderer from "./BlockRenderer.astro";
+
+export type Group = z.infer<typeof groupSchema>;
+
+interface Props {
+  group: Group;
+}
+
+const { group } = Astro.props;
+---
+
+{group.blocks.map((block, idx) => <BlockRenderer block={block} index={idx} />)}

@@ -3,6 +3,7 @@ import type { z } from "astro:content";
 
 import type { titleBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
+import { generateGridPosition } from "@/utils/layoutCalc";
 
 type CaseTitleBlock = z.infer<typeof titleBlock>;
 
@@ -12,12 +13,12 @@ interface Props {
   index: number;
 }
 
-const { block, className = "", index } = Astro.props;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const marginRight = index % 2 === 0;
+const { block, className = "" } = Astro.props;
+const { layout } = block.base;
+const postioning = generateGridPosition(layout);
 ---
 
-<section class={cn("aspect-block", className)}>
-  <h1 class="text-large md:text-largest mb-2 leading-[1]">{block.title}</h1>
+<section class={cn("", className)} style={postioning}>
+  <h1 class="text-large md:text-largest mb-2 leading-none">{block.title}</h1>
   <p class="md:text-big text-base leading-[1.125]">{block.subHeading}</p>
 </section>

@@ -1,0 +1,43 @@
+---
+import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
+import type { z } from "astro:content";
+
+import type { imageBlock } from "@/content/schemas/blockSchemas";
+import { cn } from "@/utils/cn";
+import { generateGridPosition } from "@/utils/layoutCalc";
+
+import Background from "./utils/Background.astro";
+
+type ImageBlock = z.infer<typeof imageBlock>;
+
+interface Props {
+  block: ImageBlock;
+  loading: string;
+  className?: string;
+  index: number;
+}
+
+const { block, loading, className } = Astro.props;
+const { base, images } = block;
+const { layout, background } = base;
+const positioning = generateGridPosition(layout);
+const isFlex = images.length > 1;
+---
+
+<section style={positioning} class={cn("", className)}>
+  <Background
+    background={background}
+    className={cn({
+      flex: isFlex,
+      "gap-4": isFlex,
+    })}
+  >
+    {
+      images.map((image) => {
+        return (
+          <ImageWrapper loading={loading} src={image.src} altText={image.alt} />
+        );
+      })
+    }
+  </Background>
+</section>
