@@ -59,7 +59,7 @@
   --spacing-page-desktop: 1.5rem;
 
   /* Aspect Ratio */
-  --aspect-block: 16 / 9;
+  /* --aspect-block: 16 / 9; */
 
   /* Radius */
   --radius-nav: 2.875rem;
@@ -95,10 +95,10 @@
   }
 
   .padding-background {
-    @apply px-[1rem] py-[0.5rem] md:px-[2rem] md:py-[1.125rem];
+    @apply md:py-sub px-4 py-2 md:px-8;
   }
   .padding-background-half {
-    @apply px-[0.5rem] py-[0.25rem] md:px-[1rem] md:py-[0.5625rem];
+    @apply md:py-2.25 px-2 py-1 md:px-4;
   }
 }
 

@@ -23,12 +23,15 @@ const { background, layout } = base;
 const positioning = generateGridPosition(layout);
 ---
 
-<section class={cn(className, "aspect-block")} style={positioning}>
-  <Background background={background}>
+<section class={cn(className)} style={positioning}>
+  <Background
+    className={cn("h-full w-full", className)}
+    background={background}
+  >
     <VideoWrapper
       src={video}
       loading={loading}
-      className={cn("rounded-media h-full")}
+      className={cn("rounded-media")}
     />
   </Background>
 </section>

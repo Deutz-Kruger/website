@@ -24,12 +24,12 @@ const positioning = generateGridPosition(layout);
 const isFlex = images.length > 1;
 ---
 
-<section style={positioning} class={cn("", className)}>
+<section style={positioning} class={cn("h-full w-full", className)}>
   <Background
     background={background}
-    className={cn({
+    className={cn("h-full w-full justify-between", {
       flex: isFlex,
-      "gap-4": isFlex,
+      "gap-2": isFlex,
     })}
   >
     {

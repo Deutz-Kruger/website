@@ -30,7 +30,10 @@ const staticCol = background?.background_colors
         <slot />
       </BackgroundGradient>
     ) : background.background === "static" ? (
-      <div style={`background: ${staticCol}`} class={cn(className)}>
+      <div
+        style={`background: ${staticCol}`}
+        class={cn(className, "padding-background")}
+      >
         <slot />
       </div>
     ) : (

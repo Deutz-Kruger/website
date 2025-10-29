@@ -36,7 +36,7 @@ const { client, groups } = caseEntry;
 ---
 
 <Layout title={client}>
-  <main class="grid grid-cols-1 md:grid-cols-4">
+  <main class="grid grid-cols-1 md:grid-cols-4 md:gap-6">
     {groups.map((group) => <GroupRenderer group={group} />)}
   </main>
 </Layout>
