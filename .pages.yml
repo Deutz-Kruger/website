@@ -24,7 +24,10 @@ content:
   - name: groups
     label: Block Groups
     type: block
-    list: true
+    list:
+      collapsible:
+        collapsed: false # Set to true if you want them collapsed by default
+        summary: "{fields.group_title}" # This will display the value of group_title
     blocks:
     - name: group
       label: Group
