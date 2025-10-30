@@ -26,7 +26,8 @@
     "type-check": "astro check",
     "prepare": "husky",
     "sync-media": "git pull && tsx ./media-sync/sync.ts",
-    "admin": "tsx ./admin-dashboard/server.ts"
+    "admin": "tsx ./admin-dashboard/server.ts",
+    "reset:cache": "rm -rf .astro .cache .wrangler dist"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.10",

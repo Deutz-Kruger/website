@@ -73,7 +73,7 @@ export default defineConfig({
     },
   },
   adapter: cloudflare({
-    imageService: "cloudflare",
+    imageService: "custom",
     platformProxy: {
       enabled: true,
       configPath: "wrangler.jsonc",
@@ -82,4 +82,11 @@ export default defineConfig({
       },
     },
   }),
+  image: {
+    service: {
+      entrypoint: fileURLToPath(
+        new URL("./src/utils/images-service.ts", import.meta.url),
+      ),
+    },
+  },
 });

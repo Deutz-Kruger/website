@@ -1,7 +1,10 @@
 ---
+import { Image } from "astro:assets";
+
 import { cn } from "@/utils/cn";
 import { getMedia } from "@/utils/media";
-import { getImageSet } from "@/utils/media";
+
+export const prerender = false;
 
 interface Props {
   src: string;
@@ -20,24 +23,38 @@ const {
 } = Astro.props;
 
 const mediaEntry = getMedia(src);
-const image = getImageSet(mediaEntry?.id);
+
+const cloudflareBaseUrl = mediaEntry
+  ? `https://imagedelivery.net/MdnPOFk9l0bFpoVPozEWbw/${mediaEntry.id}/public`
+  : undefined;
 
 const loadingOrder = loading === "eager" ? loading : "lazy";
 
 if (!(mediaEntry.width && mediaEntry.height)) {
   throw new Error(`[IMAGE ${mediaEntry.id}]: height and / or width missing`);
 }
+
+const width = mediaEntry?.width;
+const height = mediaEntry?.height;
 ---
 
 <div role="presentation" class={cn(className, "h-full w-full")}>
-  <img
-    src={image.baseImage}
-    srcset={image.srcSet}
-    sizes={sizes}
-    alt={altText}
-    width={mediaEntry?.width}
-    height={mediaEntry?.height}
-    class={cn("h-full object-contain")}
-    loading={loadingOrder}
-  />
+  {
+    cloudflareBaseUrl && width && height ? (
+      <Image
+        src={mediaEntry.id}
+        alt={altText}
+        width={width}
+        height={height}
+        widths={[320, 640, 1024, 1920]}
+        sizes={sizes}
+        class={cn("h-full w-full object-contain")}
+        loading={loadingOrder}
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-500">
+        <p>Image not found: {src}</p>
+      </div>
+    )
+  }
 </div>
