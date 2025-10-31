@@ -5,7 +5,7 @@ import type { videoBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
 
-import VideoWrapper from "../util/VideoWrapper.astro";
+import HlsVideo from "../util/HlsVideo.astro";
 import Background from "./utils/Background.astro";
 
 type CaseVideoBlock = z.infer<typeof videoBlock>;
@@ -28,10 +28,6 @@ const positioning = generateGridPosition(layout);
     className={cn("h-full w-full", className)}
     background={background}
   >
-    <VideoWrapper
-      src={video}
-      loading={loading}
-      className={cn("rounded-media")}
-    />
+    <HlsVideo src={video} loading={loading} className={cn("rounded-media")} />
   </Background>
 </section>

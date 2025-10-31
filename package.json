@@ -43,6 +43,7 @@
     "astro-useragent": "^5.2.0",
     "clsx": "^2.1.1",
     "glob": "^11.0.3",
+    "hls.js": "^1.6.13",
     "leva": "^0.10.0",
     "nanostores": "^1.0.1",
     "react": "^19.2.0",
