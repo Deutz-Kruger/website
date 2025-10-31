@@ -22,14 +22,16 @@ const { base, images } = block;
 const { layout, background } = base;
 const positioning = generateGridPosition(layout);
 const isFlex = images.length > 1;
+console.log(positioning, block._block);
 ---
 
-<section style={positioning} class={cn("h-full w-full", className)}>
+<section style={positioning.grid} class={cn("h-full w-full", className)}>
   <Background
     background={background}
-    className={cn("h-full w-full justify-between", {
+    margin={positioning.margin}
+    className={cn("h-full w-fit justify-around", {
       flex: isFlex,
-      "gap-2": isFlex,
+      "gap-1": isFlex,
     })}
   >
     {

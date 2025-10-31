@@ -18,7 +18,7 @@ const { layout } = block.base;
 const postioning = generateGridPosition(layout);
 ---
 
-<section class={cn("", className)} style={postioning}>
+<section class={cn("", className)} style={postioning.grid}>
   <h1 class="text-large md:text-largest mb-2 leading-none">{block.title}</h1>
   <p class="md:text-big text-base leading-[1.125]">{block.subHeading}</p>
 </section>

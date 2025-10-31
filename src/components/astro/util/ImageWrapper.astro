@@ -12,6 +12,7 @@ interface Props {
   className?: string;
   loading?: string;
   sizes?: string;
+  positioning?: string;
 }
 
 const {
@@ -38,7 +39,7 @@ const width = mediaEntry?.width;
 const height = mediaEntry?.height;
 ---
 
-<div role="presentation" class={cn(className, "h-full w-full")}>
+<div role="presentation" class={cn(className, "h-full w-fit")}>
   {
     cloudflareBaseUrl && width && height ? (
       <Image

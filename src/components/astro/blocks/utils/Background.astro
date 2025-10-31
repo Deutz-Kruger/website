@@ -9,11 +9,11 @@ type Background = z.infer<typeof backgroundField>;
 
 interface Props {
   background: Background;
-
+  margin?: string;
   className?: string;
 }
 
-const { background, className = "" } = Astro.props;
+const { background, className = "", margin } = Astro.props;
 const staticCol = background?.background_colors
   ? background?.background_colors[0]
   : "#EBEBEB";
@@ -23,7 +23,7 @@ const staticCol = background?.background_colors
   {
     background.background === "gradient" ? (
       <BackgroundGradient
-        className={cn(className, "padding-background")}
+        className={cn(className, "padding-background w-full")}
         client:visible
         gradientCols={background.background_colors}
       >
@@ -31,13 +31,18 @@ const staticCol = background?.background_colors
       </BackgroundGradient>
     ) : background.background === "static" ? (
       <div
-        style={`background: ${staticCol}`}
+        style={`background: ${staticCol}; ${margin}`}
         class={cn(className, "padding-background")}
       >
         <slot />
       </div>
     ) : (
-      <div class={cn(className, "p-0! h-full")}>
+      <div
+        style={margin}
+        class={cn(className, "p-0! h-full", {
+          "w-full": !margin,
+        })}
+      >
         <slot />
       </div>
     )
