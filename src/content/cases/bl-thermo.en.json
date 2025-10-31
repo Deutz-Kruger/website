@@ -29,7 +29,6 @@
       "blocks": [
         {
           "_block": "video",
-          "video": "/src/content/media/key_visual 3-compressed.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -42,7 +41,6 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/full_site_scroll 2-compressed.mp4",
           "base": {
             "background": {
               "background": "gradient",
@@ -59,7 +57,6 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/concept_reality 1-compressed.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -103,7 +100,6 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/mission 4-compressed.mp4",
           "base": {
             "background": {
               "background": "none"
