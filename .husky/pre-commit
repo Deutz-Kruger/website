@@ -1,1 +1,1 @@
-git pull && pnpm exec lint-staged
+pnpm exec lint-staged
