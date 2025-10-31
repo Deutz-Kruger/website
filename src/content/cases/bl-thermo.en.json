@@ -29,6 +29,7 @@
       "blocks": [
         {
           "_block": "video",
+          "video": "/src/content/media/key_visual_compressed.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -41,6 +42,7 @@
         },
         {
           "_block": "video",
+          "video": "/src/content/media/full_site_scroll_compressed.mp4",
           "base": {
             "background": {
               "background": "gradient",
@@ -57,6 +59,7 @@
         },
         {
           "_block": "video",
+          "video": "/src/content/media/concept_to_reality_compressed.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -100,6 +103,7 @@
         },
         {
           "_block": "video",
+          "video": "/src/content/media/mission_compressed.mp4",
           "base": {
             "background": {
               "background": "none"
