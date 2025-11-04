@@ -1,0 +1,41 @@
+{
+  "lang": "en",
+  "hero": {
+    "headline": "We are Manuel Krüger and Marvin Deutz, a design and creative development duo based in Berlin. Together, we create brands and digital experiences that connect clarity in design with creativity in technology."
+  },
+  "cases": [
+    "src/content/cases/bl-thermo.en.json"
+  ],
+  "services": [
+    {
+      "title": "Branding",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/brand-icon.png"
+        },
+        "icon_color": "#425E6B"
+      }
+    },
+    {
+      "title": "Design",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/design-icon.png"
+        },
+        "icon_color": "#9A2B5A"
+      }
+    },
+    {
+      "title": "Development",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/dev-icon.png"
+        },
+        "icon_color": "#618667"
+      }
+    }
+  ]
+}
