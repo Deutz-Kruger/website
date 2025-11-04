@@ -27,16 +27,17 @@ if (width && height) {
 ---
 
 <div
-  class="p-page-mobile md:p-page-desktop 2xl scrollbar-hidden h-screen overflow-x-hidden tracking-[1%] antialiased"
+  class="scrollbar-hidden h-screen overflow-x-hidden tracking-[1%] antialiased"
   id="bg-col-wrapper"
 >
-  <NavBar
-    navItems={navItems}
-    lang={lang}
-    navMinHeight={navMinHeight}
-    logoWidthInRem={logoWidthInRem}
-    logo={logo.src}
-  />
-  <slot />
-  <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
+  <div class="max-w-480 page-spacing mx-auto">
+    <NavBar
+      navItems={navItems}
+      lang={lang}
+      navMinHeight={navMinHeight}
+      logo={logo.src}
+    />
+    <slot />
+    <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
+  </div>
 </div>

@@ -5,18 +5,13 @@ import ImageWrapper from "./util/ImageWrapper.astro";
 
 interface Props {
   lang: string;
-  logoWidthInRem: number;
   logo: string;
 }
 
-const { lang, logoWidthInRem, logo } = Astro.props;
+const { lang, logo } = Astro.props;
 ---
 
-<a
-  href={getRelativeLocaleUrl(lang, "/")}
-  class=""
-  style={`width: ${logoWidthInRem}rem;`}
->
+<a href={getRelativeLocaleUrl(lang, "/")} class="inline-block h-full">
   <ImageWrapper
     src={logo}
     altText="Deutz & Krüger Logo"

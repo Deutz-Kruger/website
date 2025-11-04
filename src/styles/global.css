@@ -55,9 +55,11 @@
   --spacing-bigger: 5rem;
   --spacing-big: 3.125rem;
   --spacing-sub: 1.125rem;
+
   --spacing-page-mobile: 0.625rem;
-  --spacing-page-desktop: 1.5rem;
-  --spacing-max-screen: 90rem;
+  --spacing-page-laptop: 1.5rem;
+  --spacing-page-desktop: 3rem;
+  --spacing-page-big-desktop: 12rem;
 
   /* Aspect Ratio */
   /* --aspect-block: 16 / 9; */
@@ -77,6 +79,15 @@
     text-decoration: underline;
     font-style: italic;
     @apply inline-block transition-all duration-200 hover:rotate-[0.25deg] hover:scale-[99.5%];
+  }
+
+  .page-spacing {
+    @apply px-page-mobile md:px-page-laptop xl:px-page-desktop py-page-mobile md:py-page-laptop;
+    /*@apply px-page-mobile md:px-page-laptop xl:px-page-desktop 2xl:px-page-big-desktop;*/
+  }
+
+  .page-spacing-neg-margins {
+    @apply -mx-page-mobile md:-mx-page-laptop xl:-mx-page-desktop 2xl:-mx-page-big-desktop;
   }
 
   .keyword-active {
@@ -109,4 +120,21 @@
   }
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.main-full-bleed-bg {
+  position: relative; /* Already on main, but ensure it's set */
+  z-index: 10;
+}
+
+.main-full-bleed-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 100%;
+  background: white;
+  transform: translateX(-50%);
+  z-index: -1;
 }
