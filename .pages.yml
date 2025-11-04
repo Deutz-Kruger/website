@@ -344,6 +344,7 @@ components:
     - name: alt
       label: Alt Text
       type: string
+      required: true
 
 media:
 - name: media
