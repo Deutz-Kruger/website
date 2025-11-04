@@ -57,6 +57,7 @@
   --spacing-sub: 1.125rem;
   --spacing-page-mobile: 0.625rem;
   --spacing-page-desktop: 1.5rem;
+  --spacing-max-screen: 90rem;
 
   /* Aspect Ratio */
   /* --aspect-block: 16 / 9; */

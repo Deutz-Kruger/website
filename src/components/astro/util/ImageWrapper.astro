@@ -39,7 +39,7 @@ const width = mediaEntry?.width;
 const height = mediaEntry?.height;
 ---
 
-<div role="presentation" class={cn(className, "h-full w-fit")}>
+<div role="presentation" class={cn("h-full w-full max-w-full", className)}>
   {
     cloudflareBaseUrl && width && height ? (
       <Image
@@ -49,7 +49,7 @@ const height = mediaEntry?.height;
         height={height}
         widths={[320, 640, 1024, 1920]}
         sizes={sizes}
-        class={cn("h-full w-full object-contain")}
+        class={cn("h-full max-h-full w-full max-w-full object-contain")}
         loading={loadingOrder}
       />
     ) : (
