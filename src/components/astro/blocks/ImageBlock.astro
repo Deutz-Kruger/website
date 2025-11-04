@@ -22,16 +22,21 @@ const { base, images } = block;
 const { layout, background } = base;
 const positioning = generateGridPosition(layout);
 const isFlex = images.length > 1;
-console.log(positioning, block._block);
 ---
 
-<section style={positioning.grid} class={cn("h-full w-full", className)}>
+<section
+  class={cn("h-full w-full", className)}
+  data-desktop-start={positioning.desktopStart}
+  data-desktop-span={positioning.desktopSpan}
+  data-aspect-width={positioning.aspect.width}
+  data-aspect-height={positioning.aspect.height}
+  style={`--desktop-start: ${positioning.desktopStart}; --desktop-span: ${positioning.desktopSpan}; --aspect-width: ${positioning.aspect.width}; --aspect-height: ${positioning.aspect.height}`}
+>
   <Background
     background={background}
     margin={positioning.margin}
-    className={cn("h-full w-fit justify-around", {
-      flex: isFlex,
-      "gap-1": isFlex,
+    className={cn("h-full w-fit", {
+      "flex justify-around gap-1": isFlex,
     })}
   >
     {

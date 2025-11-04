@@ -4,33 +4,52 @@ import { baseBlock } from "@/content/schemas/blockSchemas";
 
 type Layout = z.infer<typeof baseBlock.shape.layout>;
 
-export const generateGridPosition = (layout: Layout) => {
-  let margin = "";
-  let aspect = "";
-  switch (layout.width) {
-    case 1:
-      aspect = "aspect-ratio: 8 / 9;";
-      break;
-    case 2:
-      aspect = "aspect-ratio: 16 / 9;";
-      break;
-    case 3:
-      aspect = "aspect-ratio: 27 / 9;";
-      break;
-    case 4:
-      aspect = "aspect-ratio: 32 / 9;";
-  }
+type Margin = "LEFT" | "RIGHT" | "NONE";
 
-  if (layout.width === 1) {
-    if (layout.position % 2 === 0) {
-      margin = "margin-left: auto;";
-    } else {
-      margin = "margin-right: auto;";
-    }
-  }
+export const generateGridPosition = (layout: Layout) => {
+  const aspect = aspectRatioFromSpan(layout.width);
+  const margin = marginSideFromPosition(layout);
+  const desktopStart = clamp(layout.position, 4);
+  const desktopSpan = clamp(layout.width, 4);
+  const mobileSpan = 1;
 
   return {
-    grid: `grid-column-start: ${layout.position}; grid-column-end: span ${layout.width}; ${aspect}`,
-    margin: margin,
+    aspect,
+    margin,
+    desktopStart,
+    desktopSpan,
+    mobileSpan,
   };
 };
+
+const aspectRatioFromSpan = (span: number) => {
+  const aspect = { width: 16, height: 9 };
+  switch (span) {
+    case 1:
+      aspect.width = 8;
+      break;
+    case 2:
+      aspect.width = 16;
+      break;
+    case 3:
+      aspect.width = 27;
+      break;
+    case 4:
+      aspect.width = 32;
+  }
+  return aspect;
+};
+
+const marginSideFromPosition = (layout: Layout): Margin => {
+  if (layout.width === 1) {
+    if (layout.position % 2 === 0) {
+      return "LEFT";
+    } else {
+      return "RIGHT";
+    }
+  }
+  return "NONE";
+};
+
+const clamp = (val: number, gridCols: number) =>
+  Math.min(Math.max(val, 1), gridCols);

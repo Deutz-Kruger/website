@@ -31,16 +31,21 @@ const staticCol = background?.background_colors
       </BackgroundGradient>
     ) : background.background === "static" ? (
       <div
-        style={`background: ${staticCol}; ${margin}`}
-        class={cn(className, "padding-background")}
+        style={`background: ${staticCol};`}
+        class={cn(className, "padding-background h-full w-full md:w-fit", {
+          "w-full": !margin || margin === "NONE",
+          "ml-auto": margin === "LEFT",
+          "mr-auto": margin === "RIGHT",
+        })}
       >
         <slot />
       </div>
     ) : (
       <div
-        style={margin}
-        class={cn(className, "p-0! h-full", {
-          "w-full": !margin,
+        class={cn(className, "p-0! h-full w-full md:w-fit", {
+          "w-full": !margin || margin === "NONE",
+          "ml-auto": margin === "LEFT",
+          "mr-auto": margin === "RIGHT",
         })}
       >
         <slot />

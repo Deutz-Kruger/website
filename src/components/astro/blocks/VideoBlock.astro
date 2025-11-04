@@ -23,7 +23,14 @@ const { background, layout } = base;
 const positioning = generateGridPosition(layout);
 ---
 
-<section class={cn(className)} style={positioning.grid}>
+<section
+  class={cn(className)}
+  data-desktop-start={positioning.desktopStart}
+  data-desktop-span={positioning.desktopSpan}
+  data-aspect-width={positioning.aspect.width}
+  data-aspect-height={positioning.aspect.height}
+  style={`--desktop-start: ${positioning.desktopStart}; --desktop-span: ${positioning.desktopSpan}; --aspect-width: ${positioning.aspect.width}; --aspect-height: ${positioning.aspect.height}`}
+>
   <Background
     className={cn("h-full w-full", className)}
     background={background}
