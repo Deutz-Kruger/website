@@ -17,7 +17,7 @@ const lang = Astro.currentLocale ?? "en";
 ---
 
 <a href={getRelativeLocaleUrl(lang, slug)}>
-  <hr class="hide md:block" />
+  <hr class="hide mb-2 md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
       src={preview_image.src}

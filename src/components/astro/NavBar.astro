@@ -16,7 +16,9 @@ interface Props {
 const { navItems, navMinHeight, lang, logo } = Astro.props;
 ---
 
-<header class="mb-8 flex h-10 items-center justify-between md:h-16 xl:h-20">
+<header
+  class="mb-16 flex h-10 items-center justify-between md:mb-6 md:h-16 xl:h-20"
+>
   <Logo lang={lang} logo={logo} />
   <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />
   <LangSelect />

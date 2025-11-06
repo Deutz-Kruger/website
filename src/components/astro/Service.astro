@@ -1,12 +1,11 @@
 ---
-import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 
 import { servicesSchema } from "@/content/schemas/pageSchemas";
 
 type Props = z.infer<typeof servicesSchema.element>;
 
-const { title, body, icon } = Astro.props;
+const { title, body } = Astro.props;
 
 let bgColorIcon = "#FFFFFF";
 
@@ -22,18 +21,20 @@ switch (title) {
 }
 ---
 
-<div class="p-page-mobile min-h-70 md:border-h md:w-1/3 md:even:border-x">
+<div
+  class="min-h-70 md:border-h md:not-first:pl-6 md:w-1/3 md:pt-3 md:even:border-x"
+>
   <hr class="mb-2 md:mb-0 md:hidden" />
   <div class="flex items-center">
     <div
-      class="rounded-icon mr-1.5 grid h-6 p-1.5 md:h-9 md:w-12"
+      class="mr-1.5 grid h-6 w-8 rounded-lg md:h-8 md:w-11 md:rounded-xl"
       style={`background: var(${bgColorIcon})`}
     >
-      <ImageWrapper
+      <!-- <ImageWrapper
         src={icon.icon_logo.src}
         className="flex h-full w-full items-center justify-center place-self-center"
         altText="Services Logo"
-      />
+      /> -->
     </div>
     <h2 class="text-large md:text-larger">{title}</h2>
   </div>

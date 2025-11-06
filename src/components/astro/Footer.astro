@@ -16,20 +16,14 @@ const { footerItems, navMinHeight, lang } = Astro.props;
 ---
 
 <footer
-  class="hidden w-full items-center justify-center gap-3 md:mt-6 md:flex"
-  style={`margin-top: ${navMinHeight}rem; min-height: ${navMinHeight}rem`}
+  class="hidden w-full items-center justify-center gap-3 md:flex md:py-4"
+  style={`min-height: ${navMinHeight}rem`}
 >
   {
     footerItems.map((item) => {
       const { href, title } = item;
       const link = getRelativeLocaleUrl(lang, href);
-      return (
-        <NavItem
-          link={link}
-          title={title}
-          style={`margin-bottom: ${navMinHeight / 4}rem`}
-        />
-      );
+      return <NavItem link={link} title={title} />;
     })
   }
 </footer>

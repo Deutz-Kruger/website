@@ -5,20 +5,26 @@ interface Props {
   link: string;
   title: string;
   className?: string;
-  style?: string;
 }
 
-const { link, title, className, style } = Astro.props;
+const { link, title, className } = Astro.props;
 ---
 
 <a href={link} class="">
   <div
     class={cn(
-      "rounded-nav padding-nav-item shadow-nav text-medium leading-tight tracking-hero-desktop  w-fit h-fit hover:scale-103 transition ease-in-out duration-300",
+      "rounded-nav padding-nav-item shadow-nav text-medium leading-tight tracking-tight will-change-auto  w-fit h-fit hover:bg-black/3 transition ease-in-out duration-300",
       className,
     )}
-    style={style}
+    style={{ "--hover-col": "var(--color-blue)" }}
   >
     {title}
   </div>
 </a>
+
+<script>
+  import { keywordColor } from "@/stores/keywordStore";
+  keywordColor.subscribe((col) => {
+    console.log("Color:", col);
+  });
+</script>

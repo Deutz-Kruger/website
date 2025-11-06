@@ -19,13 +19,13 @@ const positioning = generateGridPosition(layout);
 ---
 
 <section
-  class={cn("", className)}
+  class={cn("block-title-typo", className)}
   data-desktop-start={positioning.desktopStart}
   data-desktop-span={positioning.desktopSpan}
   data-aspect-width={positioning.aspect.width}
   data-aspect-height={positioning.aspect.height}
   style={`--desktop-start: ${positioning.desktopStart}; --desktop-span: ${positioning.desktopSpan}; --aspect-width: ${positioning.aspect.width}; --aspect-height: ${positioning.aspect.height}`}
 >
-  <h1 class="text-large md:text-largest mb-2 leading-none">{block.title}</h1>
-  <p class="md:text-big text-base leading-[1.125]">{block.subHeading}</p>
+  <h1 class="">{block.title}</h1>
+  <p class="">{block.subHeading}</p>
 </section>
