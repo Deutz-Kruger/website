@@ -39,7 +39,10 @@ const width = mediaEntry?.width;
 const height = mediaEntry?.height;
 ---
 
-<div role="presentation" class={cn("h-full w-full max-w-full", className)}>
+<div
+  role="presentation"
+  class={cn("md:h-full max-w-full w-full md:max-h-full", className)}
+>
   {
     cloudflareBaseUrl && width && height ? (
       <Image
@@ -49,11 +52,13 @@ const height = mediaEntry?.height;
         height={height}
         widths={[320, 640, 1024, 1920]}
         sizes={sizes}
-        class={cn("h-full max-h-full w-full max-w-full object-contain")}
+        class={cn(
+          "max-h-[66vh] w-full max-w-full object-contain md:h-full md:max-h-full",
+        )}
         loading={loadingOrder}
       />
     ) : (
-      <div class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-500">
+      <div class="flex w-full items-center justify-center bg-gray-100 text-gray-500 md:h-full">
         <p>Image not found: {src}</p>
       </div>
     )
