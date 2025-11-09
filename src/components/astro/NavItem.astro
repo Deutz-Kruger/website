@@ -13,18 +13,10 @@ const { link, title, className } = Astro.props;
 <a href={link} class="">
   <div
     class={cn(
-      "rounded-nav padding-nav-item shadow-nav text-medium leading-tight tracking-tight will-change-auto  w-fit h-fit hover:bg-black/3 transition ease-in-out duration-300",
+      "rounded-nav padding-nav-item shadow-nav text-medium leading-tight tracking-tight will-change-auto  w-fit h-fit hover:bg-black/10 transition ease-in-out duration-300",
       className,
     )}
-    style={{ "--hover-col": "var(--color-blue)" }}
   >
     {title}
   </div>
 </a>
-
-<script>
-  import { keywordColor } from "@/stores/keywordStore";
-  keywordColor.subscribe((col) => {
-    console.log("Color:", col);
-  });
-</script>
