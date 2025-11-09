@@ -54,6 +54,18 @@ export default defineConfig({
       // @ts-expect-error Compat issues with vite 7 and plugin typing
       tailwindcss(),
     ],
+    optimizeDeps: {
+      exclude: ["vite-plugin-glslify-inject/injectConstants"],
+      include: [
+        "three",
+        "@react-three/fiber",
+        "@react-three/drei",
+        "leva",
+        "@thi.ng/color",
+        "@thi.ng/math",
+        "@thi.ng/vectors",
+      ],
+    },
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -65,7 +77,17 @@ export default defineConfig({
     },
     server: {
       watch: {
-        ignored: ["**/*.astro.tsx"],
+        ignored: [
+          "**/*.astro.tsx",
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/dist/**",
+          "**/.astro/**",
+          "**/src/content/media/**/*.{mp4,webm,mov}", // Ignore video files
+        ],
+      },
+      fs: {
+        strict: false,
       },
     },
     build: {
