@@ -38,11 +38,11 @@
   --tracking-hero-desktop: -0.025em;
   --leading-hero-desktop: 1.4;
 
-  --tracking-heading-mobile: -0.045em;
-  --leading-heading-mobile: 1.125;
+  --tracking-heading-mobile: -0.01em;
+  --leading-heading-mobile: 1.075;
 
   --tracking-text-mobile: -0.05em;
-  --leading-text-mobile: 1.1;
+  --leading-text-mobile: 1.225;
 
   /* CasePreview */
   --tracking-case-mobile: -0.04rem;
@@ -129,7 +129,13 @@
       /*Font Sizes*/
       @apply text-normal md:text-medium lg:text-big;
       /* Font Spacing */
-      @apply tracking-text-mobile;
+      @apply tracking-text-mobile leading-text-mobile;
+    }
+  }
+
+  .block-text-typo {
+    & p {
+      @apply text-normal leading-5 tracking-tight;
     }
   }
 }
