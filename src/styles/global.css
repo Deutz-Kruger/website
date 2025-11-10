@@ -26,7 +26,7 @@
 @theme {
   /* Typo */
   --font-sans: Arial, "sans-serif";
-  --text-largest: 3.25rem;
+  --text-largest: 3.75rem;
   --text-largerer: 3rem;
   --text-larger: 2.175rem;
   --text-large: 1.875rem;
@@ -34,10 +34,15 @@
   --text-medium: 1.35rem;
   --text-normal: 1rem;
 
-  /* Hero */
-  --tracking-hero-desktop: -0.025em;
-  --leading-hero-desktop: 1.4;
+  /* Tracking & Leading */
+  /* Desktop */
+  --tracking-heading-desktop: -0.015em;
+  --leading-heading-desktop: 1.1875;
 
+  --tracking-text-desktop: 0.0125em;
+  --leading-text-desktop: 1.295;
+
+  /* Mobile */
   --tracking-heading-mobile: -0.01em;
   --leading-heading-mobile: 1.075;
 
@@ -121,15 +126,15 @@
   .block-title-typo {
     & h1 {
       /*Font Sizes*/
-      @apply text-large md:text-larger lg:text-largerer;
+      @apply text-large md:text-largerer xl:text-largest;
       /* Font Spacing */
-      @apply tracking-heading-mobile leading-heading-mobile;
+      @apply tracking-heading-mobile leading-heading-mobile md:leading-heading-desktop md:tracking-heading-desktop;
     }
     & p {
       /*Font Sizes*/
       @apply text-normal md:text-medium lg:text-big;
       /* Font Spacing */
-      @apply tracking-text-mobile leading-text-mobile;
+      @apply tracking-text-mobile leading-text-mobile md:tracking-text-desktop md:leading-text-desktop;
     }
   }
 
