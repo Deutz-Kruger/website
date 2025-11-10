@@ -35,14 +35,20 @@ const isFlex = images.length > 1;
   <Background
     background={background}
     margin={positioning.margin}
-    className={cn("h-full w-fit py-8 md:h-full md:max-h-full md:py-0", {
+    className={cn("h-full w-fit md:h-full md:max-h-full", {
       "flex justify-around gap-1": isFlex,
+      "py-6": positioning.desktopSpan < 2,
     })}
   >
     {
       images.map((image) => {
         return (
-          <ImageWrapper loading={loading} src={image.src} altText={image.alt} />
+          <ImageWrapper
+            loading={loading}
+            src={image.src}
+            imgClassName="max-h-[62vh]"
+            altText={image.alt}
+          />
         );
       })
     }
