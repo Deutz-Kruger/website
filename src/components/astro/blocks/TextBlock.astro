@@ -2,6 +2,7 @@
 import type { z } from "astro:content";
 
 import { textBlock } from "@/content/schemas/blockSchemas";
+import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
 
 import Background from "./utils/Background.astro";
@@ -25,9 +26,18 @@ const positioning = generateGridPosition(layout);
   data-desktop-span={positioning.desktopSpan}
   data-aspect-width={positioning.aspect.width}
   data-aspect-height={positioning.aspect.height}
-  style={`--desktop-start: ${positioning.desktopStart}; --desktop-span: ${positioning.desktopSpan}; --aspect-width: ${positioning.aspect.width}; --aspect-height: ${positioning.aspect.height}`}
+  style={`--desktop-start: ${positioning.desktopStart};
+          --desktop-span: ${positioning.desktopSpan};
+          --aspect-width: ${positioning.aspect.width};
+          --aspect-height: ${positioning.aspect.height}`}
 >
   <Background background={background}>
-    <p>{text}</p>
+    <p
+      class={cn("w-fit -mt-2 md:mt-0", {
+        "md:text-right": positioning.desktopStart % 2 === 0,
+      })}
+    >
+      {text}
+    </p>
   </Background>
 </section>
