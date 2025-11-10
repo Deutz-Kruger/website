@@ -55,7 +55,7 @@ export default defineConfig({
       tailwindcss(),
     ],
     optimizeDeps: {
-      exclude: ["vite-plugin-glslify-inject/injectConstants"],
+      // exclude: ["vite-plugin-glslify-inject/injectConstants"],
       include: [
         "three",
         "@react-three/fiber",

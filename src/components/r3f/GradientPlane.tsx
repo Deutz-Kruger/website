@@ -14,6 +14,9 @@ type Uniforms = {
   uUvScale: number;
   uUvDistortionIterations: number;
   uUvDistortionIntensity: number;
+  // NEW: Blur uniforms
+  uBlurRadius: number;
+  uBlurStrength: number;
 };
 
 interface Props {
@@ -30,6 +33,9 @@ const INITIAL_UNIFORMS: Uniforms = {
   uUvScale: 1,
   uUvDistortionIterations: 0,
   uUvDistortionIntensity: 0,
+  // NEW: Default blur values (no blur initially)
+  uBlurRadius: 0.15, // Small default radius
+  uBlurStrength: 0.95, // No blur by default
 };
 
 const GradientShaderMaterial = shaderMaterial(
@@ -50,8 +56,14 @@ declare module "@react-three/fiber" {
 export const GradientPlane = ({ gradient }: Props) => {
   const gradientShader = useRef<ShaderMaterial & Partial<Uniforms>>(null);
 
-  const { timeMultiplier, scale, distortionIterations, distortionIntensity } =
-    useConfig();
+  const {
+    timeMultiplier,
+    scale,
+    distortionIterations,
+    distortionIntensity,
+    blurRadius,
+    blurStrength,
+  } = useConfig();
 
   useFrame(({ clock }) => {
     if (!gradientShader.current) return;
@@ -69,6 +81,9 @@ export const GradientPlane = ({ gradient }: Props) => {
         uUvScale={scale}
         uUvDistortionIterations={distortionIterations}
         uUvDistortionIntensity={distortionIntensity}
+        // NEW: Pass blur uniforms
+        uBlurRadius={blurRadius}
+        uBlurStrength={blurStrength}
       />
     </ScreenQuad>
   );
@@ -79,47 +94,58 @@ type Config = {
   scale: number;
   distortionIterations: number;
   distortionIntensity: number;
+  blurRadius: number;
+  blurStrength: number;
 };
 
 function useConfig(): Config {
-  // Config for the shader
-  const { timeMultiplier, scale, distortionIterations, distortionIntensity } =
-    useControls({
-      timeMultiplier: {
-        label: "Time Multiplier",
-        value: 0.03,
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-      scale: {
-        label: "Scale",
-        value: 1,
-        min: 0.1,
-        max: 4,
-        step: 0.1,
-      },
-      distortionIterations: {
-        label: "Iterations",
-        value: 10,
-        min: 0,
-        max: 14,
-        step: 1,
-      },
-      distortionIntensity: {
-        label: "Intensity",
-        value: 0.3,
-        min: 0,
-        max: 1,
-        step: 0.02,
-        render: (get) => get("distortionIterations") > 0,
-      },
-    });
+  // Config for the shader with new blur controls
+  const config = useControls({
+    timeMultiplier: {
+      label: "Time Multiplier",
+      value: 0.025,
+      min: 0,
+      max: 1,
+      step: 0.05,
+    },
+    scale: {
+      label: "Scale",
+      value: 0.8,
+      min: 0.1,
+      max: 4,
+      step: 0.1,
+    },
+    distortionIterations: {
+      label: "Iterations",
+      value: 9,
+      min: 0,
+      max: 14,
+      step: 1,
+    },
+    distortionIntensity: {
+      label: "Intensity",
+      value: 0.2,
+      min: 0,
+      max: 1,
+      step: 0.02,
+      render: (get) => get("distortionIterations") > 0,
+    },
+    // NEW: Blur controls in Leva
+    blurRadius: {
+      label: "Blur Radius",
+      value: 0.025,
+      min: 0,
+      max: 0.05, // Max 5% of UV space
+      step: 0.001,
+    },
+    blurStrength: {
+      label: "Blur Strength",
+      value: 0.55,
+      min: 0,
+      max: 1,
+      step: 0.15,
+    },
+  });
 
-  return {
-    timeMultiplier,
-    scale,
-    distortionIterations,
-    distortionIntensity,
-  };
+  return config;
 }
