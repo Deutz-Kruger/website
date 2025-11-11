@@ -37,7 +37,7 @@ const isFlex = images.length > 1;
     margin={positioning.margin}
     className={cn("h-full w-fit md:h-full md:max-h-full", {
       "flex justify-around gap-1": isFlex,
-      "py-6": positioning.desktopSpan < 2,
+      "py-6 md:px-12": positioning.desktopSpan < 2,
     })}
   >
     {
