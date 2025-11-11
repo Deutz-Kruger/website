@@ -1,0 +1,31 @@
+{
+  "slug": "/skaut",
+  "lang": "en",
+  "client": "Skaut",
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Case title",
+      "blocks": [
+        {
+          "_block": "title",
+          "title": "Skaut - Backoffice Ticketing System",
+          "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+          "base": {
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "case_preview": {
+    "title": "Skaut - Backoffice Ticketing System",
+    "preview_image": {
+      "src": "/src/content/media/skaut_preview2.png",
+      "alt": "skaut_preview"
+    }
+  }
+}
