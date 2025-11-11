@@ -1,0 +1,34 @@
+{
+  "slug": "/krumphof",
+  "lang": "en",
+  "client": "Krumphof",
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Case title",
+      "blocks": [
+        {
+          "_block": "title",
+          "title": "Krumphof",
+          "subHeading": "Krumphof is a unique getaway in Southern Burgenland that combines adventure and relaxation. Alongside cozy cabins and camping spots, guests can enjoy activities like 3D archery and horseback riding.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "case_preview": {
+    "title": "Krumphof is a unique getaway in Southern Burgenland that combines adventure and relaxation. Alongside cozy cabins and camping spots, guests can enjoy activities like 3D archery and horseback riding.",
+    "preview_image": {
+      "src": "/src/content/media/krumphof_preview2.png",
+      "alt": "krumphof_preview"
+    }
+  }
+}
