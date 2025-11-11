@@ -22,6 +22,34 @@
           }
         }
       ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Video title",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Krumphof-Titel.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "video"
+        }
+      ]
     }
   ],
   "case_preview": {
