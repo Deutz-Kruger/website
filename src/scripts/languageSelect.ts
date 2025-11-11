@@ -26,7 +26,7 @@ const setupLangClickListeners = () => {
 
   if (
     enElement.dataset.listenerAttached === "true" ||
-    enElement.dataset.listenerAttached === "true"
+    deElement.dataset.listenerAttached === "true"
   ) {
     return;
   }
