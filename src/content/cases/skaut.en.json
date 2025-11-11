@@ -19,6 +19,85 @@
           }
         }
       ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Video Title",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Skaut_title.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_login.png",
+              "alt": "skaut_login"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_configuration.png",
+              "alt": "skaut_configuration"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_categories.png",
+              "alt": "skaut_categories"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
     }
   ],
   "case_preview": {
