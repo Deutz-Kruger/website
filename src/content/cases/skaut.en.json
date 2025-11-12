@@ -12,6 +12,9 @@
           "title": "Skaut - Backoffice Ticketing System",
           "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
           "base": {
+            "background": {
+              "background": "none"
+            },
             "layout": {
               "width": "2",
               "position": "1"
