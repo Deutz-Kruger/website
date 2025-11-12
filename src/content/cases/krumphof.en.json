@@ -41,15 +41,6 @@
           }
         }
       ]
-    },
-    {
-      "_block": "group",
-      "group_title": "Showcase",
-      "blocks": [
-        {
-          "_block": "video"
-        }
-      ]
     }
   ],
   "case_preview": {
