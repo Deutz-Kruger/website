@@ -71,7 +71,12 @@ vec3 getGradientColor(vec2 uv) {
  * - It's easy to understand and modify
  */
 vec3 getBlurredGradientColor(vec2 uv, float radius) {
-  vec3 colorSum = vec3(0.0);
+  // vec3 colorSum = vec3(0.0);
+
+  vec3 colorSum = getGradientColor(uv);
+  colorSum += getGradientColor(uv + vec2(radius, 0.0));
+  colorSum += getGradientColor(uv - vec2(radius, 0.0));
+  return colorSum / 3.0; // 3 samples instead of 5
 
   // Sample pattern: center + 4 cardinal directions
   // Think of this as a "+" shape centered on our pixel

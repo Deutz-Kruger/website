@@ -1,6 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { Leva } from "leva";
-import React from "react";
+import React, { useMemo } from "react";
 import { Vector3 } from "three";
 
 import { cn } from "@/utils/cn";
@@ -16,10 +15,13 @@ interface Props extends React.PropsWithChildren {
 export const BackgroundGradient = (props: Props) => {
   const { className, gradientCols, children } = props;
 
-  const gradient =
-    gradientCols && gradientCols?.length > 1
-      ? generateGradientUniforms(gradientCols)
-      : GRADIENT_SPECS["BLUE"].map((color) => new Vector3(...color));
+  const gradient = useMemo(
+    () =>
+      gradientCols && gradientCols?.length > 1
+        ? generateGradientUniforms(gradientCols)
+        : GRADIENT_SPECS["BLUE"].map((color) => new Vector3(...color)),
+    [gradientCols],
+  );
 
   return (
     <div
@@ -30,7 +32,10 @@ export const BackgroundGradient = (props: Props) => {
         aria-label="R3F Canvas Wrapper"
         className="z-1 absolute left-0 top-0 h-full w-full"
       >
-        <Canvas>
+        <Canvas
+          gl={{ powerPreference: "high-performance", antialias: false }}
+          dpr={1}
+        >
           <GradientPlane gradient={gradient} />
         </Canvas>
       </div>
@@ -40,7 +45,6 @@ export const BackgroundGradient = (props: Props) => {
       >
         {children}
       </div>
-      <Leva hidden={true} />
     </div>
   );
 };

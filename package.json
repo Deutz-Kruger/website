@@ -81,6 +81,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.14",
+    "r3f-perf": "^7.2.3",
     "sharp": "^0.34.4",
     "sonda": "^0.9.0",
     "tsx": "^4.20.6",
