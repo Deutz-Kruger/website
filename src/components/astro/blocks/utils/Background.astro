@@ -11,9 +11,10 @@ interface Props {
   background: Background;
   margin?: string;
   className?: string;
+  width?: number;
 }
 
-const { background, className = "", margin } = Astro.props;
+const { background, className = "", margin, width } = Astro.props;
 const staticCol = background?.background_colors
   ? background?.background_colors[0]
   : "#EBEBEB";
@@ -32,7 +33,8 @@ const staticCol = background?.background_colors
     ) : background.background === "static" ? (
       <div
         style={`background: ${staticCol};`}
-        class={cn(className, "padding-background h-full w-full md:w-fit", {
+        class={cn(className, "padding-background h-full w-full", {
+          "md:w-fit": width && width < 2,
           "w-full": !margin || margin === "NONE",
           "ml-auto": margin === "LEFT",
           "mr-auto": margin === "RIGHT",
