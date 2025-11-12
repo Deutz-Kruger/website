@@ -8,9 +8,16 @@ interface Props {
   className?: string;
   width?: number;
   height?: number;
+  hasBackground?: boolean;
 }
 
-const { src, className = "", width, height } = Astro.props;
+const {
+  src,
+  className = "",
+  width,
+  height,
+  hasBackground = false,
+} = Astro.props;
 
 const videoId = getMedia(src).id;
 
@@ -26,6 +33,7 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
   playsInline
   width={width}
   height={height}
+  has-background={hasBackground}
 >
 </hls-video>
 
@@ -33,9 +41,13 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
   import Hls from "hls.js";
 
   const sheet = new CSSStyleSheet();
-  sheet.replaceSync(
-    ":host { display: block; } video { width: 100%; height: 100% }",
-  );
+  sheet.replaceSync(`
+    :host { display: block; }
+    video { width: 100%; height: 100% }
+    :host([has-background="true"]) video {
+      border-radius: 0.625rem;
+    }
+    `);
 
   class HlsVideo extends HTMLElement {
     private hls: Hls;

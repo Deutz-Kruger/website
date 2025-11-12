@@ -35,6 +35,11 @@ const positioning = generateGridPosition(layout);
     className={cn("h-full w-full", className)}
     background={background}
   >
-    <HlsVideo src={video} loading={loading} className={cn("rounded-media")} />
+    <HlsVideo
+      src={video}
+      loading={loading}
+      className={cn({})}
+      hasBackground={background.background !== "none"}
+    />
   </Background>
 </section>
