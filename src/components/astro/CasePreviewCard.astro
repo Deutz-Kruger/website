@@ -16,8 +16,8 @@ const { preview_image, title, slug } = Astro.props;
 const lang = Astro.currentLocale ?? "en";
 ---
 
-<a href={getRelativeLocaleUrl(lang, slug)}>
-  <hr class="mb-2 hidden md:block" />
+<a class="" href={getRelativeLocaleUrl(lang, slug)}>
+  <hr class="hidden md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
       src={preview_image.src}
@@ -25,7 +25,7 @@ const lang = Astro.currentLocale ?? "en";
       className="mx-auto block w-full md:mx-0 md:max-w-lg"
     />
     <h2
-      class="text-large md:text-largest tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop mt-2 w-4/5 md:w-3/5"
+      class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop mt-2 w-4/5 md:w-3/5"
     >
       {title}
     </h2>
