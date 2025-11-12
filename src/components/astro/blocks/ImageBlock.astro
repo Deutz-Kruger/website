@@ -44,13 +44,13 @@ const hasMultipleImages = images.length > 1;
     {
       hasMultipleImages ? (
         <>
-          <Carousel className="w-full">
+          <Carousel className="w-full md:hidden">
             {images.map((image) => (
-              <li class="splide__slide">
+              <li class="glide__slide">
                 <ImageWrapper
                   loading={loading}
                   src={image.src}
-                  imgClassName="max-h-[62vh] w-full object-cover"
+                  imgClassName="max-h-[62vh] h-full w-full object-contain"
                   altText={image.alt}
                 />
               </li>
