@@ -255,8 +255,8 @@
             "background": {
               "background": "gradient",
               "background_colors": [
-                "#FF0000",
-                "#AA5151"
+                "#D6E8FF",
+                "#053CA1"
               ]
             },
             "layout": {
