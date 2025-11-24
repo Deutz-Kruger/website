@@ -1,9 +1,6 @@
 ---
 import "../styles/global.css";
 
-// import "@/scripts/backgroundColorSwitch.ts";
-import { ClientRouter } from "astro:transitions";
-
 import SeoLayout from "./SeoLayout.astro";
 import SiteLayout from "./SiteLayout.astro";
 
@@ -16,10 +13,9 @@ const { title, description = "Deutz & Krüger" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SeoLayout title={title} description={description} />
-    <ClientRouter />
   </head>
   <body>
-    <SiteLayout transition:persist>
+    <SiteLayout>
       <slot />
     </SiteLayout>
     <script src="@/scripts/backgroundColorSwitch.ts"></script>

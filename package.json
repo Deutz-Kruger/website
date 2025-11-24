@@ -30,8 +30,8 @@
     "reset:cache": "rm -rf .astro .cache .wrangler dist"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.10",
-    "@astrojs/react": "^4.4.0",
+    "@astrojs/cloudflare": "^12.6.11",
+    "@astrojs/react": "^4.4.2",
     "@glidejs/glide": "^3.7.1",
     "@nanostores/persistent": "^1.2.0",
     "@react-three/drei": "^10.7.6",
@@ -40,7 +40,7 @@
     "@thi.ng/color": "^5.8.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "astro": "^5.15.1",
+    "astro": "^5.16.0",
     "astro-useragent": "^5.2.0",
     "clsx": "^2.1.1",
     "glob": "^11.0.3",
