@@ -32,12 +32,14 @@ export const BackgroundGradient = (props: Props) => {
         aria-label="R3F Canvas Wrapper"
         className="z-1 absolute left-0 top-0 h-full w-full"
       >
-        <Canvas
-          gl={{ powerPreference: "high-performance", antialias: false }}
-          dpr={1}
-        >
-          <GradientPlane gradient={gradient} />
-        </Canvas>
+        {
+          <Canvas
+            gl={{ powerPreference: "high-performance", antialias: false }}
+            dpr={1}
+          >
+            <GradientPlane gradient={gradient} />
+          </Canvas>
+        }
       </div>
       <div
         aria-label="Content Wrapper"

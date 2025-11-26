@@ -169,3 +169,16 @@
   transform: translateX(-50%);
   z-index: -1;
 }
+
+section[data-desktop-start] {
+  grid-column: 1 / -1;
+  aspect-ratio: unset;
+}
+
+@media (min-width: 768px) {
+  section[data-desktop-start] {
+    grid-column-start: var(--desktop-start);
+    grid-column-end: span var(--desktop-span);
+    aspect-ratio: var(--aspect-width) / var(--aspect-height);
+  }
+}

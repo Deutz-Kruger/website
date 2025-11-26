@@ -19,5 +19,19 @@ const { title, description = "Deutz & Krüger" } = Astro.props;
       <slot />
     </SiteLayout>
     <script src="@/scripts/backgroundColorSwitch.ts"></script>
+    <script src="@/scripts/swup.ts"></script>
   </body>
 </html>
+
+<style is:global>
+  /* Define a transition duration during page visits */
+  html.is-changing .transition-fade {
+    transition: opacity 0.25s;
+    opacity: 1;
+  }
+
+  /* Define the styles for the unloaded pages */
+  html.is-animating .transition-fade {
+    opacity: 0;
+  }
+</style>

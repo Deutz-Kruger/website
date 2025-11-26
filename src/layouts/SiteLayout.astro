@@ -37,7 +37,9 @@ if (width && height) {
       navMinHeight={navMinHeight}
       logo={logo.src}
     />
-    <slot />
+    <main id="swup" class="transition-fade">
+      <slot />
+    </main>
     <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
   </div>
 </div>

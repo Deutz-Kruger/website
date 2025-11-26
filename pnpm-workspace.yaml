@@ -2,7 +2,8 @@ onlyBuiltDependencies:
   - "@tailwindcss/oxide"
   - esbuild
   - sharp
+  - swup
   - workerd
+
 publicHoistPattern:
-  - "linkedoms"
-#   - "*types*"
+  - linkedoms

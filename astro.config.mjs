@@ -60,7 +60,6 @@ export default defineConfig({
         "three",
         "@react-three/fiber",
         "@react-three/drei",
-        "leva",
         "@thi.ng/color",
         "@thi.ng/math",
         "@thi.ng/vectors",
