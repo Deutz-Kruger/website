@@ -1,6 +1,6 @@
-# Swup Performance Analysis Summary
+# Performance Analysis Summary
 
-## Core Swup Configuration
+## Core Configuration
 
 ### `/src/scripts/swup.ts`
 
