@@ -25,7 +25,7 @@ const staticCol = background?.background_colors
     background.background === "gradient" ? (
       <BackgroundGradient
         className={cn(className, "padding-background w-full")}
-        client:only="react"
+        client:visible
         gradientCols={background.background_colors}
       >
         <slot />

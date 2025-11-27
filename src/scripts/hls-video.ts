@@ -21,7 +21,13 @@ class HlsVideo extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: "open" });
 
-    this.hls = new Hls();
+    this.hls = new Hls({
+      maxBufferSize: 10 * 1000 * 1000,
+      maxBufferLength: 30,
+      maxMaxBufferLength: 60,
+      enableWorker: true,
+      lowLatencyMode: false,
+    });
     this.videoElement = document.createElement("video");
 
     shadow.appendChild(this.videoElement);

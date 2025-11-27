@@ -2,7 +2,7 @@ import { ScreenQuad, shaderMaterial } from "@react-three/drei";
 import { extend, useFrame } from "@react-three/fiber";
 import fragmentShader from "@shaders/gradient_bg/gradient.frag";
 import vertexShader from "@shaders/gradient_bg/gradient.vert";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ShaderMaterial, Vector3 } from "three";
 
 import { GRADIENT_SPECS } from "@/utils/gradients";
@@ -53,11 +53,29 @@ declare module "@react-three/fiber" {
 
 export const GradientPlane = ({ gradient }: Props) => {
   const gradientShader = useRef<ShaderMaterial & Partial<Uniforms>>(null);
+  const frameCount = useRef(0);
 
   useFrame(({ clock }) => {
     if (!gradientShader.current) return;
-    gradientShader.current.uTime = clock.elapsedTime * 0.025;
+    frameCount.current++;
+
+    if (frameCount.current % 2 === 0 && gradientShader.current) {
+      gradientShader.current.uTime = clock.elapsedTime * 0.03;
+    }
   });
+
+  useEffect(() => {
+    return () => {
+      // Dispose shader material on unmount
+      if (gradientShader.current) {
+        try {
+          gradientShader.current.dispose();
+        } catch (e) {
+          console.warn("Error disposing shader material:", e);
+        }
+      }
+    };
+  }, []);
 
   return (
     <ScreenQuad>

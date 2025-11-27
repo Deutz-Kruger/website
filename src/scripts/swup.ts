@@ -8,20 +8,29 @@ import Swup from "swup";
 
 import { cleanUpCarousel, initCarousel } from "@/scripts/carousel";
 
-import { addColorSwitcher, applyColor } from "./backgroundColorSwitch";
+import {
+  addColorSwitcher,
+  applyColor,
+  initColorStore,
+  removeColorSwitcher,
+} from "./backgroundColorSwitch";
 
 const swup = new Swup({
   plugins: [
     new SwupPreloadPlugin(),
     new SwupHeadPlugin({
-      persistAssets: true, // Keep existing CSS/JS, add new ones
-      persistTags: "style, link[rel=stylesheet]", // Don't remove existing styles
+      persistAssets: true,
+      persistTags: "style, link[rel=stylesheet]",
     }),
     new SwupScriptsPlugin({}),
     new SwupDebugPlugin(),
   ],
   containers: ["#swup"],
+  cache: true,
+  animationSelector: '[class*="transition-"]',
 });
+
+let isInitialized = false;
 
 swup.hooks.on("page:view", () => {
   init();
@@ -36,11 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
+  if (!isInitialized) {
+    initColorStore(); // Only subscribe once
+    isInitialized = true;
+  }
+
   addColorSwitcher();
   applyColor();
   initCarousel();
 };
 
 const cleanUp = () => {
+  removeColorSwitcher();
   cleanUpCarousel();
 };
