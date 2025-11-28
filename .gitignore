@@ -34,3 +34,4 @@ src/placeholder
 
 # Documentation and migration files
 /docs/
+.rules
