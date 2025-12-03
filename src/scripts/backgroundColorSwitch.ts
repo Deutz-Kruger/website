@@ -35,20 +35,14 @@ export const applyColor = () => {
   const body = document.getElementById("bg-col-wrapper");
   if (!body) return;
   body.style.backgroundColor = `var(${color})`;
-  document.body.style.setProperty(
-    "--swup-overlay-theme-color",
-    `var(${color})`,
-  );
+  document.body.style.setProperty("--theme-color", `var(${color})`);
 };
 
 keywordColor.subscribe((color) => {
   const body = document.getElementById("bg-col-wrapper");
   if (!body) return;
   body.style.backgroundColor = `var(${color})`;
-  document.body.style.setProperty(
-    "--swup-overlay-theme-color",
-    `var(${color})`,
-  );
+  document.body.style.setProperty("--theme-color", `var(${color})`);
 });
 
 export const initColorStore = () => {
@@ -59,10 +53,7 @@ export const initColorStore = () => {
     if (!body) return;
 
     body.style.backgroundColor = `var(${color})`;
-    document.body.style.setProperty(
-      "--swup-overlay-theme-color",
-      `var(${color})`,
-    );
+    document.body.style.setProperty("--theme-color", `var(${color})`);
   });
 
   isSubscribed = true;

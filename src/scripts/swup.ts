@@ -1,6 +1,5 @@
 import "./hls-video";
 
-import SwupDebugPlugin from "@swup/debug-plugin";
 import SwupHeadPlugin from "@swup/head-plugin";
 import SwupPreloadPlugin from "@swup/preload-plugin";
 import SwupScriptsPlugin from "@swup/scripts-plugin";
@@ -14,6 +13,7 @@ import {
   initColorStore,
   removeColorSwitcher,
 } from "./backgroundColorSwitch";
+import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
 
 const swup = new Swup({
   plugins: [
@@ -23,7 +23,7 @@ const swup = new Swup({
       persistTags: "style, link[rel=stylesheet]",
     }),
     new SwupScriptsPlugin({}),
-    new SwupDebugPlugin(),
+    // new SwupDebugPlugin(),
   ],
   containers: ["#swup"],
   cache: true,
@@ -53,9 +53,11 @@ const init = () => {
   addColorSwitcher();
   applyColor();
   initCarousel();
+  initHeaderLogic();
 };
 
 const cleanUp = () => {
   removeColorSwitcher();
   cleanUpCarousel();
+  cleanUpHeaderLogic();
 };

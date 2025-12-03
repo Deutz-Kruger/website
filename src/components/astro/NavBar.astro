@@ -17,9 +17,14 @@ interface Props {
 const { navItems, navMinHeight, lang, logo, style = "" } = Astro.props;
 ---
 
+<div
+  class="mb-12 md:mb-4 lg:-mt-8"
+  style={`height: ${navMinHeight}rem; min-height: ${navMinHeight}rem;`}
+>
+</div>
 <header
-  class="mb-12 flex h-10 items-center justify-between md:mb-4 md:h-16 lg:-mt-8 xl:h-20"
-  style={style}
+  class="page-spacing z-100 relative left-0 top-0 mb-12 flex w-full items-center justify-between md:mb-4 lg:-mt-8"
+  style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
   <Logo lang={lang} logo={logo} />
   <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />

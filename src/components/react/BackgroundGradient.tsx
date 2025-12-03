@@ -89,7 +89,7 @@ export const BackgroundGradient = (props: Props) => {
     >
       <div
         aria-label="R3F Canvas Wrapper"
-        className="z-1 absolute left-0 top-0 h-full w-full"
+        className="absolute left-0 top-0 h-full w-full"
       >
         {/*{
           <Canvas
@@ -103,7 +103,7 @@ export const BackgroundGradient = (props: Props) => {
       </div>
       <div
         aria-label="Content Wrapper"
-        className={cn(className, "z-2 relative h-full")}
+        className={cn(className, "relative h-full")}
       >
         {children}
       </div>

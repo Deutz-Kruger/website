@@ -13,12 +13,12 @@ const { lang, logo } = Astro.props;
 
 <a
   href={getRelativeLocaleUrl(lang, "/")}
-  class="inline-block h-8 md:h-11 lg:h-16"
+  class="z-100 relative left-0 top-0 h-8 md:h-11 lg:h-16"
 >
   <ImageWrapper
     src={logo}
     altText="Deutz & Krüger Logo"
     loading="eager"
-    className="z-100 h-full w-full"
+    className="h-full w-full"
   />
 </a>

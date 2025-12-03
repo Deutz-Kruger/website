@@ -3,7 +3,7 @@ import Hls from "hls.js";
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
   :host { display: block; }
-  video { width: 100%; height: 100% }
+  video { width: 100%; height: 100%; }
   :host([has-background="true"]) video {
     border-radius: 0.625rem;
   }
