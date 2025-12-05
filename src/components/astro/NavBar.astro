@@ -1,12 +1,15 @@
 ---
 import LangSelect from "./LangSelect.astro";
-import Logo from "./Logo.astro";
 import Navigation from "./Navigation.astro";
 
 interface Props {
   navMinHeight: number;
-  logo: string;
+
   lang: string;
+  aspect: {
+    height: number;
+    width: number;
+  };
   navItems: {
     title: string;
     href: string;
@@ -14,7 +17,8 @@ interface Props {
   style?: string;
 }
 
-const { navItems, navMinHeight, lang, logo, style = "" } = Astro.props;
+const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
+console.log("navMinHeight", navMinHeight, aspect);
 ---
 
 <div
@@ -23,10 +27,14 @@ const { navItems, navMinHeight, lang, logo, style = "" } = Astro.props;
 >
 </div>
 <header
-  class="page-spacing z-100 relative left-0 top-0 mb-12 flex w-full items-center justify-between md:mb-4 lg:-mt-8"
+  class="page-spacing z-100 relative left-0 top-0 mb-12 flex w-full items-center justify-between xl:-mt-4"
   style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
-  <Logo lang={lang} logo={logo} />
+  <div
+    class="h-8 pt-2.5 md:h-12 md:pt-6 xl:pt-8"
+    style={`aspect-ratio: ${aspect.width} / ${aspect.height};`}
+  >
+  </div>
   <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />
   <LangSelect />
 </header>

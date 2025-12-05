@@ -11,10 +11,7 @@ interface Props {
 const { lang, logo } = Astro.props;
 ---
 
-<a
-  href={getRelativeLocaleUrl(lang, "/")}
-  class="z-100 relative left-0 top-0 h-8 md:h-11 lg:h-16"
->
+<a href={getRelativeLocaleUrl(lang, "/")}>
   <ImageWrapper
     src={logo}
     altText="Deutz & Krüger Logo"

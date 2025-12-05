@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getEntry } from "astro:content";
 
+import FixedLogo from "@/components/astro/FixedLogo.astro";
 import Footer from "@/components/astro/Footer.astro";
 import NavBar from "@/components/astro/NavBar.astro";
 import { getMedia } from "@/utils/media";
@@ -11,28 +12,34 @@ const layoutEntry: LayoutData | undefined = await getEntry("layout", "layout");
 if (!layoutEntry) {
   return new Response(null, { status: 404 });
 }
+
 const lang = Astro.currentLocale ?? "en";
 
 const { navItems, footerItems, logo } = layoutEntry.data;
 
 const { width, height } = getMedia(logo.src);
 
-const logoWidthInRem = 4.5;
+const logoWidthInRem = width ? width / 16 : 4.5;
 let navMinHeight = logoWidthInRem;
+const aspect = { height: height ?? 48, width: width ?? 62.391 };
 
 if (width && height) {
   const aspectRatio = height / width;
+  console.log("aspectRatio", aspectRatio);
   navMinHeight = logoWidthInRem * aspectRatio;
 }
+
+console.log("navMinHeight", navMinHeight);
 ---
 
 <div class="tracking-[1%] antialiased" id="bg-col-wrapper">
-  <div class="max-w-480 page-spacing relative z-10 mx-auto">
+  <FixedLogo logo={logo.src} lang={lang} navMinHeight={navMinHeight} />
+  <div class="max-w-480 page-spacing mx-auto">
     <NavBar
       navItems={navItems}
       lang={lang}
       navMinHeight={navMinHeight}
-      logo={logo.src}
+      aspect={aspect}
     />
     <main id="swup" class="transition-main">
       <slot />
