@@ -25,11 +25,8 @@ const aspect = { height: height ?? 48, width: width ?? 62.391 };
 
 if (width && height) {
   const aspectRatio = height / width;
-  console.log("aspectRatio", aspectRatio);
   navMinHeight = logoWidthInRem * aspectRatio;
 }
-
-console.log("navMinHeight", navMinHeight);
 ---
 
 <div class="tracking-[1%] antialiased" id="bg-col-wrapper">

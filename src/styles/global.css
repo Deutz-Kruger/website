@@ -18,9 +18,9 @@
 
 @theme static {
   /* Colors */
-  --color-blue: #425e6b;
-  --color-green: #618667;
-  --color-red: #9a2b5a;
+  --color-branding: #f5f5b8;
+  --color-development: #9b5348;
+  --color-design: #b3e8c2;
 }
 
 @theme {
@@ -185,12 +185,16 @@ section[data-desktop-start] {
 
 .hide-me {
   /*transform: translateY(0);*/
-  transition: all 275ms cubic-bezier(0.67, 0.28, 0.56, 0.72);
+  /*transition: all 200ms cubic-bezier(0.47, 0.28, 0.56, 0.4);*/
+  transition: all 200ms ease-in-out;
+  transform: translateY(0);
+  /*transition: transform 2000ms ease-in;
+  transition: opacity 150ms ease-out;*/
 }
 
 .hide-me.hide {
   opacity: 0;
-  transform: translateY(-5%);
+  transform: translateY(-30%);
   /*transition: opacity 0.8s ease;*/
 }
 

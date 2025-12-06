@@ -18,23 +18,26 @@ interface Props {
 }
 
 const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
-console.log("navMinHeight", navMinHeight, aspect);
 ---
 
 <div
-  class="mb-12 md:mb-4 lg:-mt-8"
-  style={`height: ${navMinHeight}rem; min-height: ${navMinHeight}rem;`}
+  class="page-spacing mb-12 md:mb-4 md:h-12 xl:-mt-4"
+  style={`min-height: ${navMinHeight}rem;`}
 >
 </div>
 <header
-  class="page-spacing z-100 relative left-0 top-0 mb-12 flex w-full items-center justify-between xl:-mt-4"
+  class="z-100 pointer-events-none relative left-0 top-0 mb-12 w-full items-center xl:-mt-4"
   style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
-  <div
-    class="h-8 pt-2.5 md:h-12 md:pt-6 xl:pt-8"
-    style={`aspect-ratio: ${aspect.width} / ${aspect.height};`}
-  >
+  <div class="max-w-480 page-spacing mx-auto flex w-full justify-between">
+    <div
+      class="pointer-events-none h-8 pt-2.5 md:h-12 md:pt-6 xl:pt-8"
+      style={`aspect-ratio: ${aspect.width} / ${aspect.height};`}
+    >
+    </div>
+
+    <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />
+
+    <LangSelect />
   </div>
-  <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />
-  <LangSelect />
 </header>

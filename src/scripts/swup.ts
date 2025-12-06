@@ -14,6 +14,7 @@ import {
   removeColorSwitcher,
 } from "./backgroundColorSwitch";
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
+import { cleanupLenis, initLenis } from "./lenis";
 
 const swup = new Swup({
   plugins: [
@@ -54,10 +55,12 @@ const init = () => {
   applyColor();
   initCarousel();
   initHeaderLogic();
+  initLenis();
 };
 
 const cleanUp = () => {
   removeColorSwitcher();
   cleanUpCarousel();
   cleanUpHeaderLogic();
+  cleanupLenis();
 };

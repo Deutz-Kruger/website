@@ -12,16 +12,16 @@ interface Props {
 const keywords = ["development", "brands", "digital experiences"];
 
 const generateKeywords = (match: string) => {
-  let keywordColor = "--color-blue";
+  let keywordColor = "--color-branding";
   switch (match) {
     case "brands":
-      keywordColor = "--color-blue";
+      keywordColor = "--color-branding";
       break;
     case "development":
-      keywordColor = "--color-green";
+      keywordColor = "--color-development";
       break;
     case "digital experiences":
-      keywordColor = "--color-red";
+      keywordColor = "--color-design";
       break;
   }
   return `<span class="keyword" data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;

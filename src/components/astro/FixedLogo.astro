@@ -7,12 +7,11 @@ interface Props {
 }
 
 const { lang, logo, navMinHeight } = Astro.props;
-console.log("navMinHeight");
 ---
 
 <div
   id="fixed-logo-container"
-  class="page-spacing pointer-events-none left-0 top-0 box-content h-10 pt-3.5 md:h-12 md:pt-6 xl:pt-8"
+  class="left-0 top-0 box-content h-10 pt-3.5 md:h-12 md:pt-6 xl:pt-8"
   style={`min-height: ${navMinHeight}rem;`}
 >
   <Logo lang={lang} logo={logo} />
@@ -23,5 +22,26 @@ console.log("navMinHeight");
     position: fixed;
     z-index: 5; /* Behind nav content (z-100) but above the background */
     will-change: filter, transform;
+    padding-left: var(--spacing-page-mobile);
+  }
+  @media (min-width: 768px) {
+    #fixed-logo-container {
+      padding-left: var(--spacing-page-laptop);
+    }
+  }
+  @media (min-width: 1280px) {
+    #fixed-logo-container {
+      padding-left: var(--spacing-page-desktop);
+    }
+  }
+  /*
+    ADDITION: This media query handles the alignment on ultrawide screens.
+  */
+  @media (min-width: 1920px) {
+    #fixed-logo-container {
+      /* This calculates the size of the empty space to the left of your
+         centered content and sets the logo's position there. */
+      left: calc((100vw - 1920px) / 2);
+    }
   }
 </style>

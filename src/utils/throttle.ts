@@ -1,48 +1,26 @@
-type ThrottledFunction<T extends (...args: unknown[]) => unknown> = {
-  (this: ThisParameterType<T>, ...args: Parameters<T>): void;
-  cancel: () => void;
-};
-
+/**
+ * Creates a throttled function that only invokes `func` at most once
+ * per every `delay` milliseconds. The throttled function comes with a
+ * `cancel` method.
+ *
+ * @param func The function to throttle.
+ * @param delay The number of milliseconds to throttle invocations to.
+ * @returns The new throttled function.
+ */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   delay: number,
-): ThrottledFunction<T> {
-  let lastCall = 0;
-  let timeout: NodeJS.Timeout | null = null;
-  console.log("Throttle triggered", func);
-  const throttledFunc: ThrottledFunction<T> = function (
-    this: ThisParameterType<T>,
-    ...args: Parameters<T>
-  ) {
-    const now = Date.now();
-    console.log("NOW, LAST CALL", now, lastCall);
-    if (now - lastCall >= delay) {
-      func.apply(this, args);
-      lastCall = now;
-    } else {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-
-      timeout = setTimeout(
-        () => {
-          func.apply(this, args);
-          lastCall = Date.now();
-          timeout = null;
-        },
-        delay - (now - lastCall),
-      );
+): (this: ThisParameterType<T>, ...args: Parameters<T>) => void {
+  let inProgress = false;
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    if (inProgress) {
+      return;
     }
+    inProgress = true;
+    // Apply the function immediately
+    func.apply(this, args);
+    setTimeout(() => {
+      inProgress = false;
+    }, delay);
   };
-
-  console.log("Throttled Func", throttledFunc);
-
-  throttledFunc.cancel = function () {
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-  };
-
-  return throttledFunc;
 }

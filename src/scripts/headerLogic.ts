@@ -1,25 +1,17 @@
+import { throttle } from "@/utils/throttle";
+
 const elements = Array.from(document.getElementsByClassName("hide-me"));
 let lastScrollPos = 0;
-let ticking = false;
+
 let isHidden = false;
 let hidePos = 0;
 
-const throttleScroll = () => {
-  if (!ticking) {
-    setTimeout(() => {
-      renderHeader();
-      ticking = false;
-    }, 20);
-    ticking = true;
-  }
-};
-
 export const initHeaderLogic = () => {
-  window.addEventListener("scroll", throttleScroll, true);
+  window.addEventListener("scroll", throttle(renderHeader, 50), true);
 };
 
 export const cleanUpHeaderLogic = () => {
-  window.removeEventListener("scroll", throttleScroll);
+  window.removeEventListener("scroll", throttle(renderHeader, 50));
 };
 
 const renderHeader = () => {
