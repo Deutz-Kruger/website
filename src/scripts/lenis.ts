@@ -1,23 +1,43 @@
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 let lenis: Lenis | null = null;
+let lenisUpdateCallback: ((time: number) => void) | null = null;
 
+/**
+ * Initializes smooth scrolling with Lenis and integrates it with GSAP's ScrollTrigger.
+ */
 export const initLenis = () => {
-  // Initialize Lenis
   lenis = new Lenis({
-    autoRaf: true,
-    duration: 0.6,
-    easing: (t) => 1 - (1 - t) * (1 - t),
+    lerp: 0.12,
+    autoRaf: false,
   });
 
-  // Listen for the scroll event and log the event data
-  lenis.on("scroll", () => {
-    // console.log(e);
-  });
+  // Sync ScrollTrigger with Lenis' scroll updates.
+  lenis.on("scroll", ScrollTrigger.update);
+
+  // Define the function to be called on every GSAP tick.
+  lenisUpdateCallback = (time: number) => {
+    lenis?.raf(time * 1000);
+  };
+
+  gsap.ticker.add(lenisUpdateCallback);
+
+  gsap.ticker.lagSmoothing(0);
 };
 
+/**
+ * Cleans up the Lenis instance and GSAP ticker for page transitions.
+ */
 export const cleanupLenis = () => {
+  if (lenisUpdateCallback) {
+    gsap.ticker.remove(lenisUpdateCallback);
+    lenisUpdateCallback = null;
+  }
   if (lenis) {
+    lenis.off("scroll", ScrollTrigger.update);
     lenis.destroy();
+    lenis = null;
   }
 };

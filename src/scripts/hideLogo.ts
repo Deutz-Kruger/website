@@ -1,12 +1,12 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { throttle } from "@/utils/throttle"; // Assuming throttle is fixed and ready
+import { throttle } from "@/utils/throttle";
 
 gsap.registerPlugin(ScrollTrigger);
 
 let logoContainer: HTMLElement | null = null;
-let logoElement: HTMLElement | null = null; // Assuming the actual image or interactive part is inside
+let logoElement: HTMLElement | null = null;
 let isLogoObscured = false;
 let checkOverlapThrottled: (() => void) | null = null;
 
@@ -23,50 +23,40 @@ function checkOverlap() {
 
   const logoRect = logoContainer.getBoundingClientRect();
 
-  // Get a point near the center of the logo for element detection
+  // Get a point near the center of the logo for element detection on the x axis
   const x = logoRect.left + logoRect.width / 2;
-  const y = logoRect.bottom - logoRect.height / 6;
 
-  // Get all elements at this point
-  const elementsAtPoint = document.elementsFromPoint(x, y);
+  // Get a point at the top and bottom of the logo for the detection.
+  const y_bottom = logoRect.bottom - logoRect.height / 6;
+  const y_top = logoRect.top + logoRect.height / 2;
 
-  // Filter for elements that are descendants of <main id="swup"> and are text-like
-  // We need to ensure these elements are actually obscuring the logo
-  const obscuringElement = elementsAtPoint.find((el) => {
-    // Check if it's a descendant of main#swup
-    const isMainContent =
-      el.closest("#swup") === document.getElementById("swup");
-    // Check if it's a block-level or text-containing element (adjust as needed)
-    const isTextLike =
-      el.tagName === "P" ||
-      el.tagName === "H1" ||
-      el.tagName === "H2" ||
-      el.tagName === "H3" ||
-      el.tagName === "H4" ||
-      el.tagName === "H5" ||
-      el.tagName === "H6" ||
-      el.tagName === "SPAN"; // Add more tags as necessary
+  const isObscuredAt = (y: number): boolean => {
+    const elementsAtPoint = document.elementsFromPoint(x, y);
+    const obscuringElement = elementsAtPoint.find((el) => {
+      const isMainContent =
+        el.closest("#swup") === document.getElementById("swup");
+      const isTextLike =
+        el.tagName === "P" ||
+        el.tagName === "H1" ||
+        el.tagName === "H2" ||
+        el.tagName === "H3" ||
+        el.tagName === "H4" ||
+        el.tagName === "H5" ||
+        el.tagName === "H6" ||
+        el.tagName === "SPAN";
+      const isNotLogo = !el.closest("#fixed-logo-container");
+      const computedStyle = window.getComputedStyle(el);
+      const isVisible =
+        computedStyle.opacity !== "0" && computedStyle.visibility !== "hidden";
+      return isMainContent && isTextLike && isNotLogo && isVisible;
+    });
+    return !!obscuringElement;
+  };
 
-    // Ensure it's not the logo itself or its parent container
-    const isNotLogo = !el.closest("#fixed-logo-container");
+  const isCurrentlyObscured = isObscuredAt(y_top) || isObscuredAt(y_bottom);
 
-    // Make sure it's visually solid (not fully transparent)
-    const computedStyle = window.getComputedStyle(el);
-    const isVisible =
-      computedStyle.opacity !== "0" && computedStyle.visibility !== "hidden";
-
-    // Check if its z-index is higher than the logo's (logo is z-index: 5)
-    // This is more complex than a direct check, as 'static' elements don't have effective z-index.
-    // Instead, rely on elementsFromPoint order and main content being 'on top' of logo.
-
-    return isMainContent && isTextLike && isNotLogo && isVisible;
-  });
-
-  console.log("obscuringElemen", obscuringElement);
-
-  if (obscuringElement) {
+  if (isCurrentlyObscured) {
     if (!isLogoObscured) {
-      // Logo is becoming obscured
       gsap.to(logoElement, {
         duration: ANIMATION_DURATION,
         filter: `blur(${BLUR_AMOUNT}px)`,
@@ -93,7 +83,6 @@ function checkOverlap() {
  * Initializes the logo animation by setting up the scroll listener.
  */
 export function initLogoAnimation() {
-  console.log("Initializing logo animation.");
   logoContainer = document.getElementById("fixed-logo-container");
   if (!logoContainer) {
     console.warn(
@@ -103,15 +92,13 @@ export function initLogoAnimation() {
   }
   logoElement = logoContainer.querySelector("a"); // Assuming the 'a' tag within is the animated element
 
-  // Ensure initial state
+  // Initial / base state
   gsap.set(logoElement, { filter: "blur(0px)", scale: 1 });
 
-  // Create a throttled version of checkOverlap
-  checkOverlapThrottled = throttle(checkOverlap, 100); // Throttle to every 100ms
+  checkOverlapThrottled = throttle(checkOverlap, 100);
 
-  // Add event listener
   window.addEventListener("scroll", checkOverlapThrottled);
-  window.addEventListener("resize", checkOverlapThrottled); // Also check on resize
+  window.addEventListener("resize", checkOverlapThrottled);
   checkOverlapThrottled(); // Initial check
 }
 
@@ -119,7 +106,6 @@ export function initLogoAnimation() {
  * Cleans up the logo animation by removing the scroll listener.
  */
 export function cleanupLogoAnimation() {
-  console.log("Cleaning up logo animation.");
   if (checkOverlapThrottled) {
     window.removeEventListener("scroll", checkOverlapThrottled);
     window.removeEventListener("resize", checkOverlapThrottled);

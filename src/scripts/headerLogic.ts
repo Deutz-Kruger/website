@@ -16,7 +16,7 @@ export const cleanUpHeaderLogic = () => {
 
 const renderHeader = () => {
   const windowY = window.scrollY;
-  console.log("window.scrollY", window.scrollY);
+
   const threshold = 200;
   const deadZone = 10; // Pixels to scroll up before showing
 
@@ -32,9 +32,6 @@ const renderHeader = () => {
       isHidden = false;
     }
   } else {
-    console.log("Window Y > threshhold", windowY, threshold);
-    console.log("lastScrollPos", lastScrollPos);
-    console.log("hidePos", hidePos);
     // Above threshold: handle direction with hysteresis
     if (windowY > lastScrollPos) {
       // Scrolling down: hide immediately
@@ -45,18 +42,8 @@ const renderHeader = () => {
         });
         isHidden = true;
         hidePos = windowY;
-        console.log("hidePosUpdated", hidePos);
       }
     } else {
-      // Scrolling up: show only after dead zone
-      console.log(
-        "isHidden",
-        isHidden,
-        "windowY",
-        windowY,
-        "showTarget",
-        lastScrollPos - deadZone,
-      );
       if (isHidden && windowY < hidePos - deadZone) {
         elements.forEach((element) => {
           element.classList.remove("hide");
