@@ -25,7 +25,7 @@ function checkOverlap() {
 
   // Get a point near the center of the logo for element detection
   const x = logoRect.left + logoRect.width / 2;
-  const y = logoRect.top + logoRect.height / 2;
+  const y = logoRect.bottom - logoRect.height / 6;
 
   // Get all elements at this point
   const elementsAtPoint = document.elementsFromPoint(x, y);

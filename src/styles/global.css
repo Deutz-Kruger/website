@@ -132,9 +132,9 @@
     }
     & p {
       /*Font Sizes*/
-      @apply text-normal md:text-medium lg:text-big;
+      @apply text-normal md:text-medium xl:text-big;
       /* Font Spacing */
-      @apply tracking-text-mobile leading-text-mobile md:tracking-text-desktop md:leading-text-desktop;
+      @apply tracking-text-mobile leading-text-mobile xl:tracking-text-desktop xl:leading-text-desktop;
     }
   }
 
