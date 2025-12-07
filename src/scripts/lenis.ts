@@ -11,8 +11,8 @@ export const initLenis = () => {
   });
 
   // Listen for the scroll event and log the event data
-  lenis.on("scroll", (e) => {
-    console.log(e);
+  lenis.on("scroll", () => {
+    // console.log(e);
   });
 };
 

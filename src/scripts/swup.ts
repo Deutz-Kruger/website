@@ -14,6 +14,7 @@ import {
   removeColorSwitcher,
 } from "./backgroundColorSwitch";
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
+import { cleanupLogoAnimation, initLogoAnimation } from "./hideLogo";
 import { cleanupLenis, initLenis } from "./lenis";
 
 const swup = new Swup({
@@ -56,6 +57,7 @@ const init = () => {
   initCarousel();
   initHeaderLogic();
   initLenis();
+  initLogoAnimation();
 };
 
 const cleanUp = () => {
@@ -63,4 +65,5 @@ const cleanUp = () => {
   cleanUpCarousel();
   cleanUpHeaderLogic();
   cleanupLenis();
+  cleanupLogoAnimation();
 };

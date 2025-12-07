@@ -24,13 +24,13 @@ const lang = Astro.currentLocale ?? "en";
       altText={preview_image.alt}
       className="mx-auto block w-full md:mx-0 md:max-w-lg"
     />
-
-    <h2
-      class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop relative mt-2 w-4/5 md:w-3/5"
-    >
-      {title}
-    </h2>
-
+    <div class="relative mt-2 w-4/5 md:w-3/5">
+      <h2
+        class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop"
+      >
+        {title}
+      </h2>
+    </div>
     <hr class="mb-12 md:hidden" />
   </div>
 </a>
