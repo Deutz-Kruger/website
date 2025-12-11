@@ -1,11 +1,7 @@
 name: Build
 
 on:
-  workflow_run:
-    workflows: ["Code Quality"]
-    types:
-      - completed
-    branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
   build:
