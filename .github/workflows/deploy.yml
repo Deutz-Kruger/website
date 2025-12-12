@@ -13,9 +13,9 @@ concurrency:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    name: Build Project
     secrets:
       CLOUDFLARE_MEDIA_API_TOKEN: ${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }}
-    with:
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
 
   deploy:

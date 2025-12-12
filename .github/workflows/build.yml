@@ -6,10 +6,9 @@ on:
     secrets:
       CLOUDFLARE_MEDIA_API_TOKEN:
         required: true
-    inputs:
       CLOUDFLARE_ACCOUNT_ID:
         required: true
-        type: string
+
 jobs:
   build:
     environment: CLOUDFLARE
@@ -31,7 +30,7 @@ jobs:
       - name: "Create .env file"
         run: |
           touch .env
-          echo CLOUDFLARE_ACCOUNT_ID=${{ inputs.CLOUDFLARE_ACCOUNT_ID }} >> .env
+          echo CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} >> .env
           echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
           cat .env
 
