@@ -17,6 +17,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "lint && astro build && wrangler dev",
+    "deploy": "wrangler deploy",
     "deploy-cf": "astro build && wrangler deploy",
     "astro": "astro",
     "lint": "eslint . --ext .js,.ts,.astro",

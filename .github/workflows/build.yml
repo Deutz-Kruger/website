@@ -2,6 +2,7 @@ name: Build
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
@@ -24,18 +25,23 @@ jobs:
         with:
           version: latest
 
-      - name: "Create env file"
+      - name: "Create .env file"
         run: |
           touch .env
           echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
           echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
           cat .env
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Sync Media
-        run: pnpm sync-media
+      - name: Install dependencies & sync media file
+        run: |
+          pnpm install
+          pnpm sync-media
 
       - name: Build project
         run: pnpm run build
+
+      - name: Create build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: ./dist

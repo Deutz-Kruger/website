@@ -12,28 +12,14 @@ concurrency:
 
 jobs:
   build:
+    name: Build project
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  deploy:
+    name: Deploy to Cloudflare
     runs-on: ubuntu-latest
-    continue-on-error: true
-    defaults:
-      run:
-        working-directory: "./"
-
+    needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10.10.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.11.0"
-
-      - name: Check versions
-        run: |
-          echo "📦 Package manager versions:"
-          echo "Node: $(node --version)"
-          echo "pnpm: $(pnpm --version)"
+      - name: Deploy with wrangler
+        run: wrangler deploy
