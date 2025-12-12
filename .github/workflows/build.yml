@@ -3,11 +3,11 @@ name: Build
 on:
   workflow_dispatch:
   workflow_call:
-    secrets:
-      CLOUDFLARE_MEDIA_API_TOKEN:
-        required: true
-      CLOUDFLARE_ACCOUNT_ID:
-        required: true
+    # secrets:
+    #   CLOUDFLARE_MEDIA_API_TOKEN:
+    #     required: true
+    #   CLOUDFLARE_ACCOUNT_ID:
+    #     required: true
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: "Create .env file"
         run: |
           touch .env
-          echo CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} >> .env
+          echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
           echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
           cat .env
 
