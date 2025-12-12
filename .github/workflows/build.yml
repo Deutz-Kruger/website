@@ -22,6 +22,13 @@ jobs:
           cache: "pnpm"
       - run: pnpm install
 
+      - name: "Create .env file"
+        run: |
+          touch .env
+          echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
+          echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
+          cat .env
+
       - name: Cache media-sync manifest
         id: cache-manifest
         uses: actions/cache@v4
@@ -48,18 +55,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name != 'workflow_run' }}
 
     steps:
-      - name: "Create .env file"
-        run: |
-          touch .env
-          echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
-          echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
-          cat .env
-
-      - name: Install dependencies & sync media file
-        run: |
-          pnpm install
-          pnpm sync-media
-
       - name: Build project
         run: pnpm run build
 
