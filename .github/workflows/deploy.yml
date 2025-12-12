@@ -1,4 +1,4 @@
-name: Deploy Dev
+name: Deploy
 
 on:
   workflow_dispatch:
@@ -12,8 +12,11 @@ concurrency:
 
 jobs:
   build:
-    name: Build project
     uses: ./.github/workflows/build.yml
+    secrets:
+      CLOUDFLARE_MEDIA_API_TOKEN: ${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }}
+    with:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
 
   deploy:
     name: Deploy to Cloudflare
