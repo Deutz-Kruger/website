@@ -26,5 +26,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Sync Media
+        run: pnpm sync-media
+
       - name: Build project
         run: pnpm run build

@@ -218,3 +218,5 @@ export const writeManifest = async (manifest: Manifest) => {
   await writeFile(MANIFEST_PATH, jsonManifest, { encoding: "utf-8" });
   console.log("Sucessfully written manifest.");
 };
+
+syncMedia();
