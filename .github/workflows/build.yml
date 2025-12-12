@@ -40,16 +40,9 @@ jobs:
       - name: Sync media files
         run: pnpm sync-media
 
-      - name: Save updated manifest to cache
-        if: steps.cache-manifest.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          key: ${{ runner.os }}-sync-${{ hashFiles('./src/content/media/**') }}
-          path: |
-            ./media-sync/manifest.json
-
   build:
     environment: CLOUDFLARE
+    needs: setup
     name: Build
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name != 'workflow_run' }}
