@@ -1,18 +1,20 @@
-name: Build
+name: Build & Deploy
 
 on:
   workflow_dispatch:
+  push:
+    paths-ignore:
+      - ".github/**"
   workflow_call:
-    # secrets:
-    #   CLOUDFLARE_MEDIA_API_TOKEN:
-    #     required: true
-    #   CLOUDFLARE_ACCOUNT_ID:
-    #     required: true
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build_deploy:
     environment: CLOUDFLARE
-    name: Build Project
+    name: Build & Deploy Project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
