@@ -14,12 +14,17 @@ jobs:
   build:
     name: Build project
     uses: ./.github/workflows/build.yml
-    secrets: inherit
 
   deploy:
     name: Deploy to Cloudflare
-    runs-on: ubuntu-latest
+    environment: CLOUDFLARE
     needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - name: Deploy with wrangler
-        run: wrangler deploy
+      - uses: actions/checkout@v4
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
