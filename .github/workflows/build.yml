@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     environment: CLOUDFLARE
-    name: Setup dependencies & sync media
+    name: Build Project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
