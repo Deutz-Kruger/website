@@ -25,6 +25,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "astro check",
+    "check": "eslint . --ext .js,.ts,.astro && prettier --check . && astro check",
     "prepare": "husky",
     "sync-media": "git pull && tsx ./media-sync/sync.ts",
     "admin": "tsx ./admin-dashboard/server.ts",

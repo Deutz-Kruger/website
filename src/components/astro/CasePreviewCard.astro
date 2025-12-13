@@ -9,14 +9,15 @@ type CasePreview = z.infer<typeof caseSchema.shape.case_preview>;
 
 interface Props extends CasePreview {
   slug: string;
+  description: string;
 }
 
-const { preview_image, title, slug } = Astro.props;
+const { preview_image, title, slug, description } = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
 ---
 
-<a class="" href={getRelativeLocaleUrl(lang, slug)}>
+<a class="group" href={getRelativeLocaleUrl(lang, slug)}>
   <hr class="hidden md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
@@ -30,6 +31,11 @@ const lang = Astro.currentLocale ?? "en";
       >
         {title}
       </h2>
+      <p
+        class="text-large tracking-text-desktop leading-text-desktop -translate-y-1 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+      >
+        {description}
+      </p>
     </div>
     <hr class="mb-12 md:hidden" />
   </div>
