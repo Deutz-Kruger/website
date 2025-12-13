@@ -17,25 +17,28 @@ const { preview_image, title, slug, description } = Astro.props;
 const lang = Astro.currentLocale ?? "en";
 ---
 
-<a class="group" href={getRelativeLocaleUrl(lang, slug)}>
+<a class="group mb-9 inline-block" href={getRelativeLocaleUrl(lang, slug)}>
   <hr class="hidden md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
       src={preview_image.src}
       altText={preview_image.alt}
-      className="mx-auto block w-full md:mx-0 md:max-w-lg"
+      className="md:w-4/9 mx-auto block w-full md:mx-0"
     />
-    <div class="relative mt-2 w-4/5 md:w-3/5">
-      <h2
-        class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop"
-      >
-        {title}
-      </h2>
-      <p
-        class="text-large tracking-text-desktop leading-text-desktop -translate-y-1 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
-      >
-        {description}
-      </p>
+
+    <div class="relative mt-2 w-4/5 md:w-1/2">
+      <div class="">
+        <h2
+          class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop md:w-3/4"
+        >
+          {title}
+        </h2>
+        <p
+          class="text-large md:w-6/7 -translate-y-1 pt-4 leading-tight tracking-tight opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          {description}
+        </p>
+      </div>
     </div>
     <hr class="mb-12 md:hidden" />
   </div>

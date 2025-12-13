@@ -15,3 +15,6 @@ yarn.lock
 # CMS Data
 src/content/**/*.json
 .pages.yml
+
+# Auto-Gen Types
+src/shaders/gradient_bg/*.d.ts
