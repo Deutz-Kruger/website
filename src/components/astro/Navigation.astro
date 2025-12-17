@@ -8,16 +8,15 @@ interface Props {
     title: string;
     href: string;
   }[];
-  navMinHeight: number;
+  // navMinHeight: number;
   lang: string;
 }
 
-const { navItems, lang, navMinHeight } = Astro.props;
+const { navItems, lang } = Astro.props;
 ---
 
 <nav
   class="hide-me z-100 pointer-events-auto relative hidden w-screen items-center justify-center gap-3 md:flex"
-  style={`min-height: ${navMinHeight}rem`}
 >
   {
     navItems.map((item) => {
