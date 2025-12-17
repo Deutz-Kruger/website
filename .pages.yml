@@ -82,6 +82,7 @@ content:
     type: object
     fields:
     - { name: headline, type: text, label: Headline }
+    - { name: contact, type: text, label: Contact Line}
 
   - name: cases
     label: Cases
