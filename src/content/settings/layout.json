@@ -1,5 +1,5 @@
 {
-  "navItems": [
+  "nav_items": [
     {
       "href": "/bl-thermo",
       "title": "BL thermodynamics"
@@ -13,7 +13,7 @@
       "title": "Krumphof"
     }
   ],
-  "footerItems": [
+  "footer_items": [
     {
       "href": "/impressum",
       "title": "Impressum"
@@ -24,7 +24,7 @@
     }
   ],
   "logo": {
-    "src": "/src/content/media/logo.svg",
+    "src": "/src/content/media/logo.png",
     "alt": "DK Logo"
   }
 }
