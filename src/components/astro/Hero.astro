@@ -33,13 +33,22 @@ const highlightedHeadline = hero.headline.replace(
   new RegExp(`(${keywords.join("|")})`, "gi"),
   generateKeywords,
 );
+
+const contactLine = hero.contact.replace(
+  "hi@deutzkrueger.de",
+  "<a href='mailto:hi@deutzkrueger.de' class='keyword not-italic!'>hi@deutzkrueger.de</a>",
+);
 ---
 
 <section
-  class="md:mt-big xl:mt-biggest 2xl:mt-huge mb-12 flex flex-col justify-end"
+  class="md:mt-big xl:mt-biggest 2xl:mt-huge mb-4 flex flex-col justify-end md:mb-8"
 >
   <h1
-    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop w-6/7 md:w-12/17"
+    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop w-6/7 xl:w-12/17 mb-4 md:mb-6"
     set:html={highlightedHeadline}
+  />
+  <h2
+    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop sm:w-6/7 md:w-12/17 2xl:w-8/17 3xl:w- ml-auto text-right"
+    set:html={contactLine}
   />
 </section>
