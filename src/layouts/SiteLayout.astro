@@ -15,7 +15,7 @@ if (!layoutEntry) {
 
 const lang = Astro.currentLocale ?? "en";
 
-const { navItems, footerItems, logo } = layoutEntry.data;
+const { nav_items, footer_items, logo } = layoutEntry.data;
 
 const { width, height } = getMedia(logo.src);
 
@@ -33,7 +33,7 @@ if (width && height) {
   <FixedLogo logo={logo.src} lang={lang} navMinHeight={navMinHeight} />
   <div class="max-w-480 page-spacing mx-auto">
     <NavBar
-      navItems={navItems}
+      navItems={nav_items}
       lang={lang}
       navMinHeight={navMinHeight}
       aspect={aspect}
@@ -41,6 +41,10 @@ if (width && height) {
     <main id="swup" class="transition-main">
       <slot />
     </main>
-    <Footer footerItems={footerItems} lang={lang} navMinHeight={navMinHeight} />
+    <Footer
+      footerItems={footer_items}
+      lang={lang}
+      navMinHeight={navMinHeight}
+    />
   </div>
 </div>

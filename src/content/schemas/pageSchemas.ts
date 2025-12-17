@@ -20,6 +20,7 @@ export const landingPageSchema = z.object({
   lang: z.string(),
   hero: z.object({
     headline: z.string(),
+    contact: z.string(),
   }),
   cases: casePreviewSchema,
   services: servicesSchema,

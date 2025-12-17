@@ -19,13 +19,13 @@ export const settingsSchema = z.object({
 });
 
 export const layoutSchema = z.object({
-  navItems: z.array(
+  nav_items: z.array(
     z.object({
       href: z.string(),
       title: z.string(),
     }),
   ),
-  footerItems: z.array(
+  footer_items: z.array(
     z.object({
       href: z.string(),
       title: z.string(),
