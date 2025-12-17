@@ -20,24 +20,31 @@ interface Props {
 const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
 ---
 
-<div
-  class="page-spacing mb-10 md:mb-6 md:h-12 xl:-mt-4"
-  style={`min-height: ${navMinHeight}rem;`}
->
-</div>
+<div id="navbar" class="w-full"></div>
 <header
-  class="z-100 pointer-events-none relative left-0 top-0 mb-12 w-full items-center xl:-mt-4"
+  class="z-100 pointer-events-none relative left-0 top-0 w-full items-center xl:-mt-4"
   style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
-  <div class="max-w-480 page-spacing mx-auto flex w-full justify-between">
+  <div
+    id="navbar"
+    class="max-w-480 page-spacing mx-auto flex w-full justify-between"
+  >
     <div
-      class="pointer-events-none h-8 pt-2.5 md:h-12 md:pt-6 xl:pt-8"
-      style={`aspect-ratio: ${aspect.width} / ${aspect.height};`}
+      class="pointer-events-none box-content"
+      style={`width: ${aspect.width}px; `}
     >
     </div>
 
-    <Navigation navItems={navItems} lang={lang} navMinHeight={navMinHeight} />
+    <Navigation navItems={navItems} lang={lang} />
 
     <LangSelect />
   </div>
 </header>
+
+<script>
+  const navbar = document.getElementById("navbar");
+  const logoHeight = document.getElementById("fixed-logo-container");
+  if (logoHeight && navbar) {
+    navbar.style.height = `${logoHeight.offsetHeight}px`;
+  }
+</script>
