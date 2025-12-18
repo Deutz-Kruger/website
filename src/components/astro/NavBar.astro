@@ -20,14 +20,13 @@ interface Props {
 const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
 ---
 
-<div id="navbar" class="w-full"></div>
+<div class="navbar pb-0! relative top-0 w-full"></div>
 <header
-  class="z-100 pointer-events-none relative left-0 top-0 w-full items-center xl:-mt-4"
+  class="z-100 pointer-events-none relative left-0 top-0 w-full items-center"
   style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
   <div
-    id="navbar"
-    class="max-w-480 page-spacing mx-auto flex w-full justify-between"
+    class="navbar max-w-480 page-spacing mx-auto flex w-full justify-between"
   >
     <div
       class="pointer-events-none box-content"
@@ -41,10 +40,4 @@ const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
   </div>
 </header>
 
-<script>
-  const navbar = document.getElementById("navbar");
-  const logoHeight = document.getElementById("fixed-logo-container");
-  if (logoHeight && navbar) {
-    navbar.style.height = `${logoHeight.offsetHeight}px`;
-  }
-</script>
+<script></script>
