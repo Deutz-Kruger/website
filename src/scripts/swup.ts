@@ -16,6 +16,7 @@ import {
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
 import { cleanupLogoAnimation, initLogoAnimation } from "./hideLogo";
 import { cleanupLenis, initLenis } from "./lenis";
+import { cleanUpLogoSizer, setupLogoSizer } from "./logoSizer";
 
 const swup = new Swup({
   plugins: [
@@ -58,6 +59,7 @@ const init = () => {
   initHeaderLogic();
   initLenis();
   initLogoAnimation();
+  setupLogoSizer();
 };
 
 const cleanUp = () => {
@@ -66,4 +68,5 @@ const cleanUp = () => {
   cleanUpHeaderLogic();
   cleanupLenis();
   cleanupLogoAnimation();
+  cleanUpLogoSizer();
 };

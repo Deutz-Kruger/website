@@ -8,10 +8,7 @@ interface Props {
 const { lang, logo } = Astro.props;
 ---
 
-<div
-  id="fixed-logo-container"
-  class="w-13 md:w-15 pr-0! page-spacing left-0 top-0 box-content"
->
+<div id="fixed-logo-container" class="w-13 md:w-15 left-0 top-0 box-content">
   <Logo lang={lang} logo={logo} />
 </div>
 
@@ -21,15 +18,18 @@ const { lang, logo } = Astro.props;
     z-index: 5; /* Behind nav content (z-100) but above the background */
     will-change: filter, transform;
     padding-left: var(--spacing-page-mobile);
+    padding-top: var(--spacing-page-mobile);
   }
   @media (min-width: 768px) {
     #fixed-logo-container {
       padding-left: var(--spacing-page-laptop);
+      padding-top: var(--spacing-page-laptop);
     }
   }
   @media (min-width: 1280px) {
     #fixed-logo-container {
       padding-left: var(--spacing-page-desktop);
+      padding-top: var(--spacing-page-desktop);
     }
   }
   @media (min-width: 1920px) {
