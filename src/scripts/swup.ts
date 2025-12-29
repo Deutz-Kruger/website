@@ -15,6 +15,7 @@ import {
 } from "./backgroundColorSwitch";
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
 import { cleanupLogoAnimation, initLogoAnimation } from "./hideLogo";
+import { cleanupLangSelect, setupLangSelect } from "./languageSelect";
 import { cleanupLenis, initLenis } from "./lenis";
 import { cleanUpLogoSizer, setupLogoSizer } from "./logoSizer";
 
@@ -60,6 +61,7 @@ const init = () => {
   initLenis();
   initLogoAnimation();
   setupLogoSizer();
+  setupLangSelect();
 };
 
 const cleanUp = () => {
@@ -69,4 +71,5 @@ const cleanUp = () => {
   cleanupLenis();
   cleanupLogoAnimation();
   cleanUpLogoSizer();
+  cleanupLangSelect();
 };
