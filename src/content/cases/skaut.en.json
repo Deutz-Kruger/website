@@ -47,13 +47,8 @@
       "group_title": "Showcase",
       "blocks": [
         {
-          "_block": "image",
-          "images": [
-            {
-              "src": "/src/content/media/skaut_login.png",
-              "alt": "skaut_login"
-            }
-          ],
+          "_block": "video",
+          "video": "/src/content/media/Skaut-signin.mp4",
           "base": {
             "background": {
               "background": "none"
