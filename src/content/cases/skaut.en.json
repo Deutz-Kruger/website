@@ -60,17 +60,9 @@
           }
         },
         {
-          "_block": "image",
-          "images": [
-            {
-              "src": "/src/content/media/skaut_configuration.png",
-              "alt": "skaut_configuration"
-            }
-          ],
+          "_block": "video",
+          "video": "/src/content/media/Skaut_ticket.mp4",
           "base": {
-            "background": {
-              "background": "none"
-            },
             "layout": {
               "width": "2",
               "position": "3"
