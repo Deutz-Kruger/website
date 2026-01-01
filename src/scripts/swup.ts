@@ -57,11 +57,11 @@ const init = () => {
   addColorSwitcher();
   applyColor();
   initCarousel();
-  initHeaderLogic();
   initLenis();
-  initLogoAnimation();
   setupLogoSizer();
   setupLangSelect();
+  initHeaderLogic();
+  initLogoAnimation();
 };
 
 const cleanUp = () => {
