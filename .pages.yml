@@ -253,6 +253,7 @@ components:
           label: Static Background
         - value: gradient
           label: Gradient Background
+      required: true
     - name: background_colors
       label: Background Color(s)
       description: "The # must be included per color. #EBEBEB is the default color."
