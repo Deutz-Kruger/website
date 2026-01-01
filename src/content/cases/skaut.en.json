@@ -82,7 +82,7 @@
           ],
           "base": {
             "background": {
-              "background": "none"
+              "background": "static"
             },
             "layout": {
               "width": "2",
