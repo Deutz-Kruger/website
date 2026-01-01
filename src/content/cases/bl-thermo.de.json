@@ -1,0 +1,309 @@
+{
+  "slug": "/bl-thermo",
+  "lang": "de",
+  "client": "BL thermodynamics",
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Case Title",
+      "blocks": [
+        {
+          "_block": "title",
+          "title": "BL thermodynamics Website Re-Design",
+          "subHeading": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Video Group",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/key_visual_compressed.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/full_site_scroll_compressed.mp4",
+          "base": {
+            "background": {
+              "background": "gradient",
+              "background_colors": [
+                "#FF0000",
+                "#AA5151"
+              ]
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/concept_to_reality_compressed.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/tower_in_sunset.png",
+              "alt": "tower in sunset"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "2"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/mission_compressed.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Screenshots",
+      "blocks": [
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/services.png",
+              "alt": "services"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "static",
+              "background_colors": [
+                "#EBEBEB"
+              ]
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/services_mobile.png",
+              "alt": "services mobile"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "static",
+              "background_colors": [
+                "#EBEBEB"
+              ]
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/infocard_collapsed.png",
+              "alt": "infocard collapsed"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "static",
+              "background_colors": [
+                "#EBEBEB"
+              ]
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/infocard_expanded.png",
+              "alt": "infocard expanded"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "static",
+              "background_colors": [
+                "#EBEBEB"
+              ]
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/infocard_mobile.png",
+              "alt": "infocard mobile"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "static",
+              "background_colors": [
+                "#EBEBEB"
+              ]
+            },
+            "layout": {
+              "width": "1",
+              "position": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/iPhone 16 - 1.png",
+              "alt": "iPhone 16 - 1"
+            },
+            {
+              "src": "/src/content/media/iPhone 16 - 2.png",
+              "alt": "iPhone 16 - 2"
+            },
+            {
+              "src": "/src/content/media/iPhone 16 - 3.png",
+              "alt": "iPhone 16 - 3"
+            },
+            {
+              "src": "/src/content/media/iPhone 16 - 4.png",
+              "alt": "iPhone 16 - 4"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "gradient",
+              "background_colors": [
+                "#D6E8FF",
+                "#053CA1"
+              ]
+            },
+            "layout": {
+              "width": "4",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "2"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/construction_site.png",
+              "alt": "construction_site"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "case_preview": {
+    "title": "BL thermodynamics Website Re-Design",
+    "preview_image": {
+      "src": "/src/content/media/blt_preview.png",
+      "alt": "blt_preview"
+    }
+  }
+}

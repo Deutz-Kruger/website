@@ -1,0 +1,165 @@
+{
+  "slug": "/skaut",
+  "lang": "de",
+  "client": "Skaut",
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Case title",
+      "blocks": [
+        {
+          "_block": "title",
+          "title": "Skaut - Backoffice Ticketing System",
+          "subHeading": "SKAUT serves as an in-house ticketing and management system for the agileo team. The architecture aligns with internal processes, covering functions from asset tracking to issue resolution. The tool was built to support specific workflows through a customized feature set, ensuring the software adapts to the team's requirements.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Video Title",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Skaut_title.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Skaut-signin.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Skaut_ticket.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_categories.png",
+              "alt": "skaut_categories"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "A text-based approach was selected for the corporate design. Visual elements were reduced to a sans-serif logotype, prioritizing legibility and structure. This minimal branding ensures the identity remains subordinate to the application's function.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_successerror.png",
+              "alt": "skaut_code"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "2"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/skaut_services.png",
+              "alt": "skaut_services"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "The interface is structured around a card-based layout to organize information. System feedback is communicated through functional color codes: green for verification and a distinct pink for error states. Standardized components, including modal confirmations and data tables, were implemented to ensure consistency across the application.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "4"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "case_preview": {
+    "title": "Skaut - Backoffice Ticketing System",
+    "preview_image": {
+      "src": "/src/content/media/skaut_preview2.png",
+      "alt": "skaut_preview"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "lang": "de",
+  "hero": {
+    "headline": "We are Manuel Krüger and Marvin Deutz, a design and creative development duo based in Berlin. Together, we create brands and digital experiences that connect clarity in design with creativity in technology.",
+    "contact": "Want to discuss a potential project?\nContact us at hi@deutzkrueger.de"
+  },
+  "cases": [
+    "src/content/cases/bl-thermo.en.json",
+    "src/content/cases/skaut.en.json",
+    "src/content/cases/krumphof.en.json"
+  ],
+  "services": [
+    {
+      "title": "Branding",
+      "body": "A strong visual identity is more than just a logo; it is a strategic asset. Corporate design systems are developed to translate company values into a coherent visual language. From typography to color palettes, every element is defined to ensure recognition and consistency across all physical and digital touchpoints.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/brand-icon.png",
+          "alt": "brand-icon"
+        },
+        "icon_color": "#425E6B"
+      }
+    },
+    {
+      "title": "Design",
+      "body": "The design process covers the entire digital interface spectrum, ranging from corporate websites to complex software applications. Whether for a marketing landing page or an internal management tool, the focus remains on clarity and usability. Information is structured logically and translated into intuitive interfaces (UI) that guide the user efficiently to their goal.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/design-icon.png",
+          "alt": "design-icon"
+        },
+        "icon_color": "#9A2B5A"
+      }
+    },
+    {
+      "title": "Development",
+      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "icon": {
+        "icon_logo": {
+          "src": "/src/content/media/dev-icon.png",
+          "alt": "dev-icon"
+        },
+        "icon_color": "#618667"
+      }
+    }
+  ]
+}
