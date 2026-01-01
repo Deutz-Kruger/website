@@ -63,6 +63,9 @@
           "_block": "video",
           "video": "/src/content/media/Skaut_ticket.mp4",
           "base": {
+            "background": {
+              "background": "none"
+            },
             "layout": {
               "width": "2",
               "position": "3"
