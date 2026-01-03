@@ -71,6 +71,24 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/krumphof_horses.jpg",
+              "alt": "krumphof_horses"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
         }
       ]
     }
