@@ -141,7 +141,7 @@
         },
         {
           "_block": "text",
-          "text": "The interface is structured around a card-based layout to organize information. System feedback is communicated through functional color codes: green for verification and a distinct pink for error states. Standardized components, including modal confirmations and data tables, were implemented to ensure consistency across the application.",
+          "text": "Die Benutzeroberfläche basiert auf einem kartenbasierten Layout zur klaren Organisation von Informationen. Systemfeedback erfolgt über funktionale Farbcodes: Grün für Verifizierungen und ein markantes Pink für Fehlermeldungen. Standardisierte Komponenten, wie Bestätigungsdialoge und Datentabellen, wurden implementiert, um eine durchgängige Konsistenz innerhalb der Anwendung zu gewährleisten.",
           "base": {
             "background": {
               "background": "none"
