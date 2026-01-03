@@ -102,6 +102,19 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/krumphof_flyer.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
         }
       ]
     }
