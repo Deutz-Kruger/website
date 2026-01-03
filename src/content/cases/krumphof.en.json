@@ -41,6 +41,25 @@
           }
         }
       ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/krumphof_twopage.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
     }
   ],
   "case_preview": {
