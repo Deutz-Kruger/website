@@ -1,21 +1,19 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection, type z } from "astro:content";
 
-// import BlockRenderer from "@/components/astro/BlockRenderer.astro";
-// import ImageWrapper from "@/components/astro/util/ImageWrapper.astro";
+import GroupRenderer from "@/components/astro/GroupRenderer.astro";
+import { caseSchema } from "@/content/schemas/pageSchemas";
 import Layout from "@/layouts/Layout.astro";
-import { type CaseEntry } from "@/pages/en/[caseSlug]/index.astro";
 
 export const getStaticPaths = (async () => {
   const cases = await getCollection("cases", (entry) =>
     entry.id.endsWith(".de"),
   );
   const paths = cases.map((caseEntry) => {
-    const { slug, lang } = caseEntry.data;
+    const { slug } = caseEntry.data;
     return {
       params: {
-        lang,
         caseSlug: slug.replace("/", ""),
       },
       props: {
@@ -26,21 +24,19 @@ export const getStaticPaths = (async () => {
   return paths;
 }) satisfies GetStaticPaths;
 
+export type CaseEntry = z.infer<typeof caseSchema>;
+
 interface Props {
   caseEntry: CaseEntry;
 }
 
-// const { caseEntry } = Astro.props;
-// const { client, blocks, casePreview } = caseEntry;
+const { caseEntry } = Astro.props;
+const { client, groups } = caseEntry;
 ---
 
-<Layout>
-  <!-- <main>
-    <ImageWrapper src={casePreview.previewImage.image} altText={client} />
-    {
-      blocks.map((block, index) => {
-        return <BlockRenderer block={block} index={index} />;
-      })
-    }
-  </main> -->
+<Layout title={client}>
+  <hr class="mb-4 md:mb-6" />
+  <main class="relative grid grid-cols-1 md:grid-cols-4 md:gap-6">
+    {groups.map((group) => <GroupRenderer group={group} />)}
+  </main>
 </Layout>
