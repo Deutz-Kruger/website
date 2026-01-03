@@ -58,6 +58,19 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "text",
+          "text": "The website redesign focuses on visual storytelling and clear conversion paths. A full-width hero section immerses visitors immediately, while a modular grid organizes services for quick scanning. Prominent call-to-action elements were strategically placed to streamline the booking process.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
         }
       ]
     }
