@@ -92,7 +92,7 @@
         },
         {
           "_block": "text",
-          "text": "A text-based approach was selected for the corporate design. Visual elements were reduced to a sans-serif logotype, prioritizing legibility and structure. This minimal branding ensures the identity remains subordinate to the application's function.",
+          "text": "Für das Corporate Design wurde ein rein typografischer Ansatz gewählt. Visuelle Elemente wurden auf einen serifenlosen Schriftzug reduziert, wobei der Fokus auf Lesbarkeit und Struktur liegt. Durch dieses reduzierte Branding tritt das visuelle Erscheinungsbild hinter der Funktion der Anwendung zurück.",
           "base": {
             "background": {
               "background": "none"
