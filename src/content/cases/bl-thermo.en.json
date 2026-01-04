@@ -163,6 +163,19 @@
           }
         },
         {
+          "_block": "text",
+          "text": "The interface design prioritizes clarity and technical precision. A clean, white-space-dominant layout was chosen to reflect the sterile, high-tech nature of the industry. Complex technical data and diagrams are organized into expandable content cards and modals, allowing users to access detailed specifications without cluttering the main navigation flow. The entire system is fully responsive, ensuring that intricate engineering schematics remain legible on mobile devices.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "4"
+            }
+          }
+        },
+        {
           "_block": "image",
           "images": [
             {
@@ -262,19 +275,6 @@
             "layout": {
               "width": "4",
               "position": "1"
-            }
-          }
-        },
-        {
-          "_block": "text",
-          "text": "The interface design prioritizes clarity and technical precision. A clean, white-space-dominant layout was chosen to reflect the sterile, high-tech nature of the industry. Complex technical data and diagrams are organized into expandable content cards and modals, allowing users to access detailed specifications without cluttering the main navigation flow. The entire system is fully responsive, ensuring that intricate engineering schematics remain legible on mobile devices.",
-          "base": {
-            "background": {
-              "background": "none"
-            },
-            "layout": {
-              "width": "1",
-              "position": "2"
             }
           }
         },
