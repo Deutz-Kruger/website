@@ -72,7 +72,7 @@
         },
         {
           "_block": "text",
-          "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+          "text": "Ein dynamisches visuelles System wurde auf Basis von Heizungsrohr-Querschnitten entwickelt. Ein abstraktes Raster aus kreisförmigen Elementen dient als zentrales Design-Element, das die physischen Eigenschaften der Technologie simuliert: Farbverläufe visualisieren den Wechsel zwischen Heiz- und Kühlzuständen. Zusätzlich ordnen sich diese „Rohre“ dynamisch neu an, um themenspezifische Icons für die jeweiligen Unterseiten zu bilden, was eine intuitive, animierte Orientierung innerhalb der Seitenstruktur schafft.",
           "base": {
             "background": {
               "background": "none"
