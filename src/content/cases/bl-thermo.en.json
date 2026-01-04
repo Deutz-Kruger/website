@@ -72,7 +72,7 @@
         },
         {
           "_block": "text",
-          "text": "Ein dynamisches visuelles System wurde auf Basis von Heizungsrohr-Querschnitten entwickelt. Ein abstraktes Raster aus kreisförmigen Elementen dient als zentrales Design-Element, das die physischen Eigenschaften der Technologie simuliert: Farbverläufe visualisieren den Wechsel zwischen Heiz- und Kühlzuständen. Zusätzlich ordnen sich diese „Rohre“ dynamisch neu an, um themenspezifische Icons für die jeweiligen Unterseiten zu bilden, was eine intuitive, animierte Orientierung innerhalb der Seitenstruktur schafft.",
+          "text": "A dynamic visual system was created based on the cross-section of heating pipes. An abstract grid of circular elements serves as the central design anchor, simulating the physical properties of the technology: elements shift in color to visualize the transition between heating and cooling states. Additionally, these \"pipes\" dynamically rearrange to form specific icons and structures relevant to the active subpage, providing an intuitive, animated guide through the site’s architecture.",
           "base": {
             "background": {
               "background": "none"
@@ -267,7 +267,7 @@
         },
         {
           "_block": "text",
-          "text": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features.",
+          "text": "The interface design prioritizes clarity and technical precision. A clean, white-space-dominant layout was chosen to reflect the sterile, high-tech nature of the industry. Complex technical data and diagrams are organized into expandable content cards and modals, allowing users to access detailed specifications without cluttering the main navigation flow. The entire system is fully responsive, ensuring that intricate engineering schematics remain legible on mobile devices.",
           "base": {
             "background": {
               "background": "none"
