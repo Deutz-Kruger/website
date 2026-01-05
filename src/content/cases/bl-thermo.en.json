@@ -208,13 +208,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/infocard_mobile.png",
+              "src": "/src/content/media/blt_showmore_mobile.png",
               "alt": "infocard mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
