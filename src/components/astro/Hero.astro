@@ -34,10 +34,12 @@ const highlightedHeadline = hero.headline.replace(
   generateKeywords,
 );
 
-const contactLine = hero.contact.replace(
-  "hi@deutzkrueger.de",
-  "<a href='mailto:hi@deutzkrueger.de' class='keyword not-italic!'>hi@deutzkrueger.de</a>",
-);
+const contactLine = hero.contact
+  .replace(
+    "hi@deutzkrueger.de",
+    "<a href='mailto:hi@deutzkrueger.de' class='keyword not-italic!'>hi@deutzkrueger.de</a>",
+  )
+  .replace(/\n/g, "<br />");
 ---
 
 <section
@@ -48,7 +50,7 @@ const contactLine = hero.contact.replace(
     set:html={highlightedHeadline}
   />
   <h2
-    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop sm:w-6/7 md:w-12/17 2xl:w-8/17 3xl:w- ml-auto text-right"
+    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop md:w-15/17 2xl:w-8/17 3xl:w- ml-auto w-5/6 text-right"
     set:html={contactLine}
   />
 </section>
