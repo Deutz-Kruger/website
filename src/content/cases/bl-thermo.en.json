@@ -187,13 +187,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/infocard_expanded.png",
+              "src": "/src/content/media/blt_showmore_extendet.png",
               "alt": "infocard expanded"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
