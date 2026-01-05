@@ -172,7 +172,7 @@
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
