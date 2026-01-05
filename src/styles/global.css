@@ -26,7 +26,7 @@
 @theme {
   /* Typo */
   --font-sans: Arial, "sans-serif";
-  --text-largest: 3.75rem;
+  --text-largest: 3.5rem;
   --text-largerer: 3rem;
   --text-larger: 2.175rem;
   --text-large: 1.875rem;
@@ -37,10 +37,10 @@
   /* Tracking & Leading */
   /* Desktop */
   --tracking-heading-desktop: -0.015em;
-  --leading-heading-desktop: 1.1875;
+  --leading-heading-desktop: 1;
 
   --tracking-text-desktop: 0.0125em;
-  --leading-text-desktop: 1.295;
+  --leading-text-desktop: 1.2;
 
   /* Mobile */
   --tracking-heading-mobile: -0.01em;
