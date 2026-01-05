@@ -3,30 +3,40 @@
 ---
 
 <div
-  class="hide-me pointer-events-auto relative flex h-fit select-none justify-between gap-2 self-center text-2xl"
+  class="hide-me pointer-events-auto relative flex h-fit select-none justify-between gap-2 text-2xl md:self-center"
 >
   <p
     aria-label="Switch to English"
     role="navigation"
     lang="en"
     data-listener-attached="false"
-    class="hover:scale-103 h-fit transition-all duration-75 hover:cursor-pointer"
+    class="hover:scale-103 h-fit leading-5 transition-all duration-75 hover:cursor-pointer md:leading-normal"
     id="en"
   >
     EN
   </p>
   <p
-    class="h-fit cursor-default place-self-center text-base transition-transform hover:rotate-3"
+    class="h-fit cursor-default place-self-center text-base leading-5 transition-transform hover:rotate-3 md:leading-normal"
   >
     |
   </p>
-
+  <!-- <div class="flex items-center">
+    <svg
+      width="2"
+      height="13"
+      viewBox="0 0 1 13"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="2" height="12" fill="black"></rect>
+    </svg>
+  </div> -->
   <p
     aria-label="Switch to German"
     role="navigation"
     lang="de"
     data-listener-attached="false"
-    class="hover:scale-103 h-fit transition-transform duration-75 hover:cursor-pointer"
+    class="hover:scale-103 h-fit leading-5 transition-transform duration-75 hover:cursor-pointer md:leading-normal"
     id="de"
   >
     DE
