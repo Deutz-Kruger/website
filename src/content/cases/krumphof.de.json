@@ -41,6 +41,95 @@
           }
         }
       ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Showcase",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/krumphof_twopage.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "The website redesign focuses on visual storytelling and clear conversion paths. A full-width hero section immerses visitors immediately, while a modular grid organizes services for quick scanning. Prominent call-to-action elements were strategically placed to streamline the booking process.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/krumphof_horses.jpg",
+              "alt": "krumphof_horses"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/krumphof_singlepage.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/krumphof_flyer.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "A strict grid system was established for promotional materials to organize dense pricing and schedule information. Fine geometric lines were introduced as structural elements, referencing archery targets. This layout ensures key data is immediately accessible while maintaining a clean visual hierarchy.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        }
+      ]
     }
   ],
   "case_preview": {
