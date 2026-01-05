@@ -124,13 +124,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/blt_dropdown.png",
+              "src": "/src/content/media/blt_service.png",
               "alt": "services"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
