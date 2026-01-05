@@ -145,13 +145,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/blt_dropdown_mobile.png",
+              "src": "/src/content/media/blt_service_mobile.png",
               "alt": "services mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
