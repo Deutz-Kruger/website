@@ -15,7 +15,7 @@ const { lang, logo } = Astro.props;
 <style>
   #fixed-logo-container {
     position: fixed;
-    z-index: 5; /* Behind nav content (z-100) but above the background */
+    z-index: 101; /* Behind nav content (z-100) but above the background */
     will-change: filter, transform;
     padding-left: var(--spacing-page-mobile);
     padding-top: var(--spacing-page-mobile);

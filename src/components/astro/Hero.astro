@@ -43,8 +43,13 @@ const contactLine = hero.contact
 ---
 
 <section
-  class="md:mt-big xl:mt-biggest 2xl:mt-huge mb-4 flex flex-col justify-end md:mb-8"
+  class="md:pt-big xl:pt-biggest 2xl:pt-huge relative mb-4 flex flex-col justify-end pb-8 md:mb-8"
 >
+  <div
+    class="absolute left-1/2 -z-10 w-screen -translate-x-1/2 transition-colors duration-300"
+    style="background-color: var(--theme-color); top: -50vh; height: calc(100% + 50vh);"
+  >
+  </div>
   <h1
     class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop w-6/7 xl:w-12/17 mb-4 md:mb-12"
     set:html={highlightedHeadline}
