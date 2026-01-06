@@ -32,28 +32,17 @@ export const removeColorSwitcher = () => {
 
 export const applyColor = () => {
   const color = keywordColor.get();
-  const body = document.getElementById("bg-col-wrapper");
-  if (!body) return;
-  body.style.backgroundColor = `var(${color})`;
-  document.body.style.setProperty("--theme-color", `var(${color})`);
+  document.documentElement.style.setProperty("--theme-color", `var(${color})`);
 };
-
-keywordColor.subscribe((color) => {
-  const body = document.getElementById("bg-col-wrapper");
-  if (!body) return;
-  body.style.backgroundColor = `var(${color})`;
-  document.body.style.setProperty("--theme-color", `var(${color})`);
-});
 
 export const initColorStore = () => {
   if (isSubscribed) return;
 
   keywordColor.subscribe((color) => {
-    const body = document.getElementById("bg-col-wrapper");
-    if (!body) return;
-
-    body.style.backgroundColor = `var(${color})`;
-    document.body.style.setProperty("--theme-color", `var(${color})`);
+    document.documentElement.style.setProperty(
+      "--theme-color",
+      `var(${color})`,
+    );
   });
 
   isSubscribed = true;

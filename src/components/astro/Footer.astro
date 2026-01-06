@@ -15,8 +15,13 @@ const { footerItems, lang } = Astro.props;
 ---
 
 <footer
-  class="hidden w-full items-center justify-center gap-3 pb-4 pt-5 md:flex"
+  class="relative mt-6 hidden w-full items-center justify-center gap-3 pb-6 pt-6 md:flex"
 >
+  <div
+    class="absolute left-1/2 top-0 -z-10 h-full w-screen -translate-x-1/2 transition-colors duration-300"
+    style="background-color: var(--theme-color);"
+  >
+  </div>
   {
     footerItems.map((item) => {
       const { href, title } = item;
