@@ -15,8 +15,10 @@ let resizeHandler: ResizeHandler | null = null;
 const CAROUSEL_OPTIONS: Partial<Options> = {
   type: "carousel",
   autoplay: 5000,
-  animationDuration: 1200,
-  animationTimingFunc: "ease",
+  animationDuration: 900,
+  animationTimingFunc: "ease-in-out",
+  swipeThreshold: 60,
+  dragThreshold: 80,
   hoverpause: true,
   perView: 1,
   gap: 16,
