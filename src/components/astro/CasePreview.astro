@@ -21,7 +21,7 @@ const caseSlugs = extractSlugsFromPaths(cases);
 const resolvedCasePreviews = await resolveCasePreview(caseSlugs);
 ---
 
-<section class="bigger relative pt-12">
+<section class="bigger relative pb-12 pt-12">
   {
     resolvedCasePreviews.map((preview) => {
       const { slug, case_preview, groups } = preview.data;
