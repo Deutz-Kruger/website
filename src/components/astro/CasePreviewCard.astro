@@ -17,7 +17,10 @@ const { preview_image, title, slug, description } = Astro.props;
 const lang = Astro.currentLocale ?? "en";
 ---
 
-<a class="group mb-9 inline-block" href={getRelativeLocaleUrl(lang, slug)}>
+<a
+  class="group mb-9 inline-block last:mb-0 md:last:mb-9"
+  href={getRelativeLocaleUrl(lang, slug)}
+>
   <hr class="mb-4 md:mb-0 md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
     <ImageWrapper
