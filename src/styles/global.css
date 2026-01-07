@@ -140,7 +140,7 @@
 
   .block-text-typo {
     & p {
-      @apply text-normal md:text-medium md:w-7/8 leading-5 tracking-tight md:leading-6 md:tracking-normal;
+      @apply text-normal md:text-medium xl:text-big md:w-7/8 leading-5 tracking-tight md:leading-6 md:tracking-normal;
     }
   }
 }
