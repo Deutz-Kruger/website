@@ -2,8 +2,10 @@ import { navigate } from "astro:transitions/client";
 
 import { langSelection, setLang } from "@/stores/langStore";
 
+let enClickHandler: (() => void) | null = null;
+let deClickHandler: (() => void) | null = null;
+
 const handleLanguageSwitch = (newLang: "de" | "en") => {
-  console.log("New Lang", newLang);
   setLang(newLang);
   document.cookie = `lang=${newLang}; SameSite=None; Secure`;
   const currentPath = window.location.pathname;
@@ -25,7 +27,6 @@ const syncLanguageWithUrl = () => {
   if (currentLang === "en" || currentLang === "de") {
     const storedLang = langSelection.get();
     if (storedLang !== currentLang) {
-      console.log("Syncing language store with URL:", currentLang);
       setLang(currentLang);
     }
   }
@@ -35,9 +36,6 @@ export const setupLangSelect = () => {
   syncLanguageWithUrl();
   const enElement = document.getElementById("en");
   const deElement = document.getElementById("de");
-
-  console.log("enElement", enElement);
-  console.log("deElement", deElement);
 
   const lang = langSelection.get();
 
@@ -63,20 +61,23 @@ export const setupLangSelect = () => {
     return;
   }
 
-  enElement?.addEventListener("click", () => {
-    enElement?.classList.remove("inactive-lang");
-    deElement?.classList.add("inactive-lang");
+  enClickHandler = () => {
+    enElement.classList.remove("inactive-lang");
+    deElement.classList.add("inactive-lang");
     handleLanguageSwitch("en");
-  });
+  };
+
+  deClickHandler = () => {
+    deElement.classList.remove("inactive-lang");
+    enElement.classList.add("inactive-lang");
+    handleLanguageSwitch("de");
+  };
+
+  enElement.addEventListener("click", enClickHandler);
   enElement.dataset.listenerAttached = "true";
 
-  deElement?.addEventListener("click", () => {
-    deElement?.classList.remove("inactive-lang");
-    enElement?.classList.add("inactive-lang");
-    handleLanguageSwitch("de");
-  });
+  deElement.addEventListener("click", deClickHandler);
   deElement.dataset.listenerAttached = "true";
-  console.log("Listeners Setup");
 };
 
 export const cleanupLangSelect = () => {
@@ -87,19 +88,16 @@ export const cleanupLangSelect = () => {
     return;
   }
 
-  deElement.removeEventListener("click", () => {
-    deElement?.classList.remove("inactive-lang");
-    enElement?.classList.add("inactive-lang");
-    handleLanguageSwitch("de");
-  });
+  if (enClickHandler) {
+    enElement.removeEventListener("click", enClickHandler);
+    enClickHandler = null;
+  }
+
+  if (deClickHandler) {
+    deElement.removeEventListener("click", deClickHandler);
+    deClickHandler = null;
+  }
 
   deElement.dataset.listenerAttached = "false";
-
-  enElement?.removeEventListener("click", () => {
-    enElement?.classList.remove("inactive-lang");
-    deElement?.classList.add("inactive-lang");
-    handleLanguageSwitch("en");
-  });
-
   enElement.dataset.listenerAttached = "false";
 };

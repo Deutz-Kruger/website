@@ -6,12 +6,20 @@ let lastScrollPos = 0;
 let isHidden = false;
 let hidePos = 0;
 
+let throttledScrollHandler: (() => void) | null = null;
+
 export const initHeaderLogic = () => {
-  window.addEventListener("scroll", throttle(renderHeader, 50), true);
+  if (throttledScrollHandler) return;
+
+  throttledScrollHandler = throttle(renderHeader, 50);
+  window.addEventListener("scroll", throttledScrollHandler, true);
 };
 
 export const cleanUpHeaderLogic = () => {
-  window.removeEventListener("scroll", throttle(renderHeader, 50));
+  if (throttledScrollHandler) {
+    window.removeEventListener("scroll", throttledScrollHandler, true);
+    throttledScrollHandler = null;
+  }
 };
 
 const renderHeader = () => {
