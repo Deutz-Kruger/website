@@ -46,7 +46,6 @@ export const cleanUpCarousel = (): void => {
 export const initCarousel = (): void => {
   // Only initialize on mobile
   if (window.innerWidth >= MOBILE_BREAKPOINT) {
-    console.log("Desktop view detected - skipping carousel initialization");
     return;
   }
 

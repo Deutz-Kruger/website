@@ -14,9 +14,13 @@ import {
   removeColorSwitcher,
 } from "./backgroundColorSwitch";
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
-import { cleanupLogoAnimation, initLogoAnimation } from "./hideLogo";
-import { cleanupLangSelect, setupLangSelect } from "./languageSelect";
-import { cleanupLenis, initLenis } from "./lenis";
+import { cleanUpLogoAnimation, initLogoAnimation } from "./hideLogo";
+import {
+  cleanUpLangSelect,
+  setSwupInstance,
+  setupLangSelect,
+} from "./languageSelect";
+import { cleanUpLenis, initLenis } from "./lenis";
 import { cleanUpLogoSizer, setupLogoSizer } from "./logoSizer";
 
 const swup = new Swup({
@@ -33,6 +37,9 @@ const swup = new Swup({
   cache: true,
   animationSelector: '[class*="transition-"]',
 });
+
+// Register swup instance with languageSelect
+setSwupInstance(swup);
 
 let isInitialized = false;
 
@@ -68,8 +75,8 @@ const cleanUp = () => {
   removeColorSwitcher();
   cleanUpCarousel();
   cleanUpHeaderLogic();
-  cleanupLenis();
-  cleanupLogoAnimation();
+  cleanUpLenis();
+  cleanUpLogoAnimation();
   cleanUpLogoSizer();
-  cleanupLangSelect();
+  cleanUpLangSelect();
 };

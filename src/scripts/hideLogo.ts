@@ -105,7 +105,7 @@ export function initLogoAnimation() {
 /**
  * Cleans up the logo animation by removing the scroll listener.
  */
-export function cleanupLogoAnimation() {
+export function cleanUpLogoAnimation() {
   if (checkOverlapThrottled) {
     window.removeEventListener("scroll", checkOverlapThrottled);
     window.removeEventListener("resize", checkOverlapThrottled);

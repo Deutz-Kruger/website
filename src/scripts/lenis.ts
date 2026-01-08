@@ -30,7 +30,7 @@ export const initLenis = () => {
 /**
  * Cleans up the Lenis instance and GSAP ticker for page transitions.
  */
-export const cleanupLenis = () => {
+export const cleanUpLenis = () => {
   if (lenisUpdateCallback) {
     gsap.ticker.remove(lenisUpdateCallback);
     lenisUpdateCallback = null;
