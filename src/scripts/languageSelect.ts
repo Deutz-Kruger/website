@@ -45,7 +45,7 @@ const syncLanguageWithUrl = () => {
   return "en";
 };
 
-export const setupLangSelect = () => {
+export const initLangSelect = () => {
   const currentLang = syncLanguageWithUrl();
   const enElement = document.getElementById("en");
   const deElement = document.getElementById("de");
