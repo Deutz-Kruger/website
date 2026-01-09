@@ -59,7 +59,7 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/concept_to_reality_compressed.mp4",
+          "video": "/src/content/media/c2r2.mp4",
           "base": {
             "background": {
               "background": "none"
