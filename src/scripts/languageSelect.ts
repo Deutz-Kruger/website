@@ -38,16 +38,19 @@ const syncLanguageWithUrl = () => {
     const storedLang = langSelection.get();
     if (storedLang !== currentLang) {
       setLang(currentLang);
+      document.cookie = `lang=${currentLang}; SameSite=None; Secure`;
     }
+    return currentLang;
   }
+  return "en";
 };
 
 export const setupLangSelect = () => {
-  syncLanguageWithUrl();
+  const currentLang = syncLanguageWithUrl();
   const enElement = document.getElementById("en");
   const deElement = document.getElementById("de");
 
-  const lang = langSelection.get();
+  const lang = currentLang;
 
   switch (lang) {
     case "en":
