@@ -23,7 +23,7 @@ const handleLanguageSwitch = (newLang: "de" | "en") => {
   const newPath = pathSegments.join("/");
 
   if (swupInstance) {
-    swupInstance.navigate(newPath);
+    swupInstance.navigate(newPath, { animate: false });
   } else {
     window.location.href = newPath;
   }
