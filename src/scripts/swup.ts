@@ -8,16 +8,20 @@ import Swup from "swup";
 import { cleanUpCarousel, initCarousel } from "@/scripts/carousel";
 
 import {
-  addColorSwitcher,
-  applyColor,
+  cleanUpColorSwitcher,
+  initColor,
   initColorStore,
-  removeColorSwitcher,
+  initColorSwitcher,
 } from "./backgroundColorSwitch";
 import { cleanUpHeaderLogic, initHeaderLogic } from "./headerLogic";
-import { cleanupLogoAnimation, initLogoAnimation } from "./hideLogo";
-import { cleanupLangSelect, setupLangSelect } from "./languageSelect";
-import { cleanupLenis, initLenis } from "./lenis";
-import { cleanUpLogoSizer, setupLogoSizer } from "./logoSizer";
+import { cleanUpLogoAnimation, initLogoAnimation } from "./hideLogo";
+import {
+  cleanUpLangSelect,
+  initLangSelect,
+  setSwupInstance,
+} from "./languageSelect";
+import { cleanUpLenis, initLenis } from "./lenis";
+import { cleanUpLogoSizer, initLogoSizer } from "./logoSizer";
 
 const swup = new Swup({
   plugins: [
@@ -33,6 +37,9 @@ const swup = new Swup({
   cache: true,
   animationSelector: '[class*="transition-"]',
 });
+
+// Register swup instance with languageSelect
+setSwupInstance(swup);
 
 let isInitialized = false;
 
@@ -50,26 +57,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const init = () => {
   if (!isInitialized) {
-    initColorStore(); // Only subscribe once
+    initColorStore();
     isInitialized = true;
   }
 
-  addColorSwitcher();
-  applyColor();
+  initColorSwitcher();
+  initColor();
   initCarousel();
   initLenis();
-  setupLogoSizer();
-  setupLangSelect();
+  initLogoSizer();
+  initLangSelect();
   initHeaderLogic();
   initLogoAnimation();
 };
 
 const cleanUp = () => {
-  removeColorSwitcher();
+  cleanUpColorSwitcher();
   cleanUpCarousel();
   cleanUpHeaderLogic();
-  cleanupLenis();
-  cleanupLogoAnimation();
+  cleanUpLenis();
+  cleanUpLogoAnimation();
   cleanUpLogoSizer();
-  cleanupLangSelect();
+  cleanUpLangSelect();
 };

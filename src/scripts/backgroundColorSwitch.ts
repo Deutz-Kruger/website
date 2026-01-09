@@ -4,7 +4,7 @@ let isSubscribed = false;
 
 const addedListeners = new Map<HTMLElement, () => void>();
 
-export const addColorSwitcher = () => {
+export const initColorSwitcher = () => {
   const keywordElements = document.querySelectorAll(".keyword");
 
   keywordElements.forEach((el) => {
@@ -23,14 +23,14 @@ export const addColorSwitcher = () => {
   });
 };
 
-export const removeColorSwitcher = () => {
+export const cleanUpColorSwitcher = () => {
   addedListeners.forEach((handler, element) => {
     element.removeEventListener("click", handler);
   });
   addedListeners.clear();
 };
 
-export const applyColor = () => {
+export const initColor = () => {
   const color = keywordColor.get();
   document.documentElement.style.setProperty("--theme-color", `var(${color})`);
 };

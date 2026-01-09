@@ -1,20 +1,21 @@
 ---
-
+import LangSelectDe from "@content/media/lang_select_de.svg";
+import LangSelectEn from "@content/media/lang_select_en.svg";
 ---
 
 <div
-  class="hide-me pointer-events-auto relative flex h-fit select-none justify-between gap-2 text-[50px] md:self-center md:text-2xl"
+  class="hide-me pointer-events-auto relative flex h-full select-none justify-between gap-2 md:self-center"
 >
-  <p
+  <div
     aria-label="Switch to English"
     role="navigation"
     lang="en"
     data-listener-attached="false"
-    class="hover:scale-103 h-fit leading-[0.78] transition-all duration-75 hover:cursor-pointer md:leading-normal"
+    class="hover:scale-103 flex items-center transition-all duration-75 hover:cursor-pointer"
     id="en"
   >
-    EN
-  </p>
+    <LangSelectEn class="h-full w-auto" />
+  </div>
   <p
     class="h-fit cursor-default place-self-center text-base leading-5 transition-transform hover:rotate-3 md:leading-normal"
   >
@@ -31,14 +32,14 @@
       <rect width="2" height="12" fill="black"></rect>
     </svg>
   </div> -->
-  <p
+  <div
     aria-label="Switch to German"
     role="navigation"
     lang="de"
     data-listener-attached="false"
-    class="hover:scale-103 h-fit leading-[0.78] transition-transform duration-75 hover:cursor-pointer md:leading-normal"
+    class="hover:scale-103 flex items-center transition-transform duration-75 hover:cursor-pointer"
     id="de"
   >
-    DE
-  </p>
+    <LangSelectDe class="h-full w-auto" />
+  </div>
 </div>
