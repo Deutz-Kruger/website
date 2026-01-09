@@ -103,7 +103,7 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/mission_compressed.mp4",
+          "video": "/src/content/media/blt_mission2_2.mp4",
           "base": {
             "background": {
               "background": "none"
