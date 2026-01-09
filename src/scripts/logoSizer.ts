@@ -4,9 +4,9 @@ let isSubscribed: boolean;
 let unsub: ReturnType<typeof logoSize.subscribe>;
 const fixedLogo = document.getElementById("fixed-logo-container");
 
-export const setupLogoSizer = () => {
+export const initLogoSizer = () => {
   setSize();
-  initLogoSizer();
+  initLogoSizerSubscription();
   window.addEventListener("resize", () => {
     console.log("Resize Triggered");
     setSize();
@@ -30,7 +30,7 @@ const setSize = () => {
   setLogoSize(height);
 };
 
-const initLogoSizer = () => {
+const initLogoSizerSubscription = () => {
   if (isSubscribed) return;
 
   unsub = logoSize.subscribe((size) => {
