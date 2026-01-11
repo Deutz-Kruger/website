@@ -27,7 +27,7 @@
     "type-check": "astro check",
     "check": "eslint . --ext .js,.ts,.astro && prettier --check . && astro check",
     "prepare": "husky",
-    "sync-media": "git pull && tsx ./media-sync/sync.ts",
+    "sync-media": "tsx ./media-sync/sync.ts",
     "admin": "tsx ./admin-dashboard/server.ts",
     "reset:cache": "rm -rf .astro .cache .wrangler dist"
   },
