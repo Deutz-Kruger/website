@@ -31,7 +31,6 @@ export const cleanUpCarousel = (): void => {
   if (glideInstance) {
     try {
       glideInstance.destroy();
-      console.log("Carousel instance destroyed");
     } catch (error) {
       console.warn("Error destroying carousel instance:", error);
     }
@@ -66,7 +65,6 @@ export const initCarousel = (): void => {
     // Handle resize to destroy when switching to desktop
     resizeHandler = (): void => {
       if (window.innerWidth >= MOBILE_BREAKPOINT) {
-        console.log("Switching to desktop - destroying carousel");
         cleanUpCarousel();
       }
     };

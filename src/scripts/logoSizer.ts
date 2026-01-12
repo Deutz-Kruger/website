@@ -8,7 +8,6 @@ export const initLogoSizer = () => {
   setSize();
   initLogoSizerSubscription();
   window.addEventListener("resize", () => {
-    console.log("Resize Triggered");
     setSize();
   });
 };

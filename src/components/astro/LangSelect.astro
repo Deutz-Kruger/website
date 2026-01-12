@@ -4,42 +4,32 @@ import LangSelectEn from "@content/media/lang_select_en.svg";
 ---
 
 <div
-  class="hide-me pointer-events-auto relative flex h-full select-none justify-between gap-2 md:self-center"
+  class="hide-me pointer-events-auto relative flex h-full w-fit select-none justify-between gap-2 md:self-center"
 >
   <div
     aria-label="Switch to English"
     role="navigation"
     lang="en"
     data-listener-attached="false"
-    class="hover:scale-103 flex items-center transition-all duration-75 hover:cursor-pointer"
+    class="hover:scale-102 aspect-103/59 h-full transition-transform duration-150 ease-in-out hover:-rotate-3 hover:cursor-pointer"
     id="en"
   >
-    <LangSelectEn class="h-full w-auto" />
+    <LangSelectEn class="h-full w-full" />
   </div>
   <p
     class="h-fit cursor-default place-self-center text-base leading-5 transition-transform hover:rotate-3 md:leading-normal"
   >
     |
   </p>
-  <!-- <div class="flex items-center">
-    <svg
-      width="2"
-      height="13"
-      viewBox="0 0 1 13"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="2" height="12" fill="black"></rect>
-    </svg>
-  </div> -->
+
   <div
     aria-label="Switch to German"
     role="navigation"
     lang="de"
     data-listener-attached="false"
-    class="hover:scale-103 flex items-center transition-transform duration-75 hover:cursor-pointer"
+    class="aspect-104/59 hover:scale-102 h-full transition-transform duration-150 ease-in-out hover:rotate-3 hover:cursor-pointer"
     id="de"
   >
-    <LangSelectDe class="h-full w-auto" />
+    <LangSelectDe class="h-full w-full" />
   </div>
 </div>
