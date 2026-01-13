@@ -96,7 +96,7 @@
 
   /* Language Selection */
   .inactive-lang {
-    color: rgba(0 0 0 / 0.3);
+    @apply block!;
   }
 
   /* Padding Utils */
