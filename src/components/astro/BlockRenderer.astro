@@ -19,7 +19,7 @@ interface Props {
 
 const { block, index } = Astro.props;
 
-const loadingOrder = index < 3 ? "eager" : "lazy";
+const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
 {block._block === "title" && <TitleBlock block={block} index={index} />}
