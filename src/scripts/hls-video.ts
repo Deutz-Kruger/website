@@ -3,7 +3,11 @@ import Hls from "hls.js";
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
   :host { display: block; }
-  video { width: 100%; height: 100%; }
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
   :host([has-background="true"]) video {
     border-radius: 0.625rem;
   }
@@ -14,7 +18,7 @@ class HlsVideo extends HTMLElement {
   private videoElement: HTMLVideoElement;
 
   static get observedAttributes() {
-    return ["width", "height"];
+    return ["width", "height", "poster"];
   }
 
   constructor() {
@@ -37,6 +41,7 @@ class HlsVideo extends HTMLElement {
     this.videoElement.loop = this.hasAttribute("loop");
     this.videoElement.muted = this.hasAttribute("muted");
     this.videoElement.playsInline = this.hasAttribute("playsinline");
+    this.updatePoster();
   }
 
   private updateAspectRatio() {
@@ -48,14 +53,29 @@ class HlsVideo extends HTMLElement {
     }
   }
 
+  private updatePoster() {
+    const poster = this.getAttribute("poster");
+    if (poster) {
+      this.videoElement.poster = poster;
+    }
+  }
+
   connectedCallback() {
     const manifestUrl = this.getAttribute("src");
 
     this.updateAspectRatio();
+    this.updatePoster();
 
     if (manifestUrl && Hls.isSupported()) {
       this.hls.loadSource(manifestUrl);
       this.hls.attachMedia(this.videoElement);
+      this.videoElement.addEventListener(
+        "canplay",
+        () => {
+          this.videoElement.play();
+        },
+        { once: true },
+      );
     }
   }
 
@@ -66,6 +86,9 @@ class HlsVideo extends HTMLElement {
   attributeChangedCallback(name: string) {
     if (name === "width" || name === "height") {
       this.updateAspectRatio();
+    }
+    if (name === "poster") {
+      this.updatePoster();
     }
   }
 }

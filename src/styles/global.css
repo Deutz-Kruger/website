@@ -109,7 +109,7 @@
     }
   }
 
-  :not.inactive-lang svg {
+  ::not.inactive-lang svg {
     fill-opacity: 1;
     scale: 1;
   }
