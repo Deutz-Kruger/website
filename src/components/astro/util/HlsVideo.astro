@@ -9,6 +9,7 @@ interface Props {
   width?: number;
   height?: number;
   hasBackground?: boolean;
+  poster?: string;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
   width,
   height,
   hasBackground = false,
+  poster,
 } = Astro.props;
 
 const videoId = getMedia(src).id;
@@ -34,5 +36,6 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
   width={width}
   height={height}
   has-background={hasBackground}
+  poster={poster}
 >
 </hls-video>

@@ -28,3 +28,17 @@ export const getVideoPlayerUrl = (id: string) => {
   const encodedId = encodeURIComponent(id);
   return `${CLOUDFLARE_STREAM_URL}/${encodedId}/iframe?autoplay=true&muted=true&controls=false&loop=true`;
 };
+
+/**
+ * Generates a Cloudflare Stream poster image URL for a video source path.
+ * Uses first frame (time=0s) at 720p resolution (1280x720).
+ *
+ * @param src - The source path of the video file (e.g., "/src/content/media/video.mp4").
+ * @returns The full URL to the Cloudflare Stream thumbnail/poster image.
+ */
+export const getVideoPoster = (src: string): string => {
+  const mediaEntry = getMedia(src);
+  const videoId = mediaEntry.id;
+  const encodedId = encodeURIComponent(videoId);
+  return `${CLOUDFLARE_STREAM_URL}/${encodedId}/thumbnails/thumbnail.jpg?time=0s&width=1280&height=720`;
+};
