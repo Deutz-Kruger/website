@@ -11,6 +11,7 @@ sheet.replaceSync(`
   :host([has-background="true"]) video {
     border-radius: 0.625rem;
   }
+
   `);
 
 class HlsVideo extends HTMLElement {
@@ -26,11 +27,11 @@ class HlsVideo extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     this.hls = new Hls({
-      maxBufferSize: 10 * 1000 * 1000,
-      maxBufferLength: 30,
-      maxMaxBufferLength: 60,
-      enableWorker: true,
-      lowLatencyMode: false,
+      maxBufferSize: 1 * 1000 * 1000,
+      maxBufferLength: 1,
+      maxMaxBufferLength: 2,
+      enableWorker: false,
+      lowLatencyMode: true,
     });
     this.videoElement = document.createElement("video");
 
