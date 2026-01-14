@@ -51,7 +51,7 @@ const service: ExternalImageService = {
       width,
       height,
       loading: options.loading ?? "lazy",
-      decoding: options.decoding ?? "async",
+      decoding: options.decoding ?? "sync",
       sizes,
     };
   },

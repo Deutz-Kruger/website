@@ -4,6 +4,7 @@ import type { z } from "astro:content";
 import type { videoBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
+import { getVideoPoster } from "@/utils/media";
 
 import HlsVideo from "../util/HlsVideo.astro";
 import Background from "./utils/Background.astro";
@@ -21,6 +22,7 @@ const { block, loading, className = "" } = Astro.props;
 const { video, base } = block;
 const { background, layout } = base;
 const positioning = generateGridPosition(layout);
+const poster = getVideoPoster(video);
 ---
 
 <section
@@ -40,6 +42,7 @@ const positioning = generateGridPosition(layout);
       loading={loading}
       className={cn({})}
       hasBackground={background.background !== "none"}
+      poster={poster}
     />
   </Background>
 </section>
