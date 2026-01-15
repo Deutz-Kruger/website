@@ -8,9 +8,9 @@ import {
   resolveCasePreview,
 } from "@/utils/collections.ts";
 
-type TitleBlock = z.infer<typeof titleBlock>;
-
 import CasePreviewCard from "./CasePreviewCard.astro";
+
+type TitleBlock = z.infer<typeof titleBlock>;
 
 interface Props {
   cases: CasePaths;
@@ -19,6 +19,18 @@ const { cases } = Astro.props;
 
 const caseSlugs = extractSlugsFromPaths(cases);
 const resolvedCasePreviews = await resolveCasePreview(caseSlugs);
+
+function findFirstVideo(
+  groups: z.infer<typeof import("@/content/schemas/blockSchemas").groupsSchema>,
+) {
+  for (const group of groups) {
+    const videoBlock = group.blocks.find((block) => block._block === "video");
+    if (videoBlock) {
+      return videoBlock;
+    }
+  }
+  return undefined;
+}
 ---
 
 <section class="bigger relative pb-12 pt-12">
@@ -31,11 +43,13 @@ const resolvedCasePreviews = await resolveCasePreview(caseSlugs);
       const titleBlock: TitleBlock | undefined = titleBlockGroup?.blocks.find(
         (block) => block._block === "title",
       );
+      const firstVideo = findFirstVideo(groups);
 
       const { title, preview_image } = case_preview;
       return (
         <CasePreviewCard
           preview_image={preview_image}
+          preview_video={firstVideo}
           title={title}
           slug={slug}
           description={titleBlock ? titleBlock.subHeading : ""}

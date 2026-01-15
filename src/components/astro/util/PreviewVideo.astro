@@ -1,0 +1,174 @@
+---
+import { cn } from "@/utils/cn";
+import { getMedia } from "@/utils/media";
+
+interface Props {
+  src: string;
+  poster?: string;
+  className?: string;
+}
+
+const { src, poster, className = "" } = Astro.props;
+
+const videoId = getMedia(src).id;
+const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${videoId}/manifest/video.m3u8`;
+---
+
+<preview-video src={manifestUrl} poster={poster} class={cn(className)} eager
+></preview-video>
+
+<script>
+  import Hls from "hls.js";
+
+  class PreviewVideoElement extends HTMLElement {
+    private hls: Hls | null = null;
+    private videoElement: HTMLVideoElement;
+    private hasPlayed = false;
+    private observer: IntersectionObserver | null = null;
+    private parentLink: HTMLElement | null = null;
+    private isMobile = false;
+
+    static get observedAttributes() {
+      return ["src", "poster"];
+    }
+
+    constructor() {
+      super();
+      const shadow = this.attachShadow({ mode: "open" });
+
+      this.videoElement = document.createElement("video");
+      this.videoElement.muted = true;
+      this.videoElement.playsInline = true;
+      this.videoElement.loop = false;
+      this.videoElement.controls = false;
+      this.videoElement.preload = "metadata";
+
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(`
+        :host { display: block; }
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      `);
+
+      shadow.appendChild(this.videoElement);
+      shadow.adoptedStyleSheets = [sheet];
+
+      this.isMobile = window.innerWidth < 768;
+      window.addEventListener("resize", () => {
+        this.isMobile = window.innerWidth < 768;
+      });
+    }
+
+    private updatePoster() {
+      const poster = this.getAttribute("poster");
+      if (poster) {
+        this.videoElement.poster = poster;
+      }
+    }
+
+    private playVideo() {
+      if (this.hasPlayed) return;
+
+      this.hasPlayed = true;
+
+      if (this.videoElement.readyState >= 3) {
+        this.videoElement.play().catch((error) => {
+          console.warn("Video play failed:", error);
+        });
+      } else {
+        this.videoElement.addEventListener(
+          "canplay",
+          () => {
+            this.videoElement.play().catch((error) => {
+              console.warn("Video play failed:", error);
+            });
+          },
+          { once: true },
+        );
+      }
+    }
+
+    private setupHoverInteraction() {
+      this.parentLink = this.closest("a");
+
+      if (!this.parentLink) return;
+
+      this.parentLink.addEventListener("mouseenter", () => {
+        if (!this.isMobile && !this.hasPlayed) {
+          this.playVideo();
+        }
+      });
+    }
+
+    private setupIntersectionObserver() {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (this.isMobile && entry.isIntersecting && !this.hasPlayed) {
+              this.playVideo();
+              this.observer?.disconnect();
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+
+      this.observer.observe(this);
+    }
+
+    private resetPlayback() {
+      this.hasPlayed = false;
+      if (this.videoElement.src) {
+        this.videoElement.src = "";
+      }
+      this.videoElement.load();
+    }
+
+    connectedCallback() {
+      this.updatePoster();
+
+      const manifestUrl = this.getAttribute("src");
+
+      if (manifestUrl && Hls.isSupported()) {
+        this.hls = new Hls({
+          maxBufferSize: 1 * 1000 * 1000,
+          maxBufferLength: 1,
+          maxMaxBufferLength: 2,
+          enableWorker: false,
+          lowLatencyMode: true,
+        });
+        this.hls.loadSource(manifestUrl);
+        this.hls.attachMedia(this.videoElement);
+      } else if (manifestUrl) {
+        if (this.videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+          this.videoElement.src = manifestUrl;
+        }
+      }
+
+      this.setupHoverInteraction();
+      this.setupIntersectionObserver();
+
+      document.addEventListener("swup:pageView", () => {
+        this.resetPlayback();
+      });
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+      this.hls?.destroy();
+    }
+
+    attributeChangedCallback(name: string) {
+      if (name === "poster") {
+        this.updatePoster();
+      }
+    }
+  }
+
+  if (!customElements.get("preview-video")) {
+    customElements.define("preview-video", PreviewVideoElement);
+  }
+</script>
