@@ -1,20 +1,29 @@
 ---
-import ImageWrapper from "@components/astro/util/ImageWrapper.astro";
 import { type z } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 import { caseSchema } from "@/content/schemas/pageSchemas";
+import { getVideoPoster } from "@/utils/media";
+
+import PreviewVideo from "./util/PreviewVideo.astro";
 
 type CasePreview = z.infer<typeof caseSchema.shape.case_preview>;
+type VideoBlock = z.infer<
+  typeof import("@/content/schemas/blockSchemas").videoBlock
+>;
 
 interface Props extends CasePreview {
   slug: string;
   description: string;
+  preview_video?: VideoBlock;
 }
 
-const { preview_image, title, slug, description } = Astro.props;
+const { preview_image, title, slug, description, preview_video } = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
+const videoPoster = preview_video
+  ? getVideoPoster(preview_video.video)
+  : undefined;
 ---
 
 <a
@@ -23,11 +32,24 @@ const lang = Astro.currentLocale ?? "en";
 >
   <hr class="mb-4 md:mb-0 md:block" />
   <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
-    <ImageWrapper
-      src={preview_image.src}
-      altText={preview_image.alt}
-      className="md:w-4/9 mx-auto block w-full md:mx-0"
-    />
+    {
+      preview_video ? (
+        <PreviewVideo
+          src={preview_video.video}
+          poster={videoPoster}
+          className="md:w-4/9 h-full mx-auto block w-full md:mx-0"
+        />
+      ) : (
+        <div class="md:w-4/9 mx-auto block w-full md:mx-0">
+          <img
+            src={preview_image.src}
+            alt={preview_image.alt}
+            class="h-full w-full object-contain md:h-full md:max-h-full"
+            loading="eager"
+          />
+        </div>
+      )
+    }
 
     <div class="relative mt-2 w-4/5 md:w-2/3">
       <h2
@@ -41,6 +63,5 @@ const lang = Astro.currentLocale ?? "en";
         {description}
       </p>
     </div>
-    <!-- <hr class="mt-5 md:hidden" /> -->
   </div>
 </a>
