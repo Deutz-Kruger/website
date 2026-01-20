@@ -29,16 +29,16 @@ if (width && height) {
 }
 ---
 
-<div class="tracking-[1%] antialiased">
+<div class="flex min-h-screen flex-col tracking-[1%] antialiased">
   <FixedLogo logo={logo.src} lang={lang} />
-  <div class="max-w-480 page-spacing mx-auto">
+  <div class="max-w-480 page-spacing mx-auto flex flex-1 flex-col">
     <NavBar
       navItems={nav_items}
       lang={lang}
       navMinHeight={navMinHeight}
       aspect={aspect}
     />
-    <main id="swup" class="transition-main">
+    <main id="swup" class="transition-main flex-1">
       <slot />
     </main>
     <Footer footerItems={footer_items} lang={lang} />

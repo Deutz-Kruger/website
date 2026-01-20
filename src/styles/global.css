@@ -218,3 +218,7 @@ section[data-desktop-start] {
   opacity: 1; /* Visible when scrolling up */
   transform: translateY(0);
 }
+
+pre {
+  font-family: inherit;
+}
