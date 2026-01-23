@@ -13,7 +13,7 @@ let deClickHandler: (() => void) | null = null;
 
 const handleLanguageSwitch = (newLang: "de" | "en") => {
   setLang(newLang);
-  document.cookie = `lang=${newLang}; SameSite=None; Secure`;
+  document.cookie = `lang=${newLang}; path=/; SameSite=None; Secure`;
   const currentPath = window.location.pathname;
   const pathSegments = currentPath.split("/");
 
@@ -38,10 +38,11 @@ const syncLanguageWithUrl = () => {
     const storedLang = langSelection.get();
     if (storedLang !== currentLang) {
       setLang(currentLang);
-      document.cookie = `lang=${currentLang}; SameSite=None; Secure`;
+      document.cookie = `lang=${currentLang}; path=/; SameSite=None; Secure`;
     }
     return currentLang;
   }
+  console.log("Current Lang", currentLang);
   return "en";
 };
 
