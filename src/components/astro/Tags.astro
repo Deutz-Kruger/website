@@ -1,0 +1,20 @@
+---
+interface Props {
+  tags: Array<string> | undefined;
+}
+const { tags } = Astro.props;
+---
+
+{
+  tags && (
+    <ul class="mt-2 flex gap-2 pl-2">
+      {tags.map((tag) => {
+        return (
+          <li class="bg-(--theme-color)/75 rounded-nav padding-nav-item transition-colors duration-500">
+            {tag}
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
