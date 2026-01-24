@@ -36,7 +36,7 @@ export const caseSchema = z.object({
   slug: z.string(),
   lang: z.string(),
   client: z.string(),
-  tags: z.array(z.string()),
+  tags: z.array(z.string()).optional(),
   groups: groupsSchema,
   case_preview: z.object({
     title: z.string(),

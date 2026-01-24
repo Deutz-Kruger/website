@@ -14,7 +14,7 @@ type VideoBlock = z.infer<
 
 interface Props extends CasePreview {
   slug: string;
-  tags: Array<string>;
+  tags: Array<string> | undefined;
   description: string;
   preview_video?: VideoBlock;
 }
