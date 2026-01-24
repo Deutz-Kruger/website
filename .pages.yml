@@ -21,6 +21,13 @@ content:
     label: Client Name
     type: string
 
+  - name: tags
+    label: Tags
+    type: select
+    options:
+      multiple: true
+      creatable: true
+
   - name: groups
     label: Block Groups
     type: block
