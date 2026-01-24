@@ -2,6 +2,11 @@
   "slug": "/bl-thermo",
   "lang": "de",
   "client": "BL thermodynamics",
+  "tags": [
+    "NextJS",
+    "TailwindCSS",
+    "Sanity CMS"
+  ],
   "groups": [
     {
       "_block": "group",
