@@ -14,11 +14,13 @@ type VideoBlock = z.infer<
 
 interface Props extends CasePreview {
   slug: string;
+  tags: Array<string>;
   description: string;
   preview_video?: VideoBlock;
 }
 
-const { preview_image, title, slug, description, preview_video } = Astro.props;
+const { preview_image, title, slug, description, preview_video, tags } =
+  Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
 const videoPoster = preview_video
@@ -57,6 +59,14 @@ const videoPoster = preview_video
       >
         {title}
       </h2>
+      <ul>
+        {
+          tags &&
+            tags.map((tag) => {
+              return <li>{tag}</li>;
+            })
+        }
+      </ul>
       <p
         class="md:text-medium xl:text-big md:w-13/14 hidden -translate-y-1 pt-4 leading-tight tracking-tight opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 md:block"
       >

@@ -36,7 +36,7 @@ function findFirstVideo(
 <section class="bigger relative pb-12 pt-12">
   {
     resolvedCasePreviews.map((preview) => {
-      const { slug, case_preview, groups } = preview.data;
+      const { slug, case_preview, groups, tags } = preview.data;
       const titleBlockGroup = groups.find((group) =>
         group.blocks.find((block) => block._block === "title"),
       );
@@ -53,6 +53,7 @@ function findFirstVideo(
           title={title}
           slug={slug}
           description={titleBlock ? titleBlock.subHeading : ""}
+          tags={tags}
         />
       );
     })
