@@ -18,6 +18,8 @@ const { background, className = "", margin, width } = Astro.props;
 const staticCol = background?.background_colors
   ? background?.background_colors[0]
   : "#EBEBEB";
+
+console.log("margin", margin);
 ---
 
 <>
@@ -44,7 +46,7 @@ const staticCol = background?.background_colors
       </div>
     ) : (
       <div
-        class={cn(className, "p-0! h-full w-full md:w-fit", {
+        class={cn(className, "p-0! h-full w-full lg:w-fit", {
           "w-full": !margin || margin === "NONE",
           "ml-auto": margin === "LEFT",
           "mr-auto": margin === "RIGHT",

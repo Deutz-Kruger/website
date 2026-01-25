@@ -193,7 +193,7 @@ section[data-desktop-start] {
   aspect-ratio: unset;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   section[data-desktop-start] {
     grid-column-start: var(--desktop-start);
     grid-column-end: span var(--desktop-span);
