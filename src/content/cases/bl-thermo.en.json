@@ -77,7 +77,7 @@
         },
         {
           "_block": "text",
-          "text": "A dynamic visual system was created based on the cross-section of heating pipes. An abstract grid of circular elements serves as the central design anchor, simulating the physical properties of the technology: elements shift in color to visualize the transition between heating and cooling states. Additionally, these \"pipes\" dynamically rearrange to form specific icons and structures relevant to the active subpage, providing an intuitive, animated guide through the site’s architecture.",
+          "text": "The visual system derives from the cross-section of heating pipes. An abstract grid of circles shifts color to visualize heating and cooling states. These elements dynamically rearrange to form specific icons, acting as an intuitive, animated guide through the site structure.",
           "base": {
             "background": {
               "background": "none"
