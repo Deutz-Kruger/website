@@ -103,6 +103,21 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
       });
     }
 
+    private setupVideoHover() {
+      this.videoElement.addEventListener("mouseenter", () => {
+        if (!this.isMobile && this.hasPlayed) {
+          this.videoElement.loop = true;
+          this.videoElement.play().catch(console.warn);
+        }
+      });
+
+      this.videoElement.addEventListener("mouseleave", () => {
+        if (!this.isMobile) {
+          this.videoElement.loop = false;
+        }
+      });
+    }
+
     private setupIntersectionObserver() {
       this.observer = new IntersectionObserver(
         (entries) => {
@@ -150,6 +165,7 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
       }
 
       this.setupHoverInteraction();
+      this.setupVideoHover();
       this.setupIntersectionObserver();
 
       document.addEventListener("swup:pageView", () => {
