@@ -34,16 +34,16 @@ const videoPoster = preview_video
   href={getRelativeLocaleUrl(lang, slug)}
 >
   <hr class="mb-4 md:mb-0 md:block" />
-  <div class="flex w-full flex-col md:flex-row-reverse md:justify-between">
+  <div class="flex w-full flex-col xl:flex-row-reverse xl:justify-between">
     {
       preview_video ? (
         <PreviewVideo
           src={preview_video.video}
           poster={videoPoster}
-          className="md:w-4/9 h-full mx-auto block w-full md:mx-0"
+          className="xl:w-4/9 h-full mx-auto block w-full md:mx-0"
         />
       ) : (
-        <div class="md:w-4/9 mx-auto block w-full md:mx-0">
+        <div class="xl:w-4/9 mx-auto block w-full md:mx-0">
           <img
             src={preview_image.src}
             alt={preview_image.alt}
@@ -54,18 +54,18 @@ const videoPoster = preview_video
       )
     }
 
-    <div class="relative mt-2 w-4/5 md:w-2/3">
+    <div class="md:w-13/14 relative mt-2 w-4/5 xl:w-2/3">
       <h2
-        class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop md:w-6/7"
+        class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop xl:w-6/7"
       >
         {title}
       </h2>
-      <Tags tags={tags} />
       <p
-        class="md:text-medium xl:text-big md:w-13/14 hidden -translate-y-1 pt-4 leading-tight tracking-tight opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 md:block"
+        class="text-normal md:text-medium xl:text-big md:w-13/14 hidden -translate-y-1 pt-4 text-base leading-tight tracking-[-0.0175em] transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 md:block xl:opacity-0"
       >
         {description}
       </p>
+      <Tags tags={tags} />
     </div>
   </div>
 </a>

@@ -30,7 +30,7 @@
   --text-largerer: 3rem;
   --text-larger: 2.175rem;
   --text-large: 1.875rem;
-  --text-big: 1.5rem;
+  --text-big: 1.4rem;
   --text-medium: 1.35rem;
   --text-normal: 1rem;
 
@@ -155,7 +155,9 @@
 
   .block-text-typo {
     & p {
-      @apply text-normal md:text-medium xl:text-big md:w-7/8 leading-5 tracking-tight md:leading-6 md:tracking-normal;
+      @apply text-normal;
+      /* Font Spacing */
+      @apply tracking-text-mobile leading-text-mobile xl:tracking-text-desktop xl:leading-text-desktop;
     }
   }
 }
