@@ -40,14 +40,14 @@ const videoPoster = preview_video
         <PreviewVideo
           src={preview_video.video}
           poster={videoPoster}
-          className="xl:w-4/9 h-full mx-auto block w-full md:mx-0"
+          className="xl:w-4/9 h-full mx-auto block w-full lg:mx-0"
         />
       ) : (
-        <div class="xl:w-4/9 mx-auto block w-full md:mx-0">
+        <div class="xl:w-4/9 mx-auto block w-full lg:mx-0">
           <img
             src={preview_image.src}
             alt={preview_image.alt}
-            class="h-full w-full object-contain md:h-full md:max-h-full"
+            class="h-full w-full object-contain lg:h-full lg:max-h-full"
             loading="eager"
           />
         </div>
