@@ -56,9 +56,9 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
       shadow.appendChild(this.videoElement);
       shadow.adoptedStyleSheets = [sheet];
 
-      this.isMobile = window.innerWidth < 768;
+      this.isMobile = window.innerWidth <= 1024;
       window.addEventListener("resize", () => {
-        this.isMobile = window.innerWidth < 768;
+        this.isMobile = window.innerWidth <= 1024;
       });
     }
 
@@ -108,12 +108,13 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
         (entries) => {
           entries.forEach((entry) => {
             if (this.isMobile && entry.isIntersecting && !this.hasPlayed) {
+              console.log("entry", entry, entry.isIntersecting);
               this.playVideo();
               this.observer?.disconnect();
             }
           });
         },
-        { threshold: 0.5 },
+        { threshold: 1 },
       );
 
       this.observer.observe(this);

@@ -12,12 +12,6 @@ let enClickHandler: (() => void) | null = null;
 let deClickHandler: (() => void) | null = null;
 
 const handleLanguageSwitch = (newLang: "de" | "en") => {
-  console.log(
-    "[handleLanguageSwitch] Switching to:",
-    newLang,
-    "Current URL:",
-    window.location.pathname,
-  );
   setLang(newLang);
   document.cookie = `lang=${newLang}; path=/; SameSite=None; Secure`;
   const currentPath = window.location.pathname;
@@ -27,8 +21,6 @@ const handleLanguageSwitch = (newLang: "de" | "en") => {
 
   pathSegments[1] = newLang;
   const newPath = pathSegments.join("/");
-
-  console.log("[handleLanguageSwitch] Navigating to:", newPath);
 
   if (swupInstance) {
     swupInstance.navigate(newPath, { animate: false });
@@ -58,26 +50,19 @@ const syncLanguageWithUrl = () => {
   const pathSegments = currentPath.split("/");
   const currentLang = pathSegments[1];
 
-  console.log("[syncLanguageWithUrl] URL:", currentPath, "Lang:", currentLang);
-
   if (currentLang === "en" || currentLang === "de") {
     setLang(currentLang);
     document.cookie = `lang=${currentLang}; path=/; SameSite=None; Secure`;
     return currentLang;
   }
-  console.log("Current Lang", currentLang);
+
   return "en";
 };
 
 export const initLangSelect = () => {
-  console.log("[initLangSelect] Initializing...");
   const currentLang = syncLanguageWithUrl();
   const enElement = document.getElementById("en");
   const deElement = document.getElementById("de");
-
-  console.log("[initLangSelect] Elements found:", !!enElement, !!deElement);
-  console.log("[initLangSelect] EN classes:", enElement?.className);
-  console.log("[initLangSelect] DE classes:", deElement?.className);
 
   const lang = currentLang;
 
@@ -102,7 +87,6 @@ export const initLangSelect = () => {
     enElement.dataset.listenerAttached === "true" ||
     deElement.dataset.listenerAttached === "true"
   ) {
-    console.log("[initLangSelect] Listeners already attached, skipping");
     return;
   }
 
@@ -126,7 +110,6 @@ export const initLangSelect = () => {
 };
 
 export const cleanUpLangSelect = () => {
-  console.log("[cleanUpLangSelect] Cleaning up...");
   const enElement = document.getElementById("en");
   const deElement = document.getElementById("de");
 

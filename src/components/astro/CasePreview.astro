@@ -37,8 +37,6 @@ function findFirstVideo(
   {
     resolvedCasePreviews.map((preview) => {
       const { slug, case_preview, groups, tags } = preview.data;
-      console.log("preview.data", preview.data);
-      console.log("tags", tags);
       const titleBlockGroup = groups.find((group) =>
         group.blocks.find((block) => block._block === "title"),
       );
