@@ -77,7 +77,7 @@
         },
         {
           "_block": "text",
-          "text": "Ein dynamisches visuelles System wurde auf Basis von Heizungsrohr-Querschnitten entwickelt. Ein abstraktes Raster aus kreisförmigen Elementen dient als zentrales Design-Element, das die physischen Eigenschaften der Technologie simuliert: Farbverläufe visualisieren den Wechsel zwischen Heiz- und Kühlzuständen. Zusätzlich ordnen sich diese „Rohre“ dynamisch neu an, um themenspezifische Icons für die jeweiligen Unterseiten zu bilden, was eine intuitive, animierte Orientierung innerhalb der Seitenstruktur schafft.",
+          "text": "Das visuelle System leitet sich vom Querschnitt von Heizungsrohren ab. Ein abstraktes Raster aus Kreisen visualisiert durch Farbwechsel Heiz- und Kühlzustände. Diese Elemente ordnen sich dynamisch zu spezifischen Icons an und führen intuitiv durch die Seitenstruktur.",
           "base": {
             "background": {
               "background": "none"
@@ -169,7 +169,7 @@
         },
         {
           "_block": "text",
-          "text": "Das Interface-Design stellt Klarheit und technische Präzision in den Vordergrund. Ein reduziertes Layout mit viel Weißraum wurde gewählt, um den High-Tech-Charakter der Branche widerzuspiegeln. Komplexe technische Daten und Diagramme sind in ausklappbaren Content-Cards und Modals organisiert, wodurch detaillierte Spezifikationen zugänglich bleiben, ohne den Lesefluss zu stören. Das System ist vollständig responsive, um sicherzustellen, dass technische Schemata auch auf mobilen Endgeräten optimal lesbar sind.",
+          "text": "Das Interface priorisiert Klarheit und Struktur. Ein reduziertes Layout wurde gewählt, um die industriellen Inhalte zu rahmen. Daten werden in ausklappbaren Elementen organisiert, um visuelle Unruhe zu vermeiden. Ein responsives Framework sichert die Lesbarkeit der technischen Schemata auf mobilen Geräten.",
           "base": {
             "background": {
               "background": "none"
