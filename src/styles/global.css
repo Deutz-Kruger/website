@@ -96,7 +96,7 @@
 
   /* Language Selection */
   .inactive-lang {
-    @apply block!;
+    @apply hidden;
   }
   @media (width >= 48rem) {
     .inactive-lang svg {
