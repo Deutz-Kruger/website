@@ -21,10 +21,8 @@ interface Props {
 const { block, loading, className } = Astro.props;
 const { base, images } = block;
 const { layout, background } = base;
-console.log("layout", layout);
 const positioning = generateGridPosition(layout);
 const hasMultipleImages = images.length > 1;
-console.log("positioning", positioning);
 let dynamicSizes = "100vw";
 
 if (positioning.desktopSpan === 1) {
