@@ -5,15 +5,19 @@ import type { titleBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
 
+import Tags from "../Tags.astro";
+
 type CaseTitleBlock = z.infer<typeof titleBlock>;
 
 interface Props {
   block: CaseTitleBlock;
   className?: string;
   index: number;
+  tags: Array<string> | undefined;
 }
 
-const { block, className = "" } = Astro.props;
+const { block, className = "", tags } = Astro.props;
+console.log("tags", tags);
 const { layout } = block.base;
 const positioning = generateGridPosition(layout);
 ---
@@ -27,5 +31,6 @@ const positioning = generateGridPosition(layout);
   style={`--desktop-start: ${positioning.desktopStart}; --desktop-span: ${positioning.desktopSpan}; --aspect-width: ${positioning.aspect.width}; --aspect-height: ${positioning.aspect.height}`}
 >
   <h1 class="w-7/8 2xl:w-7/8 mb-3 lg:mb-2">{block.title}</h1>
+  <Tags tags={tags} className="my-3" />
   <p class="">{block.subHeading}</p>
 </section>

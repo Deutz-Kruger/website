@@ -31,12 +31,12 @@ interface Props {
 }
 
 const { caseEntry } = Astro.props;
-const { client, groups } = caseEntry;
+const { client, groups, tags } = caseEntry;
 ---
 
 <Layout title={client}>
   <hr class="mb-4 lg:mb-6" />
   <main class="relative grid grid-cols-1 lg:grid-cols-4 lg:gap-6">
-    {groups.map((group) => <GroupRenderer group={group} />)}
+    {groups.map((group) => <GroupRenderer group={group} tags={tags} />)}
   </main>
 </Layout>
