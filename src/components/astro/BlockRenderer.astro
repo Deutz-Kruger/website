@@ -15,14 +15,19 @@ type Block = z.infer<typeof blocksUnion>;
 interface Props {
   block: Block;
   index: number;
+  tags: Array<string> | undefined;
 }
 
-const { block, index } = Astro.props;
+const { block, index, tags } = Astro.props;
 
 const loadingOrder = index < 4 ? "eager" : "lazy";
 ---
 
-{block._block === "title" && <TitleBlock block={block} index={index} />}
+{
+  block._block === "title" && (
+    <TitleBlock block={block} index={index} tags={tags} />
+  )
+}
 {
   block._block === "video" && (
     <VideoBlock block={block} loading={loadingOrder} index={index} />

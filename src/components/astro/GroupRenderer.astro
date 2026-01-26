@@ -9,15 +9,16 @@ export type Group = z.infer<typeof groupSchema>;
 
 interface Props {
   group: Group;
+  tags: Array<string> | undefined;
 }
 
-const { group } = Astro.props;
+const { group, tags } = Astro.props;
 ---
 
 <div class="mb-5 flex h-fit flex-col gap-3 lg:mb-0 lg:contents lg:gap-0">
   {
     group.blocks.map((block, idx) => (
-      <BlockRenderer block={block} index={idx} />
+      <BlockRenderer block={block} index={idx} tags={tags} />
     ))
   }
 </div>
