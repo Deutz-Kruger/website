@@ -17,7 +17,6 @@ interface Props {
 }
 
 const { block, className = "", tags } = Astro.props;
-console.log("tags", tags);
 const { layout } = block.base;
 const positioning = generateGridPosition(layout);
 ---

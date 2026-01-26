@@ -123,7 +123,6 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
         (entries) => {
           entries.forEach((entry) => {
             if (this.isMobile && entry.isIntersecting && !this.hasPlayed) {
-              console.log("entry", entry, entry.isIntersecting);
               this.playVideo();
               this.observer?.disconnect();
             }

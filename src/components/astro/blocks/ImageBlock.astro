@@ -21,10 +21,8 @@ interface Props {
 const { block, loading, className } = Astro.props;
 const { base, images } = block;
 const { layout, background } = base;
-console.log("layout", layout);
 const positioning = generateGridPosition(layout);
 const hasMultipleImages = images.length > 1;
-console.log("positioning", positioning);
 let dynamicSizes = "100vw";
 
 if (positioning.desktopSpan === 1) {
@@ -49,7 +47,7 @@ if (positioning.desktopSpan === 1) {
   <Background
     background={background}
     margin={positioning.margin}
-    className={cn("h-full w-fit lg:h-full lg:max-h-full", {
+    className={cn("h-full w-full lg:h-full lg:max-h-full lg:w-fit", {
       "flex justify-around gap-1": hasMultipleImages,
       "py-6 lg:px-12": positioning.desktopSpan < 2,
     })}
@@ -89,7 +87,7 @@ if (positioning.desktopSpan === 1) {
         <ImageWrapper
           loading={loading}
           src={images[0].src}
-          imgClassName="max-h-[33vh]"
+          imgClassName={cn({ "max-h-[33vh]": positioning.desktopSpan < 2 })}
           altText={images[0].alt}
           sizes={dynamicSizes}
         />
