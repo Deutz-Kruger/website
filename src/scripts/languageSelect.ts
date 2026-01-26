@@ -93,13 +93,13 @@ export const initLangSelect = () => {
   enClickHandler = () => {
     enElement.classList.remove("inactive-lang");
     deElement.classList.add("inactive-lang");
-    handleLanguageSwitch("en");
+    handleLanguageSwitch("de");
   };
 
   deClickHandler = () => {
     deElement.classList.remove("inactive-lang");
     enElement.classList.add("inactive-lang");
-    handleLanguageSwitch("de");
+    handleLanguageSwitch("en");
   };
 
   enElement.addEventListener("click", enClickHandler);
