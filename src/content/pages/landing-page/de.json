@@ -5,9 +5,9 @@
     "contact": "Want to discuss a potential project?\nContact us at hi@deutzkrueger.de"
   },
   "cases": [
-    "src/content/cases/bl-thermo.en.json",
-    "src/content/cases/skaut.en.json",
-    "src/content/cases/krumphof.en.json"
+    "src/content/cases/bl-thermo.de.json",
+    "src/content/cases/skaut.de.json",
+    "src/content/cases/krumphof.de.json"
   ],
   "services": [
     {
