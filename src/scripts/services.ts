@@ -1,5 +1,41 @@
 export const initServices = () => {
   const services = document.querySelectorAll<HTMLElement>(".service-card");
+  snapPositions();
+
+  window.addEventListener("resize", snapPositions);
+
+  services.forEach((card) => {
+    card.addEventListener("click", servicesClickHandler);
+  });
+};
+
+export const cleanUpServices = () => {
+  const services = document.querySelectorAll<HTMLElement>(".service-card");
+  services.forEach((card) => {
+    card.removeEventListener("click", servicesClickHandler);
+  });
+  window.removeEventListener("resize", snapPositions);
+};
+
+const servicesClickHandler = (e: Event) => {
+  if (!window.matchMedia("(width >= 1024px)").matches) return;
+
+  const clickedCard = e.currentTarget as HTMLElement;
+  const cards = document.querySelectorAll<HTMLElement>(".service-card");
+
+  if (clickedCard.classList.contains("is-active")) return;
+
+  cards.forEach((card) => {
+    card.classList.remove("is-active");
+  });
+  console.log("class removed");
+
+  clickedCard.classList.add("is-active");
+  console.log("class added");
+};
+
+const snapPositions = () => {
+  const services = document.querySelectorAll<HTMLElement>(".service-card");
 
   services.forEach((card) => {
     const placeholder = card.querySelector<HTMLElement>(
@@ -22,26 +58,5 @@ export const initServices = () => {
     animBG.style.height = `${placeholderRect.height}px`;
     animBG.style.left = `${offsetLeft}px`;
     animBG.style.top = `${offsetTop}px`;
-
-    const matchesScreen = window.matchMedia("(width >= 1024px)").matches;
-
-    if (matchesScreen) {
-      card.addEventListener("click", servicesClickHandler);
-    }
   });
-};
-
-const servicesClickHandler = (e: Event) => {
-  const clickedCard = e.currentTarget as HTMLElement;
-  const cards = document.querySelectorAll<HTMLElement>(".service-card");
-
-  if (clickedCard.classList.contains("is-active")) return;
-
-  cards.forEach((card) => {
-    card.classList.remove("is-active");
-  });
-  console.log("class removed");
-
-  clickedCard.classList.add("is-active");
-  console.log("class added");
 };
