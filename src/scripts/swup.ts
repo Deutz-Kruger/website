@@ -22,6 +22,7 @@ import {
 } from "./languageSelect";
 import { cleanUpLenis, initLenis } from "./lenis";
 import { cleanUpLogoSizer, initLogoSizer } from "./logoSizer";
+import { initServices } from "./services";
 
 const swup = new Swup({
   plugins: [
@@ -69,6 +70,7 @@ const init = () => {
   initLangSelect();
   initHeaderLogic();
   initLogoAnimation();
+  initServices();
 };
 
 const cleanUp = () => {

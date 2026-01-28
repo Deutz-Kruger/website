@@ -25,34 +25,19 @@ const { services } = Astro.props;
   </div>
 </section>
 
-<script>
-  const NUM_SERVICES = 3;
-  // const placeholders: Array<HTMLElement | null> = [];
-  // const animBGs: Array<HTMLElement | null> = [];
+<style is:global>
+  .service-card.is-active .service-animated-bg {
+    /* ...override the JS styles and fill the screen */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
 
-  for (let i = 0; i < NUM_SERVICES; i++) {
-    const placeholder = document.getElementById(`service-placeholder-${i}`);
-    const animBG = document.getElementById(`animated-background-${i}`);
-
-    if (!placeholder || !animBG) continue;
-
-    const container = animBG.offsetParent;
-
-    if (!container) continue;
-
-    const placeholderRect = placeholder.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-
-    if (!placeholderRect || !containerRect) continue;
-
-    const offsetTop = placeholderRect.top - containerRect.top;
-    const offsetLeft = placeholderRect.left - containerRect.left;
-
-    animBG.style.width = `${placeholderRect.width}px`;
-    animBG.style.height = `${placeholderRect.height}px`;
-    animBG.style.left = `${offsetLeft}px`;
-    animBG.style.top = `${offsetTop}px`;
-
-    console.log("Rect", placeholder?.getBoundingClientRect());
+    transition: all 0.4s ease-in-out;
   }
-</script>
+  .service-card.is-active .service-placeholder-bg {
+    width: 0px;
+    margin: 0px;
+    transition: all 0.25s ease-out;
+  }
+</style>
