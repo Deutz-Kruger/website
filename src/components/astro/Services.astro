@@ -26,21 +26,7 @@ const { services } = Astro.props;
 </section>
 
 <style is:global>
-  .service-card:first-child.is-active .service-animated-bg {
-    left: calc(-1 * var(--spacing-page-desktop)) !important;
-    width: calc(100% + var(--spacing-page-desktop)) !important;
-  }
-
-  .service-card:last-child.is-active .service-animated-bg {
-    width: calc(100% + var(--spacing-page-desktop)) !important;
-  }
-
-  .service-card.is-active .service-animated-bg {
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-
+  .service-animated-bg {
     transition: all 0.4s
       linear(
         0,
@@ -116,10 +102,8 @@ const { services } = Astro.props;
         1
       );
   }
-  .service-card.is-active .service-placeholder-bg {
-    width: 0px;
-    margin: 0px;
 
+  .service-placeholder-bg {
     transition: all 0.55s 0.15s
       linear(
         0,
@@ -194,5 +178,25 @@ const { services } = Astro.props;
         0.999,
         1
       );
+  }
+
+  .service-card:first-child.is-active .service-animated-bg {
+    left: calc(-1 * var(--spacing-page-desktop)) !important;
+    width: calc(100% + var(--spacing-page-desktop)) !important;
+  }
+
+  .service-card:last-child.is-active .service-animated-bg {
+    width: calc(100% + var(--spacing-page-desktop)) !important;
+  }
+
+  .service-card.is-active .service-animated-bg {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .service-card.is-active .service-placeholder-bg {
+    width: 0px;
+    margin: 0px;
   }
 </style>
