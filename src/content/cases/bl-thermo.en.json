@@ -47,10 +47,10 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/full_site_scroll_compressed.mp4",
+          "video": "/src/content/media/scroll_gradient2comp.mp4",
           "base": {
             "background": {
-              "background": "gradient",
+              "background": "none",
               "background_colors": [
                 "#FF0000",
                 "#AA5151"
