@@ -1,3 +1,5 @@
+import { setKeyword } from "@/stores/keywordStore";
+
 export const initServices = () => {
   const services = document.querySelectorAll<HTMLElement>(".service-card");
   snapPositions();
@@ -28,10 +30,12 @@ const servicesClickHandler = (e: Event) => {
   cards.forEach((card) => {
     card.classList.remove("is-active");
   });
-  console.log("class removed");
 
   clickedCard.classList.add("is-active");
-  console.log("class added");
+
+  const color = clickedCard.dataset.color;
+
+  if (color) setKeyword(color);
 };
 
 const snapPositions = () => {
