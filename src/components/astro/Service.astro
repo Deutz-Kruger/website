@@ -2,10 +2,15 @@
 import { type z } from "astro:content";
 
 import { servicesSchema } from "@/content/schemas/pageSchemas";
+import { cn } from "@/utils/cn";
 
-type Props = z.infer<typeof servicesSchema.element>;
+type ServiceProps = z.infer<typeof servicesSchema.element>;
 
-const { title, body } = Astro.props;
+interface Props extends ServiceProps {
+  idx: number;
+}
+
+const { title, body, idx } = Astro.props;
 
 let bgColorIcon = "#FFFFFF";
 
@@ -19,15 +24,25 @@ switch (title) {
   case "Development":
     bgColorIcon = "--color-development";
 }
+
+const even = idx % 2 !== 0;
 ---
 
 <div
-  class="min-h-70 lg:border-h lg:not-first:pl-6 lg:w-1/3 lg:pt-3 lg:even:border-x"
+  class={cn("min-h-70 lg:border-h lg:not-first:pl-6 lg:w-1/3 lg:pt-3", {
+    "lg:border-x": even,
+  })}
 >
   <hr class="mb-2 lg:mb-0 lg:hidden" />
-  <div class="flex items-center">
+  <div class="relative flex items-center overflow-hidden">
     <div
+      id={`service-placeholder-${idx}`}
       class="mr-3 grid h-6 w-8 lg:h-7 lg:w-9"
+    >
+    </div>
+    <div
+      id={`animated-background-${idx}`}
+      class="absolute z-0"
       style={`background: var(${bgColorIcon})`}
     >
     </div>

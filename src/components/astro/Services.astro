@@ -16,11 +16,43 @@ const { services } = Astro.props;
   <hr class="hidden lg:block" />
   <div class="lg:flex lg:min-h-[600px]">
     {
-      services.map((service) => {
+      services.map((service, idx) => {
         const { title, body, icon } = service;
 
-        return <Service title={title} body={body} icon={icon} />;
+        return <Service idx={idx} title={title} body={body} icon={icon} />;
       })
     }
   </div>
 </section>
+
+<script>
+  const NUM_SERVICES = 3;
+  // const placeholders: Array<HTMLElement | null> = [];
+  // const animBGs: Array<HTMLElement | null> = [];
+
+  for (let i = 0; i < NUM_SERVICES; i++) {
+    const placeholder = document.getElementById(`service-placeholder-${i}`);
+    const animBG = document.getElementById(`animated-background-${i}`);
+
+    if (!placeholder || !animBG) continue;
+
+    const container = animBG.offsetParent;
+
+    if (!container) continue;
+
+    const placeholderRect = placeholder.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    if (!placeholderRect || !containerRect) continue;
+
+    const offsetTop = placeholderRect.top - containerRect.top;
+    const offsetLeft = placeholderRect.left - containerRect.left;
+
+    animBG.style.width = `${placeholderRect.width}px`;
+    animBG.style.height = `${placeholderRect.height}px`;
+    animBG.style.left = `${offsetLeft}px`;
+    animBG.style.top = `${offsetTop}px`;
+
+    console.log("Rect", placeholder?.getBoundingClientRect());
+  }
+</script>
