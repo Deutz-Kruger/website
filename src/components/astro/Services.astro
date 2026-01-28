@@ -16,11 +16,187 @@ const { services } = Astro.props;
   <hr class="hidden lg:block" />
   <div class="lg:flex lg:min-h-[600px]">
     {
-      services.map((service) => {
+      services.map((service, idx) => {
         const { title, body, icon } = service;
 
-        return <Service title={title} body={body} icon={icon} />;
+        return <Service idx={idx} title={title} body={body} icon={icon} />;
       })
     }
   </div>
 </section>
+
+<style is:global>
+  .service-animated-bg {
+    transition: all 0.4s
+      linear(
+        0,
+        0.037,
+        0.101,
+        0.175,
+        0.248,
+        0.318,
+        0.383,
+        0.443,
+        0.495,
+        0.544,
+        0.589,
+        0.627,
+        0.664,
+        0.697,
+        0.726,
+        0.753,
+        0.777,
+        0.799,
+        0.818,
+        0.836,
+        0.852,
+        0.867,
+        0.88,
+        0.891,
+        0.902,
+        0.911,
+        0.92,
+        0.928,
+        0.935,
+        0.941,
+        0.947,
+        0.952,
+        0.957,
+        0.961,
+        0.965,
+        0.968,
+        0.971,
+        0.974,
+        0.977,
+        0.979,
+        0.981,
+        0.983,
+        0.984,
+        0.986,
+        0.987,
+        0.989,
+        0.99,
+        0.991,
+        0.992,
+        0.992,
+        0.993,
+        0.994,
+        0.994,
+        0.995,
+        0.996,
+        0.996,
+        0.996,
+        0.997,
+        0.997,
+        0.997,
+        0.998,
+        0.998,
+        0.998,
+        0.998,
+        0.998,
+        0.999,
+        0.999,
+        0.999,
+        0.999,
+        0.999,
+        1
+      );
+  }
+
+  .service-placeholder-bg {
+    transition: all 0.55s 0.15s
+      linear(
+        0,
+        0.037,
+        0.101,
+        0.175,
+        0.248,
+        0.318,
+        0.383,
+        0.443,
+        0.495,
+        0.544,
+        0.589,
+        0.627,
+        0.664,
+        0.697,
+        0.726,
+        0.753,
+        0.777,
+        0.799,
+        0.818,
+        0.836,
+        0.852,
+        0.867,
+        0.88,
+        0.891,
+        0.902,
+        0.911,
+        0.92,
+        0.928,
+        0.935,
+        0.941,
+        0.947,
+        0.952,
+        0.957,
+        0.961,
+        0.965,
+        0.968,
+        0.971,
+        0.974,
+        0.977,
+        0.979,
+        0.981,
+        0.983,
+        0.984,
+        0.986,
+        0.987,
+        0.989,
+        0.99,
+        0.991,
+        0.992,
+        0.992,
+        0.993,
+        0.994,
+        0.994,
+        0.995,
+        0.996,
+        0.996,
+        0.996,
+        0.997,
+        0.997,
+        0.997,
+        0.998,
+        0.998,
+        0.998,
+        0.998,
+        0.998,
+        0.999,
+        0.999,
+        0.999,
+        0.999,
+        0.999,
+        1
+      );
+  }
+
+  .service-card:first-child.is-active .service-animated-bg {
+    left: calc(-1 * var(--spacing-page-desktop)) !important;
+    width: calc(100% + var(--spacing-page-desktop)) !important;
+  }
+
+  .service-card:last-child.is-active .service-animated-bg {
+    width: calc(100% + var(--spacing-page-desktop)) !important;
+  }
+
+  .service-card.is-active .service-animated-bg {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .service-card.is-active .service-placeholder-bg {
+    width: 0px;
+    margin: 0px;
+  }
+</style>
