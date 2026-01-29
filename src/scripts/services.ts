@@ -8,6 +8,8 @@ export const initServices = () => {
 
   services.forEach((card) => {
     card.addEventListener("click", servicesClickHandler);
+    card.addEventListener("mouseover", servicesHoverHandler);
+    card.addEventListener("mouseleave", servicesLeaveHandler);
   });
 };
 
@@ -20,6 +22,32 @@ export const cleanUpServices = () => {
 };
 
 const servicesClickHandler = (e: Event) => {
+  if (!window.matchMedia("(width >= 1024px)").matches) return;
+
+  const clickedCard = e.currentTarget as HTMLElement;
+  const cards = document.querySelectorAll<HTMLElement>(".service-card");
+
+  if (clickedCard.classList.contains("is-active")) return;
+
+  cards.forEach((card) => {
+    card.classList.remove("is-active");
+  });
+
+  clickedCard.classList.add("is-active");
+
+  const color = clickedCard.dataset.color;
+
+  if (color) setKeyword(color);
+};
+
+const servicesLeaveHandler = () => {
+  const cards = document.querySelectorAll<HTMLElement>(".service-card");
+  cards.forEach((card) => {
+    card.classList.remove("is-active");
+  });
+};
+
+const servicesHoverHandler = (e: Event) => {
   if (!window.matchMedia("(width >= 1024px)").matches) return;
 
   const clickedCard = e.currentTarget as HTMLElement;
