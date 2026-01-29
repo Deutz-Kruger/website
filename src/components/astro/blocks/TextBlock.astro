@@ -35,12 +35,18 @@ const positioning = generateGridPosition(layout);
           --aspect-height: ${positioning.aspect.height}`}
 >
   <Background background={background}>
-    <p
+    <div
       class={cn("w-fit mt-2 lg:mt-0", {
         "lg:text-right": positioning.desktopStart % 2 === 0,
       })}
     >
-      {richText ? <RichText richText={richText} /> : text}
-    </p>
+      {
+        richText ? (
+          <RichText richText={richText} className="block-text-typo" />
+        ) : (
+          text
+        )
+      }
+    </div>
   </Background>
 </section>

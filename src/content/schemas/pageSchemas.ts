@@ -8,7 +8,8 @@ export const casePreviewSchema = z.array(z.string());
 export const servicesSchema = z.array(
   z.object({
     title: z.string(),
-    body: z.string(),
+    body: z.string().optional(),
+    bodyRich: z.string().optional(),
     icon: z.object({
       icon_logo: imageField,
       icon_color: z.string(),

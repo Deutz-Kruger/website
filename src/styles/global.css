@@ -226,12 +226,14 @@ pre {
 }
 
 .rich-text ul {
+  @apply mt-2 lg:mt-4;
   list-style-type: disc;
   list-style-position: outside;
   padding-left: 1rem;
 }
 
 .rich-text li {
-  padding-left: 0.25rem;
+  padding-left: 0.425rem;
+  margin-left: 0.5rem;
   width: 100%;
 }

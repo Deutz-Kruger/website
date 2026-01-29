@@ -12,14 +12,22 @@ interface Props {
 const { services } = Astro.props;
 ---
 
-<section class="h-full">
+<section>
   <hr class="hidden lg:block" />
   <div class="lg:flex lg:min-h-[600px]">
     {
       services.map((service, idx) => {
-        const { title, body, icon } = service;
+        const { title, body, icon, bodyRich } = service;
 
-        return <Service idx={idx} title={title} body={body} icon={icon} />;
+        return (
+          <Service
+            idx={idx}
+            title={title}
+            body={body}
+            bodyRich={bodyRich}
+            icon={icon}
+          />
+        );
       })
     }
   </div>

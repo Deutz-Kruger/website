@@ -1,17 +1,18 @@
 ---
 import { marked } from "marked";
 
+import { cn } from "@/utils/cn";
+
 interface Props {
   richText: string | undefined;
+  className?: string;
 }
 
-const { richText } = Astro.props;
-console.log("RichText.astro", richText);
+const { richText, className } = Astro.props;
+
 if (!richText) return;
 
 const innerHtml = marked.parse(richText);
-
-console.log("HTML", innerHtml);
 ---
 
-<div class="rich-text" set:html={innerHtml} />
+<div class={cn("rich-text", className)} set:html={innerHtml} />

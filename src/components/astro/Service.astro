@@ -4,13 +4,15 @@ import { type z } from "astro:content";
 import { servicesSchema } from "@/content/schemas/pageSchemas";
 import { cn } from "@/utils/cn";
 
+import RichText from "./util/RichText.astro";
+
 type ServiceProps = z.infer<typeof servicesSchema.element>;
 
 interface Props extends ServiceProps {
   idx: number;
 }
 
-const { title, body, idx } = Astro.props;
+const { title, body, idx, bodyRich } = Astro.props;
 
 let bgColorIcon = "#FFFFFF";
 
@@ -30,7 +32,7 @@ const even = idx % 2 !== 0;
 
 <div
   class={cn(
-    "service-card relative  min-h-70  lg:border-h lg:not-first:pl-6 lg:w-1/3 lg:pt-3 ",
+    "service-card relative flex flex-col min-h-70  lg:border-h lg:not-first:pl-6 lg:w-1/3 lg:pt-3 ",
     {
       "lg:border-x": even,
     },
@@ -47,9 +49,18 @@ const even = idx % 2 !== 0;
     </div>
     <h2 class="text-large md:text-larger z-10">{title}</h2>
   </div>
-  <p
-    class="text-normal md:text-medium xl:text-big z-10 mt-2 text-base leading-tight tracking-[-0.0175em] lg:pr-6 2xl:pr-9"
+  <div
+    class="text-normal md:text-medium xl:text-big z-10 mt-6 flex grow flex-col text-base leading-tight tracking-[-0.0175em] lg:mt-12 lg:pr-6 2xl:pr-9"
   >
-    {body}
-  </p>
+    {
+      bodyRich ? (
+        <RichText
+          richText={bodyRich}
+          className="flex flex-col gap-4 lg:gap-4 lg:[&>p]:min-h-41"
+        />
+      ) : (
+        body
+      )
+    }
+  </div>
 </div>
