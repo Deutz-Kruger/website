@@ -13,6 +13,7 @@
     {
       "title": "Branding",
       "body": "A strong visual identity is more than just a logo; it is a strategic asset. Corporate design systems are developed to translate company values into a coherent visual language. From typography to color palettes, every element is defined to ensure recognition and consistency across all physical and digital touchpoints.",
+      "bodyRich": "Visual identity is treated as a strategic asset. Comprehensive design systems are developed to translate company values into a coherent language, ensuring consistency across all physical and digital touchpoints.\n\n*   Logo Development\n    \n*   Corporate Identity (CI)\n    \n*   Design Systems & Guidelines\n    \n*   Print & Editorial Design",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/brand-icon.png",
@@ -23,7 +24,7 @@
     },
     {
       "title": "Design",
-      "body": "The design process covers the entire digital interface spectrum, ranging from corporate websites to complex software applications. Whether for a marketing landing page or an internal management tool, the focus remains on clarity and usability. Information is structured logically and translated into intuitive interfaces (UI) that guide the user efficiently to their goal.",
+      "bodyRich": "The design process covers the full digital spectrum, from corporate websites to complex software applications. Logical structures are translated into intuitive interfaces, prioritizing clarity and usability to guide the user efficiently.\n\n*   UI/UX Design\n    \n*   Web Design (Corporate & E-Commerce)\n    \n*   App & Dashboard Interfaces\n    \n*   Wireframing & Prototyping",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/design-icon.png",
@@ -34,7 +35,7 @@
     },
     {
       "title": "Development",
-      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "bodyRich": "Development is where strategy and aesthetics evolve into a high-performance product. We build scalable solutions that bring the design vision to life without compromise.\n\n*   Highly performant frontends\n    \n*   E-Commerce, CMS & other backends\n    \n*   Web Apps\n    \n*   Software solutions beyond the web",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/dev-icon.png",
