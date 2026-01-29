@@ -13,6 +13,22 @@ const { title, description = "Deutz & Krüger" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="preload"
+      href="/fonts/ArialRegular.woff"
+      as="font"
+      type="font/woff"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ArialItalic.woff"
+      as="font"
+      type="font/woff"
+      crossorigin
+    />
+
     <SeoLayout title={title} description={description} />
 
     <script src="@/scripts/backgroundColorSwitch.ts"></script>

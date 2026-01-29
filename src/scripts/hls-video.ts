@@ -1,4 +1,4 @@
-import Hls from "hls.js";
+import type HlsType from "hls.js";
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
@@ -15,7 +15,7 @@ sheet.replaceSync(`
   `);
 
 class HlsVideo extends HTMLElement {
-  private hls: Hls;
+  private hls: HlsType | null = null;
   private videoElement: HTMLVideoElement;
 
   static get observedAttributes() {
@@ -26,13 +26,6 @@ class HlsVideo extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: "open" });
 
-    this.hls = new Hls({
-      maxBufferSize: 1 * 1000 * 1000,
-      maxBufferLength: 1,
-      maxMaxBufferLength: 2,
-      enableWorker: false,
-      lowLatencyMode: true,
-    });
     this.videoElement = document.createElement("video");
 
     shadow.appendChild(this.videoElement);
@@ -61,15 +54,16 @@ class HlsVideo extends HTMLElement {
     }
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     const manifestUrl = this.getAttribute("src");
 
     this.updateAspectRatio();
     this.updatePoster();
 
-    if (manifestUrl && Hls.isSupported()) {
-      this.hls.loadSource(manifestUrl);
-      this.hls.attachMedia(this.videoElement);
+    if (!manifestUrl) return;
+
+    if (this.videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+      this.videoElement.src = manifestUrl;
       this.videoElement.addEventListener(
         "canplay",
         () => {
@@ -77,11 +71,30 @@ class HlsVideo extends HTMLElement {
         },
         { once: true },
       );
+    } else {
+      const { default: Hls } = await import("hls.js");
+      if (Hls.isSupported()) {
+        this.hls = new Hls({
+          maxBufferSize: 1 * 1000 * 1000,
+          maxBufferLength: 1,
+          maxMaxBufferLength: 2,
+          enableWorker: false,
+          lowLatencyMode: true,
+        });
+        this.hls.loadSource(manifestUrl);
+        this.hls.attachMedia(this.videoElement);
+        this.videoElement.addEventListener(
+          "canplay",
+          () => {
+            this.videoElement.play();
+          },
+          { once: true },
+        );
+      }
     }
   }
-
   disconnectedCallback() {
-    this.hls.destroy();
+    this.hls?.destroy();
   }
 
   attributeChangedCallback(name: string) {

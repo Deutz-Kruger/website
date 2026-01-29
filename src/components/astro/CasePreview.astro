@@ -35,7 +35,7 @@ function findFirstVideo(
 
 <section class="bigger relative pb-12 pt-12">
   {
-    resolvedCasePreviews.map((preview) => {
+    resolvedCasePreviews.map((preview, index) => {
       const { slug, case_preview, groups, tags } = preview.data;
       const titleBlockGroup = groups.find((group) =>
         group.blocks.find((block) => block._block === "title"),
@@ -46,6 +46,7 @@ function findFirstVideo(
       const firstVideo = findFirstVideo(groups);
 
       const { title, preview_image } = case_preview;
+      const isPriority = index < 2;
       return (
         <CasePreviewCard
           preview_image={preview_image}
@@ -54,6 +55,7 @@ function findFirstVideo(
           slug={slug}
           description={titleBlock ? titleBlock.subHeading : ""}
           tags={tags}
+          loading={isPriority ? "eager" : "lazy"}
         />
       );
     })

@@ -18,10 +18,18 @@ interface Props extends CasePreview {
   tags: Array<string> | undefined;
   description: string;
   preview_video?: VideoBlock;
+  loading?: "eager" | "lazy";
 }
 
-const { preview_image, title, slug, description, preview_video, tags } =
-  Astro.props;
+const {
+  preview_image,
+  title,
+  slug,
+  description,
+  preview_video,
+  tags,
+  loading = "lazy",
+} = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
 const videoPoster = preview_video
@@ -48,7 +56,7 @@ const videoPoster = preview_video
             src={preview_image.src}
             alt={preview_image.alt}
             class="h-full w-full object-contain lg:h-full lg:max-h-full"
-            loading="eager"
+            loading={loading}
           />
         </div>
       )
