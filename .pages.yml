@@ -325,6 +325,9 @@ components:
     - name: text
       label: Text
       type: text
+    - name: rich-text
+      label: Rich Text
+      type: rich-text
     - name: base
       component: base
 
