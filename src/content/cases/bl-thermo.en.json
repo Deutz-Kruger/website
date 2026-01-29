@@ -224,7 +224,6 @@
         },
         {
           "_block": "text",
-          "rich-text": "As BL thermodynamics is an internationally acting business, it was important to have an easy translation workflow which also allows for easily made changes. Due to the need for the existing host to be kept, the chosen tech-stack was:\n\n*   NextJS in SSG mode\n    \n*   TailwindCSS for styling\n    \n*   SanityCMS for content management",
           "base": {
             "background": {
               "background": "none"
@@ -266,32 +265,16 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/iPhone 16 - 1.png",
-              "alt": "iPhone 16 - 1"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 2.png",
-              "alt": "iPhone 16 - 2"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 3.png",
-              "alt": "iPhone 16 - 3"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 4.png",
-              "alt": "iPhone 16 - 4"
+              "src": "/src/content/media/blt_mobile_double.png",
+              "alt": "blt_mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "gradient",
-              "background_colors": [
-                "#D6E8FF",
-                "#053CA1"
-              ]
+              "background": "none"
             },
             "layout": {
-              "width": "4",
+              "width": "2",
               "position": "1"
             }
           }
