@@ -62,7 +62,26 @@ class HlsVideo extends HTMLElement {
 
     if (!manifestUrl) return;
 
-    if (this.videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+    const { default: Hls } = await import("hls.js");
+
+    if (Hls.isSupported()) {
+      this.hls = new Hls({
+        maxBufferSize: 1 * 1000 * 1000,
+        maxBufferLength: 1,
+        maxMaxBufferLength: 2,
+        enableWorker: false,
+        lowLatencyMode: true,
+      });
+      this.hls.loadSource(manifestUrl);
+      this.hls.attachMedia(this.videoElement);
+      this.videoElement.addEventListener(
+        "canplay",
+        () => {
+          this.videoElement.play();
+        },
+        { once: true },
+      );
+    } else if (this.videoElement.canPlayType("application/vnd.apple.mpegurl")) {
       this.videoElement.src = manifestUrl;
       this.videoElement.addEventListener(
         "canplay",
@@ -71,26 +90,6 @@ class HlsVideo extends HTMLElement {
         },
         { once: true },
       );
-    } else {
-      const { default: Hls } = await import("hls.js");
-      if (Hls.isSupported()) {
-        this.hls = new Hls({
-          maxBufferSize: 1 * 1000 * 1000,
-          maxBufferLength: 1,
-          maxMaxBufferLength: 2,
-          enableWorker: false,
-          lowLatencyMode: true,
-        });
-        this.hls.loadSource(manifestUrl);
-        this.hls.attachMedia(this.videoElement);
-        this.videoElement.addEventListener(
-          "canplay",
-          () => {
-            this.videoElement.play();
-          },
-          { once: true },
-        );
-      }
     }
   }
   disconnectedCallback() {
