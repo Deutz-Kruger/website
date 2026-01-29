@@ -117,6 +117,9 @@ content:
     - name: body
       label: Service Description
       type: text
+    - name: bodyRich
+      label: Service Description
+      type: text
     - name: icon
       label: Service Icon
       type: object
