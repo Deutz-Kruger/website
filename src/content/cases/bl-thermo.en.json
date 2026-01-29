@@ -224,7 +224,7 @@
         },
         {
           "_block": "text",
-          "text": "In exercitation ut cillum. Et officia aliqua labore. Ea qui ut cillum exercitation mollit pariatur dolore laboris ex irure pariatur. [DEV TEXT]",
+          "rich-text": "As BL thermodynamics is an internationally acting business, it was important to have an easy translation workflow which also allows for easily made changes. Due to the need for the existing host to be kept, the chosen tech-stack was:\n\n*   NextJS in SSG mode\n    \n*   TailwindCSS for styling\n    \n*   SanityCMS for content management",
           "base": {
             "background": {
               "background": "none"
