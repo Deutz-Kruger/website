@@ -119,7 +119,7 @@ content:
       type: text
     - name: bodyRich
       label: Service Description
-      type: text
+      type: rich-text
     - name: icon
       label: Service Icon
       type: object
