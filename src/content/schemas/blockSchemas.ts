@@ -28,7 +28,8 @@ export const imageBlock = z.object({
 
 export const textBlock = z.object({
   _block: z.literal("text"),
-  text: z.string(),
+  text: z.string().optional(),
+  "rich-text": z.string().optional(),
   base: baseBlock,
 });
 

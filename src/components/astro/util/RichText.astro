@@ -1,0 +1,17 @@
+---
+import { marked } from "marked";
+
+interface Props {
+  richText: string | undefined;
+}
+
+const { richText } = Astro.props;
+console.log("RichText.astro", richText);
+if (!richText) return;
+
+const innerHtml = marked.parse(richText);
+
+console.log("HTML", innerHtml);
+---
+
+<div class="rich-text" set:html={innerHtml} />

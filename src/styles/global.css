@@ -224,3 +224,14 @@ section[data-desktop-start] {
 pre {
   font-family: inherit;
 }
+
+.rich-text ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 1rem;
+}
+
+.rich-text li {
+  padding-left: 0.25rem;
+  width: 100%;
+}

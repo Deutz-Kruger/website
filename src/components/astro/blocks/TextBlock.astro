@@ -5,6 +5,7 @@ import { textBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
 
+import RichText from "../util/RichText.astro";
 import Background from "./utils/Background.astro";
 
 type TextBlock = z.infer<typeof textBlock>;
@@ -16,6 +17,8 @@ interface Props {
 const { block } = Astro.props;
 
 const { text, base } = block;
+const richText = block["rich-text"];
+
 const { layout, background } = base;
 const positioning = generateGridPosition(layout);
 ---
@@ -37,7 +40,7 @@ const positioning = generateGridPosition(layout);
         "lg:text-right": positioning.desktopStart % 2 === 0,
       })}
     >
-      {text}
+      {richText ? <RichText richText={richText} /> : text}
     </p>
   </Background>
 </section>
