@@ -3,9 +3,9 @@
   "lang": "en",
   "client": "BL thermodynamics",
   "tags": [
-    "NextJS",
-    "TailwindCSS",
-    "Sanity CMS"
+    "Web design",
+    "CMS",
+    "Frontend"
   ],
   "groups": [
     {
@@ -168,6 +168,19 @@
           }
         },
         {
+          "_block": "text",
+          "text": "The interface prioritizes clarity and structure. A reduced layout was chosen to frame the industrial content. Data is organized into expandable cards to minimize visual clutter. A fully responsive framework ensures engineering schematics remain legible on mobile devices.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "4"
+            }
+          }
+        },
+        {
           "_block": "image",
           "images": [
             {
@@ -210,6 +223,19 @@
           }
         },
         {
+          "_block": "text",
+          "text": "In exercitation ut cillum. Et officia aliqua labore. Ea qui ut cillum exercitation mollit pariatur dolore laboris ex irure pariatur. [DEV TEXT]",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        },
+        {
           "_block": "image",
           "images": [
             {
@@ -227,19 +253,6 @@
             "layout": {
               "width": "1",
               "position": "2"
-            }
-          }
-        },
-        {
-          "_block": "text",
-          "text": "The interface prioritizes clarity and structure. A reduced layout was chosen to frame the industrial content. Data is organized into expandable cards to minimize visual clutter. A fully responsive framework ensures engineering schematics remain legible on mobile devices.",
-          "base": {
-            "background": {
-              "background": "none"
-            },
-            "layout": {
-              "width": "2",
-              "position": "3"
             }
           }
         }
