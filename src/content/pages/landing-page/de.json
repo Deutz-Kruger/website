@@ -12,7 +12,7 @@
   "services": [
     {
       "title": "Branding",
-      "bodyRich": "Visuelle Identität wird als strategischer Wert begriffen. Umfassende Designsysteme übersetzen Unternehmenswerte in eine kohärente Sprache und sichern Konsistenz über alle analogen und digitalen Kontaktpunkte hinweg.",
+      "bodyRich": "Visuelle Identität wird als strategischer Wert begriffen. Umfassende Designsysteme übersetzen Unternehmenswerte in eine kohärente Sprache und sichern Konsistenz über alle analogen und digitalen Kontaktpunkte hinweg.\n\n*   Logo-Entwicklung\n    \n*   Corporate Identity (CI)\n    \n*   Design-Systeme & Guidelines\n    \n*   Print & Editorial Design",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/brand-icon.png",
@@ -23,7 +23,7 @@
     },
     {
       "title": "Design",
-      "body": "The design process covers the entire digital interface spectrum, ranging from corporate websites to complex software applications. Whether for a marketing landing page or an internal management tool, the focus remains on clarity and usability. Information is structured logically and translated into intuitive interfaces (UI) that guide the user efficiently to their goal.",
+      "bodyRich": "Der Designprozess deckt das gesamte digitale Spektrum ab, von der Unternehmenswebsite bis zur Softwareanwendung. Logische Strukturen werden in intuitive Interfaces übersetzt, wobei Klarheit und Usability stets im Fokus stehen.\n\n*   UI/UX Design\n    \n*   Web Design (Corporate & E-Commerce)\n    \n*   App- & Dashboard-Interfaces\n    \n*   Wireframing & Prototyping",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/design-icon.png",
