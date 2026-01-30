@@ -13,7 +13,7 @@ const { tags, className = "" } = Astro.props;
     <ul class={cn("mt-3 flex flex-wrap gap-3", className)}>
       {tags.map((tag) => {
         return (
-          <li class="bg-(--theme-color)/75 rounded-nav px-2 py-0.5 transition-colors duration-500">
+          <li class="bg-(--theme-color) rounded-nav px-2 py-0.5 transition-colors duration-500">
             {tag}
           </li>
         );
