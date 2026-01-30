@@ -255,6 +255,19 @@
               "position": "2"
             }
           }
+        },
+        {
+          "_block": "text",
+          "text": "Aufgrund der internationalen Ausrichtung war eine flexible Multi-Language-Pipeline erforderlich. Sanity CMS und NextJS wurden implementiert, um skalierbare Übersetzungen und effiziente Inhaltsverwaltung zu gewährleisten.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
         }
       ]
     },
