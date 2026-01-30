@@ -2,6 +2,11 @@
   "slug": "/skaut",
   "lang": "de",
   "client": "Skaut",
+  "tags": [
+    "UI/UX Design",
+    "Web Application",
+    "Corporate Identity"
+  ],
   "groups": [
     {
       "_block": "group",
