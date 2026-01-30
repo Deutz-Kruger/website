@@ -12,7 +12,7 @@
   "services": [
     {
       "title": "Branding",
-      "body": "A strong visual identity is more than just a logo; it is a strategic asset. Corporate design systems are developed to translate company values into a coherent visual language. From typography to color palettes, every element is defined to ensure recognition and consistency across all physical and digital touchpoints.",
+      "bodyRich": "Visuelle Identität wird als strategischer Wert begriffen. Umfassende Designsysteme übersetzen Unternehmenswerte in eine kohärente Sprache und sichern Konsistenz über alle analogen und digitalen Kontaktpunkte hinweg.",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/brand-icon.png",
