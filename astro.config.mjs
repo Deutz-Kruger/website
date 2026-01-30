@@ -9,7 +9,7 @@ import { defineConfig } from "astro/config";
 import robotsTxt from "astro-robots-txt";
 // import Sonda from "sonda/astro";
 import { loadEnv } from "vite";
-import glsl from "vite-plugin-glslify-inject";
+// import glsl from "vite-plugin-glslify-inject";
 
 const { SITE_URL, APP_ENV } = loadEnv(
   process.env.NODE_ENV || "development",
@@ -46,31 +46,9 @@ export default defineConfig({
   vite: {
     plugins: [
       // @ts-expect-error Compat issues with vite 7 and plugin typing
-      glsl({
-        include: "./src/shaders/**/*.(vert|frag|glsl)",
-        exclude: "node_modules/**",
-        types: { alias: "@shaders", library: "threejs" },
-      }),
-      // @ts-expect-error Compat issues with vite 7 and plugin typing
       tailwindcss(),
     ],
-    optimizeDeps: {
-      // exclude: ["vite-plugin-glslify-inject/injectConstants"],
-      include: [
-        "three",
-        "@react-three/fiber",
-        "@react-three/drei",
-        "@thi.ng/color",
-        "@thi.ng/math",
-        "@thi.ng/vectors",
-      ],
-    },
-    resolve: {
-      alias: {
-        "@": fileURLToPath(new URL("./src", import.meta.url)),
-        "@shaders": "/src/shaders/",
-      },
-    },
+
     ssr: {
       external: ["node:path", "node:crypto", "node:fs/promises", "node:url"],
     },
@@ -84,9 +62,6 @@ export default defineConfig({
           "**/.astro/**",
           "**/src/content/media/**/*.{mp4,webm,mov}", // Ignore video files
         ],
-      },
-      fs: {
-        strict: false,
       },
     },
     build: {

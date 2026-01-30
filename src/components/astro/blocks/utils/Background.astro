@@ -1,7 +1,7 @@
 ---
 import type { z } from "astro:content";
 
-import { BackgroundGradient } from "@/components/react/BackgroundGradient";
+// import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { backgroundField } from "@/content/schemas/fieldSchemas";
 import { cn } from "@/utils/cn";
 
@@ -22,15 +22,7 @@ const staticCol = background?.background_colors
 
 <>
   {
-    background.background === "gradient" ? (
-      <BackgroundGradient
-        className={cn(className, "padding-background w-full")}
-        client:visible
-        gradientCols={background.background_colors}
-      >
-        <slot />
-      </BackgroundGradient>
-    ) : background.background === "static" ? (
+    background.background === "static" ? (
       <div
         style={`background: ${staticCol};`}
         class={cn(className, "padding-background h-full w-full", {

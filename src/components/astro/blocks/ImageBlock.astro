@@ -6,7 +6,6 @@ import type { imageBlock } from "@/content/schemas/blockSchemas";
 import { cn } from "@/utils/cn";
 import { generateGridPosition } from "@/utils/layoutCalc";
 
-import Carousel from "../Carousel.astro";
 import Background from "./utils/Background.astro";
 
 type ImageBlock = z.infer<typeof imageBlock>;
@@ -52,46 +51,12 @@ if (positioning.desktopSpan === 1) {
       "py-6 lg:px-12": positioning.desktopSpan < 2,
     })}
   >
-    {
-      hasMultipleImages ? (
-        <>
-          <Carousel className="w-full md:hidden">
-            {images.map((image) => (
-              <li class="glide__slide">
-                <ImageWrapper
-                  loading={loading}
-                  src={image.src}
-                  imgClassName="max-h-[33vh] md:max-h-[50vh] h-full w-full object-contain"
-                  altText={image.alt}
-                  sizes={dynamicSizes}
-                />
-              </li>
-            ))}
-          </Carousel>
-
-          <div class="hidden w-full justify-around gap-1 md:flex">
-            {images.map((image) => (
-              <div class="flex-1">
-                <ImageWrapper
-                  loading={loading}
-                  src={image.src}
-                  imgClassName="max-h-[33vh]"
-                  altText={image.alt}
-                  sizes={dynamicSizes}
-                />
-              </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <ImageWrapper
-          loading={loading}
-          src={images[0].src}
-          imgClassName={cn({ "max-h-[33vh]": positioning.desktopSpan < 2 })}
-          altText={images[0].alt}
-          sizes={dynamicSizes}
-        />
-      )
-    }
+    <ImageWrapper
+      loading={loading}
+      src={images[0].src}
+      imgClassName={cn({ "max-h-[33vh]": positioning.desktopSpan < 2 })}
+      altText={images[0].alt}
+      sizes={dynamicSizes}
+    />
   </Background>
 </section>

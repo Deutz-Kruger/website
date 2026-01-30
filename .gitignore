@@ -36,3 +36,10 @@ src/placeholder
 .rules
 
 src/content_backup
+
+r3f
+react
+Carousel.astro
+carousel.ts
+shaders
+gradients.ts

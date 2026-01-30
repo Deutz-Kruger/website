@@ -5,8 +5,6 @@ import SwupPreloadPlugin from "@swup/preload-plugin";
 import SwupScriptsPlugin from "@swup/scripts-plugin";
 import Swup from "swup";
 
-import { cleanUpCarousel, initCarousel } from "@/scripts/carousel";
-
 import {
   cleanUpColorSwitcher,
   initColor,
@@ -64,7 +62,6 @@ const init = () => {
 
   initColorSwitcher();
   initColor();
-  initCarousel();
   initLenis();
   initLogoSizer();
   initLangSelect();
@@ -75,7 +72,6 @@ const init = () => {
 
 const cleanUp = () => {
   cleanUpColorSwitcher();
-  cleanUpCarousel();
   cleanUpHeaderLogic();
   cleanUpLenis();
   cleanUpLogoAnimation();

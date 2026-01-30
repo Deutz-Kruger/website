@@ -36,8 +36,6 @@
     "@astrojs/react": "^4.4.2",
     "@glidejs/glide": "^3.7.1",
     "@nanostores/persistent": "^1.2.0",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.4.0",
     "@swup/debug-plugin": "^4.1.0",
     "@swup/head-plugin": "^2.3.1",
     "@swup/preload-plugin": "^3.2.11",
@@ -59,8 +57,7 @@
     "react-dom": "^19.2.0",
     "swup": "^4.8.2",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.17",
-    "three": "^0.180.0"
+    "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.0",
@@ -71,7 +68,6 @@
     "@types/ffprobe": "^1.1.8",
     "@types/ffprobe-static": "^2.0.3",
     "@types/glidejs__glide": "^3.6.6",
-    "@types/three": "^0.180.0",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
     "dotenv": "^17.2.3",
@@ -84,8 +80,6 @@
     "ffprobe": "^1.1.2",
     "ffprobe-static": "^3.1.0",
     "globals": "^16.5.0",
-    "glsl-noise": "^0.0.0",
-    "glslify": "^7.1.1",
     "hono": "^4.10.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
