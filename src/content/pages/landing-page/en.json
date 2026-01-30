@@ -12,7 +12,6 @@
   "services": [
     {
       "title": "Branding",
-      "body": "A strong visual identity is more than just a logo; it is a strategic asset. Corporate design systems are developed to translate company values into a coherent visual language. From typography to color palettes, every element is defined to ensure recognition and consistency across all physical and digital touchpoints.",
       "bodyRich": "Visual identity is treated as a strategic asset. Comprehensive design systems are developed to translate company values into a coherent language, ensuring consistency across all physical and digital touchpoints.\n\n*   Logo Development\n    \n*   Corporate Identity (CI)\n    \n*   Design Systems & Guidelines\n    \n*   Print & Editorial Design",
       "icon": {
         "icon_logo": {
@@ -35,7 +34,7 @@
     },
     {
       "title": "Development",
-      "bodyRich": "Development is where strategy and aesthetics evolve into a high-performance product. We build scalable solutions that bring the design vision to life without compromise.\n\n*   Highly performant frontends\n    \n*   E-Commerce, CMS & other backends\n    \n*   Web Apps\n    \n*   Software solutions beyond the web",
+      "bodyRich": "Development is where strategy and aesthetics evolve into a high-performance product,building scalable solutions that bring the design vision to life without compromise.\n\n*   Highly performant frontends\n    \n*   E-Commerce, CMS & other backends\n    \n*   Web Apps\n    \n*   Software solutions beyond the web",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/dev-icon.png",
