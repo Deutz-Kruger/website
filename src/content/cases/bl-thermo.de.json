@@ -1,12 +1,12 @@
 {
   "slug": "/bl-thermo",
-  "lang": "de",
+  "lang": "en",
   "client": "BL thermodynamics",
   "tags": [
     "Web design",
     "Development",
     "NextJS",
-    "Sanity CMS"
+    "SanityCMS"
   ],
   "groups": [
     {
@@ -16,7 +16,7 @@
         {
           "_block": "title",
           "title": "BL thermodynamics Website Re-Design",
-          "subHeading": "BL thermodynamics ist auf Ammoniak-Absorptionskältemaschinen und Wärmepumpen spezialisiert. Ziel des Redesigns war es, komplexe Industrietechnik in einen modernen, zugänglichen Webauftritt zu übersetzen. Die Plattform wurde entwickelt, um die Langlebigkeit und Nachhaltigkeit der Technologie hervorzuheben und das Unternehmen als zukunftsorientierten Akteur im Energiesektor zu positionieren.",
+          "subHeading": "BL Thermodynamics specializes in advanced ammonia absorption chillers and heat pumps. The objective of the redesign was to translate heavy industrial engineering into a modern, accessible digital presence. The platform was developed to highlight the longevity and sustainability of the technology, positioning the company as a forward-thinking leader in the energy sector.",
           "base": {
             "background": {
               "background": "none"
@@ -35,7 +35,7 @@
       "blocks": [
         {
           "_block": "video",
-          "video": "/src/content/media/key_visual_compressed.mp4",
+          "video": "/src/content/media/blt_title2.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -48,10 +48,10 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/full_site_scroll_compressed.mp4",
+          "video": "/src/content/media/scroll_gradient2comp.mp4",
           "base": {
             "background": {
-              "background": "gradient",
+              "background": "none",
               "background_colors": [
                 "#FF0000",
                 "#AA5151"
@@ -65,7 +65,7 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/concept_to_reality_compressed.mp4",
+          "video": "/src/content/media/c2r2.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -78,7 +78,7 @@
         },
         {
           "_block": "text",
-          "text": "Das visuelle System leitet sich vom Querschnitt von Heizungsrohren ab. Ein abstraktes Raster aus Kreisen visualisiert durch Farbwechsel Heiz- und Kühlzustände. Diese Elemente ordnen sich dynamisch zu spezifischen Icons an und führen intuitiv durch die Seitenstruktur.",
+          "text": "The visual system derives from the cross-section of heating pipes. An abstract grid of circles shifts color to visualize heating and cooling states. These elements dynamically rearrange to form specific icons, acting as an intuitive, animated guide through the site structure.",
           "base": {
             "background": {
               "background": "none"
@@ -109,7 +109,7 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/mission_compressed.mp4",
+          "video": "/src/content/media/blt_mission2_2.mp4",
           "base": {
             "background": {
               "background": "none"
@@ -130,13 +130,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/blt_dropdown.png",
+              "src": "/src/content/media/blt_service3.png",
               "alt": "services"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
@@ -151,13 +151,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/blt_dropdown_mobile.png",
+              "src": "/src/content/media/blt_service_mobile4.png",
               "alt": "services mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
@@ -170,7 +170,7 @@
         },
         {
           "_block": "text",
-          "text": "Das Interface priorisiert Klarheit und Struktur. Ein reduziertes Layout wurde gewählt, um die industriellen Inhalte zu rahmen. Daten werden in ausklappbaren Elementen organisiert, um visuelle Unruhe zu vermeiden. Ein responsives Framework sichert die Lesbarkeit der technischen Schemata auf mobilen Geräten.",
+          "text": "The interface prioritizes clarity and structure. A reduced layout was chosen to frame the industrial content. Data is organized into expandable cards to minimize visual clutter. A fully responsive framework ensures engineering schematics remain legible on mobile devices.",
           "base": {
             "background": {
               "background": "none"
@@ -185,13 +185,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/infocard_collapsed.png",
+              "src": "/src/content/media/blt_showmore3.png",
               "alt": "infocard collapsed"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
@@ -206,13 +206,13 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/infocard_expanded.png",
+              "src": "/src/content/media/blt_showmore_extendet3.png",
               "alt": "infocard expanded"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
@@ -224,16 +224,28 @@
           }
         },
         {
+          "_block": "text",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        },
+        {
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/infocard_mobile.png",
+              "src": "/src/content/media/blt_showmore_mobile3.png",
               "alt": "infocard mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "static",
+              "background": "none",
               "background_colors": [
                 "#EBEBEB"
               ]
@@ -254,33 +266,53 @@
           "_block": "image",
           "images": [
             {
-              "src": "/src/content/media/iPhone 16 - 1.png",
-              "alt": "iPhone 16 - 1"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 2.png",
-              "alt": "iPhone 16 - 2"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 3.png",
-              "alt": "iPhone 16 - 3"
-            },
-            {
-              "src": "/src/content/media/iPhone 16 - 4.png",
-              "alt": "iPhone 16 - 4"
+              "src": "/src/content/media/blt_mobile_double.png",
+              "alt": "blt_mobile"
             }
           ],
           "base": {
             "background": {
-              "background": "gradient",
-              "background_colors": [
-                "#D6E8FF",
-                "#053CA1"
-              ]
+              "background": "none"
             },
             "layout": {
-              "width": "4",
+              "width": "2",
               "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/blt_mobile_double2.png",
+              "alt": "blt_mobile"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/construction_site.png",
+              "alt": "construction_site"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
             }
           }
         }
