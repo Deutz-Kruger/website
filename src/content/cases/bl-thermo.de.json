@@ -170,7 +170,7 @@
         },
         {
           "_block": "text",
-          "text": "Das Interface priorisiert Klarheit und technische Präzision. Ein Layout mit viel Weißraum spiegelt den High-Tech-Charakter der Branche wider. Komplexe Daten werden in ausklappbaren Cards und Modals organisiert, um Überladung zu vermeiden. Das responsive System garantiert, dass technische Schemata auch mobil lesbar bleiben.",
+          "text": "Das Interface priorisiert Klarheit und Struktur. Ein reduziertes Layout wurde gewählt, um die industriellen Inhalte zu rahmen. Daten werden in ausklappbaren Elementen organisiert, um visuelle Unruhe zu vermeiden. Ein responsives Framework sichert die Lesbarkeit der technischen Schemata auf mobilen Geräten.",
           "base": {
             "background": {
               "background": "none"
