@@ -46,8 +46,8 @@
   --tracking-heading-mobile: -0.01em;
   --leading-heading-mobile: 1.075;
 
-  --tracking-text-mobile: -0.05em;
-  --leading-text-mobile: 1.225;
+  --tracking-text-mobile: 0em;
+  --leading-text-mobile: 1.5;
 
   /* CasePreview */
   --tracking-case-mobile: -0.04rem;
@@ -109,11 +109,6 @@
     }
   }
 
-  ::not.inactive-lang svg {
-    fill-opacity: 1;
-    scale: 1;
-  }
-
   /* Padding Utils */
   .padding-nav-item {
     @apply px-2.5 py-0.5 md:px-3 md:py-1;
@@ -148,14 +143,6 @@
     & p {
       /*Font Sizes*/
       @apply text-normal md:text-medium xl:text-big;
-      /* Font Spacing */
-      @apply tracking-text-mobile leading-text-mobile xl:tracking-text-desktop xl:leading-text-desktop;
-    }
-  }
-
-  .block-text-typo {
-    & p {
-      @apply text-normal;
       /* Font Spacing */
       @apply tracking-text-mobile leading-text-mobile xl:tracking-text-desktop xl:leading-text-desktop;
     }
