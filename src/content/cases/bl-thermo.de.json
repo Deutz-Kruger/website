@@ -3,8 +3,9 @@
   "lang": "de",
   "client": "BL thermodynamics",
   "tags": [
+    "Web design",
+    "Development",
     "NextJS",
-    "TailwindCSS",
     "Sanity CMS"
   ],
   "groups": [
