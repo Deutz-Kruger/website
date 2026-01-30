@@ -34,7 +34,7 @@
     },
     {
       "title": "Development",
-      "body": "I was in charge of designing and developing the graphical user interface (GUI), with a focus on tailoring the features to fit the specific needs and workflows of the agileo team.",
+      "bodyRich": "In der Entwicklung werden Strategie und Ästhetik zu einem leistungsstarken Produkt vereint. Skalierbare Lösungen, die die Vision ohne Kompromisse zum Leben erwecken.\n\n*   Highly performant frontends\n    \n*   E-Commerce, CMS & other backends\n    \n*   Web apps\n    \n*   Software solutions beyond the web",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/dev-icon.png",
