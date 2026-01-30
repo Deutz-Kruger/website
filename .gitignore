@@ -43,3 +43,6 @@ Carousel.astro
 carousel.ts
 shaders
 gradients.ts
+
+/admin-dashboard/delete-videos.bash
+/admin-dashboard/delte-images.bash

@@ -36,6 +36,8 @@ jobs:
           touch .env
           echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
           echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
+          echo APP_ENV=production >> .env
+          echo SITE_URL=https://deutzkrueger.de >> .env
           cat .env
 
       # - name: Cache media-sync manifest
