@@ -110,7 +110,7 @@
         },
         {
           "_block": "video",
-          "video": "/src/content/media/krumphof_flyer22.mp4",
+          "video": "/src/content/media/krumphof_flyer.mp4",
           "base": {
             "background": {
               "background": "none"
