@@ -43,7 +43,9 @@ function checkOverlap() {
         el.tagName === "H4" ||
         el.tagName === "H5" ||
         el.tagName === "H6" ||
-        el.tagName === "SPAN";
+        el.tagName === "SPAN" ||
+        el.tagName === "UL" ||
+        el.classList.contains("richt-text");
       const isNotLogo = !el.closest("#fixed-logo-container");
       const computedStyle = window.getComputedStyle(el);
       const isVisible =

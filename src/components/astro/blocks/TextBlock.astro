@@ -40,7 +40,7 @@ const positioning = generateGridPosition(layout);
         "lg:text-right": positioning.desktopStart % 2 === 0,
       })}
     >
-      {richText ? <RichText richText={richText} /> : text}
+      {richText ? <RichText richText={richText} /> : <p>{text}</p>}
     </div>
   </Background>
 </section>

@@ -6,8 +6,9 @@ const appEnv = import.meta.env.APP_ENV || "development";
 
 const allowIndexing = appEnv === "production";
 const robotsContent = allowIndexing ? "index, follow" : "noindex, nofollow";
-
-const { title, description = "Deutz & Krüger" } = Astro.props;
+const DEFAULT_DESCRIPTION =
+  "Manuel Krüger & Marvin Deutz: A Berlin-based duo connecting clarity in design with creativity in technology to build brands and digital experiences.";
+const { title, description = DEFAULT_DESCRIPTION } = Astro.props;
 
 const currentLocale = Astro.currentLocale || "en";
 const ogLocale = currentLocale === "de" ? "de_DE" : "en_US";
@@ -122,7 +123,7 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
         },
         sameAs: [
           // "https://www.linkedin.com/company/deutz-krueger",
-          // "https://github.com/deutz-krueger",
+          "https://github.com/deutz-kruger",
         ],
       },
       {
