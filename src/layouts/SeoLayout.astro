@@ -9,7 +9,12 @@ const robotsContent = allowIndexing ? "index, follow" : "noindex, nofollow";
 
 const { title, description = "Deutz & Krüger" } = Astro.props;
 
-const isIndexPage = Astro.url.pathname === "/en" || "/de";
+const currentLocale = Astro.currentLocale || "en";
+const ogLocale = currentLocale === "de" ? "de_DE" : "en_US";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isIndexPage =
+  currentPath === "/" || currentPath === "/en" || currentPath === "/de";
 
 const DEFAULT_TITLE = "Deutz & Krüger";
 
@@ -41,7 +46,7 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
     optional: {
       description,
       siteName: DEFAULT_TITLE,
-      locale: "en_US",
+      locale: ogLocale,
     },
   }}
   twitter={{
@@ -58,7 +63,8 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
       { name: "author", content: "Deutz & Krüger" },
       {
         name: "keywords",
-        content: "astro, web development, javascript, typescript, modern web",
+        content:
+          "Web Agency Berlin, Webagentur Berlin, Web Design, UI/UX, Web Development, Astro, React, Digitalagentur, Deutz & Krüger, Wordpress, E-Commerce, Webentwicklung",
       },
       { name: "googlebot", content: robotsContent },
       { name: "theme-color", content: "#000000" },
@@ -92,3 +98,44 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
 />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}/#organization`,
+        name: "Deutz & Krüger",
+        url: siteUrl,
+        logo: {
+          "@type": "ImageObject",
+          url: `${siteUrl}/web-app-manifest-512x512.png`,
+          width: 512,
+          height: 512,
+        },
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Berlin",
+          addressCountry: "DE",
+        },
+        sameAs: [
+          // "https://www.linkedin.com/company/deutz-krueger",
+          // "https://github.com/deutz-krueger",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        url: siteUrl,
+        name: "Deutz & Krüger",
+        description: description,
+        publisher: {
+          "@id": `${siteUrl}/#organization`,
+        },
+        inLanguage: currentLocale,
+      },
+    ],
+  })}
+/>
