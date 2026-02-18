@@ -108,6 +108,24 @@
           }
         },
         {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/blt_mockup.jpg",
+              "alt": "blt_mockup"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
           "_block": "video",
           "video": "/src/content/media/blt_mission2_2.mp4",
           "base": {
