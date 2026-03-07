@@ -15,7 +15,7 @@
         {
           "_block": "title",
           "title": "Skaut - Backoffice Ticketing System",
-          "subHeading": "SKAUT fungiert als internes Ticketing- und Managementsystem für das agileo-Team. Die Architektur orientiert sich an internen Prozessen und deckt Funktionen von der Bestandsverwaltung bis zur Problembehebung ab. Das System wurde entwickelt, um spezifische Arbeitsabläufe durch einen maßgeschneiderten Funktionsumfang abzubilden.",
+          "subHeading": "SKAUT fungiert als internes Ticketing- und Managementsystem für das agileo-Team. Die Architektur orientiert sich an internen Prozessen und deckt Funktionen von der Bestandsverwaltung bis zur Problembehebung ab. Das System wurde entwickelt, um spezifische Arbeitsabläufe durch einen maßgeschneiderten Funktionsumfang abzubilden. Test",
           "base": {
             "background": {
               "background": "none"
