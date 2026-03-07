@@ -15,7 +15,7 @@
         {
           "_block": "title",
           "title": "Skaut - Backoffice Ticketing System",
-          "subHeading": "test",
+          "subHeading": "SKAUT is an in-house ticketing and management system, aligning internal processes from asset tracking to issue resolution. Its customized feature set supports specific workflows, ensuring the software adapts to the team's requirements.",
           "base": {
             "background": {
               "background": "none"
