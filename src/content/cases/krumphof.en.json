@@ -122,6 +122,24 @@
           }
         },
         {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/flyer_mockup2.jpg",
+              "alt": "krumphof_mockup"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
           "_block": "text",
           "text": "A strict grid system was established for promotional materials to organize dense pricing and schedule information. Fine geometric lines were introduced as structural elements, referencing archery targets. This layout ensures key data is immediately accessible while maintaining a clean visual hierarchy.",
           "base": {
