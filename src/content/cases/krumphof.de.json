@@ -122,6 +122,24 @@
           }
         },
         {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/flyer_mockup.jpg",
+              "alt": "krumphof_mockup"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
           "_block": "text",
           "text": "Ein strenges Rastersystem strukturiert die Printmedien. Geometrische Linien referenzieren die Präzision des Bogenschießens und gliedern die Inhalte für eine schnelle Erfassbarkeit.",
           "base": {
