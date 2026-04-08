@@ -8,7 +8,9 @@ const defaultLocale = i18n?.defaultLocale ?? "en";
 export const onRequest = defineMiddleware((context, next) => {
   if (context.url.pathname !== "/") return next();
 
-  const langCookie = context.request.headers.get("cookie")?.match(/lang=(\w+)/);
+  const langCookie = context.request.headers
+    .get("cookie")
+    ?.match(/(?:^|;\s*)lang=([A-Za-z-]+)/);
 
   if (langCookie && locales?.includes(langCookie[1])) {
     const chosenLang = langCookie[1];
@@ -23,4 +25,6 @@ export const onRequest = defineMiddleware((context, next) => {
       return context.redirect("/" + lang);
     }
   }
+
+  return context.redirect("/" + defaultLocale);
 });
