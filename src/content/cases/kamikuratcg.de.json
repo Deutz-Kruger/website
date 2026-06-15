@@ -39,6 +39,24 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/Kamikura_type.png",
+              "alt": "Kamikura Logo"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
         }
       ]
     }
