@@ -227,6 +227,24 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/kamikura_stationary-1.jpg",
+              "alt": "kamikura stationary"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
         }
       ]
     }
