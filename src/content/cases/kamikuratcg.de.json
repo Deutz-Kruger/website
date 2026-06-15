@@ -215,6 +215,18 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "text",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
         }
       ]
     }
