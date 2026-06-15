@@ -171,6 +171,19 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "text",
+          "text": "Auch die analogen Anwendungen wurden aus dem gleichen System heraus gestaltet. Business Cards, Versandzettel, Packaging Design und weitere Drucksorten führen die visuelle Sprache des Shops konsequent weiter.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
         }
       ]
     }
