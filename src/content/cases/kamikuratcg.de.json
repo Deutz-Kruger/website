@@ -114,6 +114,19 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_category.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
         }
       ]
     }
