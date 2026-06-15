@@ -101,6 +101,19 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "text",
+          "text": "Für die Website wurde ein ruhiges, produktorientiertes Design entwickelt, das die Welt von KamikuraTCG trägt, ohne den Shop zu überladen. Die Shopify-Integration bildet das technische Fundament für Produktpflege, Warenkorb, Checkout und einen skalierbaren Shopbetrieb.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
         }
       ]
     }
