@@ -22,6 +22,25 @@
           }
         }
       ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Content",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_Banner.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        }
+      ]
     }
   ],
   "case_preview": {
