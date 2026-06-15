@@ -197,6 +197,24 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/kamikura_mysterpack.jpg",
+              "alt": "kamikura mystery pack"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
         }
       ]
     }
