@@ -88,6 +88,19 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "text",
+          "text": "Das Logo verbindet die Figur eines Komainu mit der Formensprache eines Drachen. Die metallische Anmutung und die starke Rahmung erinnern an seltene Karten, Siegel und alte Spielgrafiken, während die reduzierte Ausarbeitung das Zeichen in einen zeitgemäßen Kontext übersetzt.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
         }
       ]
     }
