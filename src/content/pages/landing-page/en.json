@@ -6,13 +6,14 @@
   },
   "cases": [
     "src/content/cases/bl-thermo.en.json",
+    "src/content/cases/kamikuratcg.en.json",
     "src/content/cases/skaut.en.json",
     "src/content/cases/krumphof.en.json"
   ],
   "services": [
     {
       "title": "Branding",
-      "bodyRich": "Visual identity is treated as a strategic asset. Comprehensive design systems are developed to translate company values into a coherent language, ensuring consistency across all physical and digital touchpoints.\n\n*   Logo Development\n    \n*   Corporate Identity (CI)\n    \n*   Design Systems & Guidelines\n    \n*   Print & Editorial Design",
+      "bodyRich": "Visual identity is treated as a strategic asset. Comprehensive design systems are developed to translate company values into a coherent language, ensuring consistency across all physical and digital touchpoints.\n\n- Logo Development\n- Corporate Identity (CI)\n- Design Systems & Guidelines\n- Print & Editorial Design\n\n",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/brand-icon.png",
@@ -23,7 +24,7 @@
     },
     {
       "title": "Design",
-      "bodyRich": "The design process covers the full digital spectrum, from corporate websites to complex software applications. Logical structures are translated into intuitive interfaces, prioritizing clarity and usability to guide the user efficiently.\n\n*   UI/UX Design\n    \n*   Web Design (Corporate & E-Commerce)\n    \n*   App & Dashboard Interfaces\n    \n*   Wireframing & Prototyping",
+      "bodyRich": "The design process covers the full digital spectrum, from corporate websites to complex software applications. Logical structures are translated into intuitive interfaces, prioritizing clarity and usability to guide the user efficiently.\n\n- UI/UX Design\n- Web Design (Corporate & E-Commerce)\n- App & Dashboard Interfaces\n- Wireframing & Prototyping\n\n",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/design-icon.png",
@@ -34,7 +35,7 @@
     },
     {
       "title": "Development",
-      "bodyRich": "Development is where strategy and aesthetics evolve into a high-performance product,building scalable solutions that bring the vision to life without compromise.\n\n*   Highly performant frontends\n    \n*   E-Commerce, CMS & other backends\n    \n*   Web Apps\n    \n*   Software solutions beyond the web",
+      "bodyRich": "Development is where strategy and aesthetics evolve into a high-performance product,building scalable solutions that bring the vision to life without compromise.\n\n- Highly performant frontends\n- E-Commerce, CMS & other backends\n- Web Apps\n- Software solutions beyond the web\n\n",
       "icon": {
         "icon_logo": {
           "src": "/src/content/media/dev-icon.png",
