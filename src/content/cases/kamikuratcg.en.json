@@ -1,0 +1,71 @@
+{
+  "slug": "/kamikuratcg",
+  "lang": "de",
+  "client": "KamikuraTCG",
+  "groups": [
+    {
+      "_block": "group",
+      "group_title": "Case title",
+      "blocks": [
+        {
+          "_block": "title",
+          "title": "KamikuraTCG Branding & E-Commerce",
+          "subHeading": "KamikuraTCG ist ein österreichischer Online-Shop für Trading Card Games, japanische Sammelprodukte und die Kultur dahinter. Für den Launch entstand ein Markenauftritt zwischen moderner E-Commerce-Klarheit und der Nostalgie klassischer Sammelkarten.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_block": "group",
+      "group_title": "Content",
+      "blocks": [
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_Banner.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/Kamikura_type.png",
+              "alt": "Kamikura Logo"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "case_preview": {
+    "title": "KamikuraTCG ist ein österreichischer Online-Shop für Trading Card Games, japanische Sammelprodukte und die Kultur dahinter. Für den Launch entstand ein Markenauftritt zwischen moderner E-Commerce-Klarheit und der Nostalgie klassischer Sammelkarten.",
+    "preview_image": {
+      "src": "/src/content/media/Kamikura_Banner-image.png",
+      "alt": "Kamikura_logo"
+    }
+  }
+}
