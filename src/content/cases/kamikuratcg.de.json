@@ -140,6 +140,19 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/kamikura_mobile.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
         }
       ]
     }
