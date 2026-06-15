@@ -57,6 +57,24 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/Kamikura_outline.png",
+              "alt": "Kamikura outline"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
         }
       ]
     }
