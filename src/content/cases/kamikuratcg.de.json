@@ -75,6 +75,19 @@
               "position": "3"
             }
           }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_Header.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
         }
       ]
     }
