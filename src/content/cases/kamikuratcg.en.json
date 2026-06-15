@@ -57,6 +57,194 @@
               "position": "1"
             }
           }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/Kamikura_outline.png",
+              "alt": "Kamikura outline"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_Header.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "Das Logo verbindet die Figur eines Komainu mit der Formensprache eines Drachen. Die metallische Anmutung und die starke Rahmung erinnern an seltene Karten, Siegel und alte Spielgrafiken, während die reduzierte Ausarbeitung das Zeichen in einen zeitgemäßen Kontext übersetzt.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "Für die Website wurde ein ruhiges, produktorientiertes Design entwickelt, das die Welt von KamikuraTCG trägt, ohne den Shop zu überladen. Die Shopify-Integration bildet das technische Fundament für Produktpflege, Warenkorb, Checkout und einen skalierbaren Shopbetrieb.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_category.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/Kamikura_new.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/kamikura_mobile.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/Kamikura_business.jpg",
+              "alt": "kamikura business card"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "text": "Auch die analogen Anwendungen wurden aus dem gleichen System heraus gestaltet. Business Cards, Versandzettel, Packaging Design und weitere Drucksorten führen die visuelle Sprache des Shops konsequent weiter.",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "video",
+          "video": "/src/content/media/kamikura_mysterypack-animation.mp4",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/kamikura_mysterpack.jpg",
+              "alt": "kamikura mystery pack"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "2",
+              "position": "3"
+            }
+          }
+        },
+        {
+          "_block": "text",
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "1"
+            }
+          }
+        },
+        {
+          "_block": "image",
+          "images": [
+            {
+              "src": "/src/content/media/kamikura_stationary-1.jpg",
+              "alt": "kamikura stationary"
+            }
+          ],
+          "base": {
+            "background": {
+              "background": "none"
+            },
+            "layout": {
+              "width": "1",
+              "position": "3"
+            }
+          }
         }
       ]
     }
