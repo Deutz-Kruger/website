@@ -104,14 +104,14 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
     }
 
     private setupVideoHover() {
-      this.videoElement.addEventListener("mouseenter", () => {
+      this.parentElement?.addEventListener("mouseenter", () => {
         if (!this.isMobile && this.hasPlayed) {
           this.videoElement.loop = true;
           this.videoElement.play().catch(console.warn);
         }
       });
 
-      this.videoElement.addEventListener("mouseleave", () => {
+      this.parentElement?.addEventListener("mouseleave", () => {
         if (!this.isMobile) {
           this.videoElement.loop = false;
         }
