@@ -27,6 +27,18 @@ content:
     options:
       multiple: true
       creatable: true
+      values: [
+        Web Design, 
+        Development, 
+        NextJS, 
+        SanityCMS, 
+        UI/UX Design, 
+        Web App, 
+        Corporate Identity,
+        Print Design,
+        Shopify,
+        E-Commerce
+        ]
 
   - name: groups
     label: Block Groups
