@@ -7,11 +7,9 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import robotsTxt from "astro-robots-txt";
-// import Sonda from "sonda/astro";
 import { loadEnv } from "vite";
-// import glsl from "vite-plugin-glslify-inject";
 
-const { SITE_URL, APP_ENV } = loadEnv(
+const { APP_ENV } = loadEnv(
   process.env.NODE_ENV || "development",
   process.cwd(),
   "",
@@ -19,7 +17,7 @@ const { SITE_URL, APP_ENV } = loadEnv(
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE_URL || "https://deutzkrueger.de",
+  site: "https://deutzkrueger.de",
   i18n: {
     locales: ["en", "de"],
     defaultLocale: "en",
@@ -33,6 +31,13 @@ export default defineConfig({
       changefreq: "monthly",
       priority: 0.7,
       lastmod: new Date(),
+      i18n: {
+        defaultLocale: "en",
+        locales: {
+          en: "en-US",
+          de: "de-DE",
+        },
+      },
     }),
     robotsTxt({
       policy:
@@ -41,7 +46,6 @@ export default defineConfig({
           : [{ userAgent: "*", disallow: "/" }],
     }),
     react(),
-    // Sonda(),
   ],
   vite: {
     plugins: [
