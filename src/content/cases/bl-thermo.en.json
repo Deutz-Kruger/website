@@ -3,10 +3,10 @@
   "lang": "en",
   "client": "BL thermodynamics",
   "tags": [
-    "Web design",
     "Development",
     "NextJS",
-    "SanityCMS"
+    "SanityCMS",
+    "Web Design"
   ],
   "groups": [
     {
