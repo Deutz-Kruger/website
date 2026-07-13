@@ -76,6 +76,6 @@ This script builds the project and then deploys it using `wrangler`.
 - **Formatting**: Prettier is used for code formatting. Run `pnpm format` to format the entire codebase.
 - **Type Checking**: TypeScript is used for type safety. Run `pnpm type-check` to check for type errors.
 - **Pre-Commit Hooks**: Husky and lint-staged are set up to automatically lint and format files before committing.
-- **Media Synchronization**: A custom script `media-sync/sync.ts` is used to synchronize media files. It can be run with `pnpm sync-media`.
+- **Media Synchronization**: `media-sync/cli.ts` reconciles local media with tagged Cloudflare Images and Stream inventory. Run it with `pnpm sync-media`.
 - **Content Management**: All content is managed in the `src/content` directory. The structure and schema for the content are defined in `src/content/schemas`.
 - **Styling**: Use Tailwind CSS utility classes for styling. Global styles are in `src/styles/global.css`.

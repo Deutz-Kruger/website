@@ -25,6 +25,9 @@ pnpm-debug.log*
 
 backup.pages.yml
 manifest.json
+src/generated/media-manifest.json
+media-sync/legacy-media-audit.json
+media-sync/legacy-media-cleanup-*.json
 
 src/placeholder
 
@@ -43,6 +46,3 @@ Carousel.astro
 carousel.ts
 shaders
 gradients.ts
-
-/admin-dashboard/delete-videos.bash
-/admin-dashboard/delete-images.bash

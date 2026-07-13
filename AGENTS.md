@@ -23,10 +23,14 @@ pnpm check                       # Run lint, format check, and type-check
 # Utilities
 pnpm reset:cache                 # Clear .astro, .cache, .wrangler, dist folders
 pnpm sync-media                  # Sync media files to Cloudflare
-pnpm admin                       # Run admin dashboard server
+pnpm sync-media:prune            # Prune managed stale media after deploy
+pnpm sync-media:audit            # Report untagged legacy media
+pnpm sync-media:cleanup-legacy   # Dry-run approved legacy cleanup
+pnpm test:media                  # Run media sync tests
 ```
 
-No test framework is currently configured in this project.
+Media-sync tests use Node's built-in test runner through `tsx`. No general
+frontend test framework is configured.
 
 ---
 
