@@ -73,8 +73,11 @@ media-sync/           # Media processing pipeline
     "format:check": "prettier --check .",
     "type-check": "astro check",
     "prepare": "husky",
-    "sync-media": "git pull && tsx ./media-sync/sync.ts",
-    "admin": "tsx ./admin-dashboard/server.ts",
+    "sync-media": "tsx ./media-sync/cli.ts sync",
+    "sync-media:prune": "tsx ./media-sync/cli.ts prune",
+    "sync-media:audit": "tsx ./media-sync/cli.ts audit",
+    "sync-media:cleanup-legacy": "tsx ./media-sync/cli.ts cleanup-legacy",
+    "test:media": "tsx --test ./media-sync/**/*.test.ts",
     "reset:cache": "rm -rf .astro .cache .wrangler dist"
   },
   "dependencies": {
@@ -124,7 +127,6 @@ media-sync/           # Media processing pipeline
     "globals": "^16.4.0",
     "glsl-noise": "^0.0.0",
     "glslify": "^7.1.1",
-    "hono": "^4.10.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
@@ -137,7 +139,6 @@ media-sync/           # Media processing pipeline
     "vite": "^7.1.12",
     "vite-plugin-glslify-inject": "^1.1.2",
     "wrangler": "^4.45.0",
-    "xxhash-wasm": "^1.1.0",
     "zod": "^4.1.12"
   }
 }

@@ -1,22 +1,22 @@
-name: Build & Deploy
+name: Build, Preview & Deploy
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-    paths-ignore:
-      - ".github/**"
-  workflow_call:
+
+permissions:
+  contents: read
 
 concurrency:
-  group: deploy
-  cancel-in-progress: true
+  group: media-deploy-${{ github.event_name == 'push' && 'production' || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
 
 jobs:
   build_deploy:
     environment: CLOUDFLARE
-    name: Build & Deploy Project
+    name: ${{ github.event_name == 'push' && 'Production deploy' || 'Preview deploy' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,32 +31,66 @@ jobs:
           # cache: "pnpm"
       - run: pnpm install
 
-      - name: "Create .env file"
-        run: |
-          touch .env
-          echo CLOUDFLARE_ACCOUNT_ID=${{ vars.CLOUDFLARE_ACCOUNT_ID }} >> .env
-          echo CLOUDFLARE_MEDIA_API_TOKEN=${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }} >> .env
-          echo APP_ENV=production >> .env
-          echo SITE_URL=https://deutzkrueger.de >> .env
-          cat .env
-
-      # - name: Cache media-sync manifest
-      #   id: cache-manifest
-      #   uses: actions/cache@v4
-      #   with:
-      #     key: ${{ runner.os }}-sync-${{ hashFiles('./src/content/media/**') }}
-      #     path: |
-      #       ./media-sync/manifest.json
-
       - name: Sync media files
         run: pnpm sync-media
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_MEDIA_API_TOKEN: ${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }}
 
       - name: Build project
         run: pnpm run build
+        env:
+          APP_ENV: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+          SITE_URL: https://deutzkrueger.de
 
-      - name: Deploy
+      - name: Upload preview Worker version
+        if: github.event_name == 'workflow_dispatch'
+        id: preview
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: ./dist
+          wranglerVersion: "4.50.0"
+          workingDirectory: .
+          command: versions upload --config wrangler.jsonc --preview-alias run-${{ github.run_id }}
+
+      - name: Publish preview details
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.deployment-url }}
+        run: |
+          if [ -z "$PREVIEW_URL" ]; then
+            echo "Wrangler did not return a preview URL." >&2
+            exit 1
+          fi
+
+          echo "### Cloudflare preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "[$PREVIEW_URL]($PREVIEW_URL)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "This run uploaded a Worker version only. Production traffic was not changed, and media pruning was skipped." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Smoke test preview
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.deployment-url }}
+        run: >-
+          curl --fail --show-error --silent --location
+          --retry 5 --retry-delay 2 --output /dev/null "$PREVIEW_URL/"
+
+      - name: Deploy to production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.50.0"
+          workingDirectory: .
+          command: deploy --config wrangler.jsonc
+
+      - name: Prune stale managed media
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: pnpm sync-media:prune
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_MEDIA_API_TOKEN: ${{ secrets.CLOUDFLARE_MEDIA_API_TOKEN }}

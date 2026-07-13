@@ -1,80 +1,155 @@
-import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { createReadStream } from "node:fs";
+import { basename, extname, relative, resolve, sep } from "node:path";
 
 import ffprobe from "ffprobe";
 import ffprobeStatic from "ffprobe-static";
+import { glob } from "glob";
 import sharp from "sharp";
-import xxhash from "xxhash-wasm";
 
-const { h64Raw } = await xxhash();
+import type { LocalMediaFile, MediaType } from "./schema";
 
-import { extname } from "node:path";
+const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".svg"]);
+const VIDEO_EXTENSIONS = new Set([".mp4", ".webm"]);
 
-import type { MediaType } from "./schema";
+export const DEFAULT_MEDIA_ROOT = resolve("./src/content/media");
+export const DEFAULT_PROJECT_ROOT = resolve(".");
 
-const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".svg"];
-const VIDEO_EXTENSIONS = [".mp4", ".webm"];
+const normalizePath = (path: string) => path.split(sep).join("/");
 
-/**
- * Determines the media type of a file based on its extension.
- * @param filePath - The path to the file.
- * @returns The media type ('image', 'video', or 'unknown').
- */
-const getMediaType = (filePath: string): MediaType => {
-  const extension = extname(filePath);
-  if (IMAGE_EXTENSIONS.includes(extension)) return "image";
-  if (VIDEO_EXTENSIONS.includes(extension)) return "video";
-  return "unknown";
+const getMediaType = (filePath: string): MediaType | undefined => {
+  const extension = extname(filePath).toLowerCase();
+  if (IMAGE_EXTENSIONS.has(extension)) return "image";
+  if (VIDEO_EXTENSIONS.has(extension)) return "video";
+  return undefined;
 };
 
-/**
- * Generates a 64-bit XXH64 hash for the content of a given file.
- * @param filePath - The path to the file.
- * @returns A promise that resolves to the hash as a string.
- */
-const generateFileHash = async (file: Buffer): Promise<string> => {
-  // const file = await readFile(filePath, "utf-8");
-  const uInt8arr = new Uint8Array(file);
-  const hash = h64Raw(uInt8arr);
-  return hash.toString();
+const isDotFile = (relativePath: string) =>
+  normalizePath(relativePath)
+    .split("/")
+    .some((part) => part.startsWith("."));
+
+/** Generates a SHA-256 digest without buffering the entire media file. */
+export const generateSha256 = async (filePath: string): Promise<string> => {
+  const hash = createHash("sha256");
+  for await (const chunk of createReadStream(filePath)) {
+    hash.update(new Uint8Array(chunk as Uint8Array));
+  }
+  return hash.digest("hex");
 };
 
-/**
- * Generates metadata for a given media file, including its hash, media type, and dimensions (if applicable).
- *
- * @param filePath - The path to the media file.
- * @returns A promise that resolves to an object containing the file's hash, media type, and optional width and height.
- *          - `hash`: The XXH64 hash of the file content.
- *          - `mediaType`: The determined media type ('image', 'video', or 'unknown').
- *          - `width`: The width of the media, if available (for images and videos).
- *          - `height`: The height of the media, if available (for images and videos).
- */
-export const generateMetaData = async (filePath: string) => {
-  const mediaType = getMediaType(filePath);
-  const file = await readFile(filePath);
-  const hash = await generateFileHash(file);
-  try {
-    if (mediaType === "image") {
-      const metaData = await sharp(file).metadata();
-      const { width, height } = metaData;
-      return { hash, mediaType, width, height };
+/** Runs asynchronous work with a fixed concurrency limit. */
+export const mapConcurrent = async <T, R>(
+  values: T[],
+  concurrency: number,
+  worker: (value: T, index: number) => Promise<R>,
+): Promise<R[]> => {
+  const results = new Array<R>(values.length);
+  let nextIndex = 0;
+
+  const runWorker = async () => {
+    while (nextIndex < values.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await worker(values[index], index);
     }
-    if (mediaType === "video") {
-      const metaData = await ffprobe(filePath, { path: ffprobeStatic.path });
-      const videoStream = metaData.streams.find(
-        (s) => s.codec_type === "video",
-      );
-      if (videoStream) {
-        return {
-          hash,
-          mediaType,
-          width: videoStream.width,
-          height: videoStream.height,
-        };
-      }
-    }
-  } catch (error) {
-    console.error(`Failed to generate metadata for ${filePath}:`, error);
+  };
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, values.length) }, runWorker),
+  );
+  return results;
+};
+
+const inspectFile = async (
+  absolutePath: string,
+  sourcePath: string,
+): Promise<LocalMediaFile> => {
+  const type = getMediaType(absolutePath);
+  if (!type) {
+    throw new Error(`Unsupported media file: ${sourcePath}`);
   }
 
-  return { hash, mediaType, width: undefined, height: undefined };
+  const sha256 = await generateSha256(absolutePath);
+
+  if (type === "image") {
+    const metadata = await sharp(absolutePath).metadata();
+    if (!metadata.width || !metadata.height) {
+      throw new Error(`Image dimensions unavailable: ${sourcePath}`);
+    }
+    return {
+      absolutePath,
+      sourcePath,
+      sha256,
+      type,
+      width: metadata.width,
+      height: metadata.height,
+    };
+  }
+
+  const metadata = await ffprobe(absolutePath, { path: ffprobeStatic.path });
+  const videoStream = metadata.streams.find(
+    (stream) => stream.codec_type === "video",
+  );
+  if (!videoStream?.width || !videoStream.height) {
+    throw new Error(`Video dimensions unavailable: ${sourcePath}`);
+  }
+
+  const duration = videoStream.duration
+    ? Number.parseFloat(videoStream.duration)
+    : undefined;
+
+  return {
+    absolutePath,
+    sourcePath,
+    sha256,
+    type,
+    width: videoStream.width,
+    height: videoStream.height,
+    duration: Number.isFinite(duration) ? duration : undefined,
+  };
+};
+
+/** Scans supported local media and returns deterministic metadata. */
+export const scanLocalMedia = async (options?: {
+  mediaRoot?: string;
+  projectRoot?: string;
+  concurrency?: number;
+}): Promise<LocalMediaFile[]> => {
+  const mediaRoot = resolve(options?.mediaRoot ?? DEFAULT_MEDIA_ROOT);
+  const projectRoot = resolve(options?.projectRoot ?? DEFAULT_PROJECT_ROOT);
+  const relativePaths = await glob("**/*", {
+    cwd: mediaRoot,
+    dot: true,
+    nodir: true,
+  });
+
+  const visiblePaths = relativePaths
+    .filter((path) => !isDotFile(path))
+    .sort((a, b) => a.localeCompare(b));
+
+  const unsupported = visiblePaths.filter(
+    (path) => !getMediaType(resolve(mediaRoot, path)),
+  );
+  if (unsupported.length > 0) {
+    throw new Error(
+      `Unsupported files in media directory:\n${unsupported.join("\n")}`,
+    );
+  }
+
+  return mapConcurrent(
+    visiblePaths,
+    options?.concurrency ?? 4,
+    async (path) => {
+      const absolutePath = resolve(mediaRoot, path);
+      const sourcePath = normalizePath(relative(projectRoot, absolutePath));
+      return inspectFile(absolutePath, sourcePath);
+    },
+  );
+};
+
+/** Returns possible legacy upload names for a source file. */
+export const getLegacyRemoteNames = (sourcePath: string): string[] => {
+  const name = basename(sourcePath);
+  return [...new Set([name, name.replace(" ", "_")])];
 };

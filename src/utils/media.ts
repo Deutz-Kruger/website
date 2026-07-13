@@ -1,44 +1,34 @@
-import manifest from "../../media-sync/manifest.json";
-import type { ManifestEntry } from "../../media-sync/sync.ts";
+import type { Manifest, ManifestEntry } from "../../media-sync/schema.ts";
 
 const CLOUDFLARE_STREAM_URL =
   "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
 
-/**
- * Retrieves media data from the manifest based on the provided source path.
- * The source path is sanitized to remove leading/trailing slashes before lookup.
- *
- * @param src - The source path of the media file (e.g., "/src/content/media/image.png").
- * @returns The ManifestEntry object for the given media, or undefined if not found.
- */
+const manifestModules = import.meta.glob<{ default: Manifest }>(
+  "../generated/media-manifest.json",
+  { eager: true },
+);
+const manifest = Object.values(manifestModules)[0]?.default ?? {};
+
+/** Returns generated Cloudflare media data for a local source path. */
 export const getMedia = (src: string): ManifestEntry => {
-  const sanitizedPath = src.replace(/^\/|\/$/g, "");
-  const mediaData = (manifest as Record<string, ManifestEntry>)[sanitizedPath];
-  return mediaData;
+  const sanitizedPath = src.replace(/^\/+|\/+$/g, "");
+  const media = manifest[sanitizedPath];
+  if (!media) {
+    throw new Error(
+      `Media manifest entry missing for "${src}". Run "pnpm sync-media" first.`,
+    );
+  }
+  return media;
 };
 
-/**
- * Generates a Cloudflare Stream video player URL for a given video ID.
- * The URL includes parameters for autoplay, muting, no controls, and looping.
- *
- * @param id - The unique ID (UID) of the video on Cloudflare Stream.
- * @returns The full URL to the Cloudflare Stream iframe player.
- */
+/** Generates a Cloudflare Stream player URL for a video ID. */
 export const getVideoPlayerUrl = (id: string) => {
   const encodedId = encodeURIComponent(id);
   return `${CLOUDFLARE_STREAM_URL}/${encodedId}/iframe?autoplay=true&muted=true&controls=false&loop=true`;
 };
 
-/**
- * Generates a Cloudflare Stream poster image URL for a video source path.
- * Uses first frame (time=0s) at 720p resolution (1280x720).
- *
- * @param src - The source path of the video file (e.g., "/src/content/media/video.mp4").
- * @returns The full URL to the Cloudflare Stream thumbnail/poster image.
- */
+/** Generates a Cloudflare Stream poster URL for a local video source path. */
 export const getVideoPoster = (src: string): string => {
-  const mediaEntry = getMedia(src);
-  const videoId = mediaEntry.id;
-  const encodedId = encodeURIComponent(videoId);
+  const encodedId = encodeURIComponent(getMedia(src).id);
   return `${CLOUDFLARE_STREAM_URL}/${encodedId}/thumbnails/thumbnail.jpg?time=0s&width=1280&height=720`;
 };
