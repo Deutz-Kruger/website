@@ -2,7 +2,6 @@
 import { fileURLToPath, URL } from "node:url";
 
 import cloudflare from "@astrojs/cloudflare";
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -29,8 +28,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       changefreq: "monthly",
+      filter: (page) => new URL(page).pathname !== "/",
       priority: 0.7,
-      lastmod: new Date(),
       i18n: {
         defaultLocale: "en",
         locales: {
@@ -45,7 +44,6 @@ export default defineConfig({
           ? [{ userAgent: "*", allow: "/" }]
           : [{ userAgent: "*", disallow: "/" }],
     }),
-    react(),
   ],
   vite: {
     plugins: [

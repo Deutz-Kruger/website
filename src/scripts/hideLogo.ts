@@ -1,18 +1,36 @@
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import {
+  NO_PREFERENCE_MOTION_QUERY,
+  prefersReducedMotion,
+} from "@/utils/motion";
 import { throttle } from "@/utils/throttle";
-
-gsap.registerPlugin(ScrollTrigger);
 
 let logoContainer: HTMLElement | null = null;
 let logoElement: HTMLElement | null = null;
 let isLogoObscured = false;
 let checkOverlapThrottled: (() => void) | null = null;
+let isCleaningUp = false;
+let motionMatchMedia: ReturnType<typeof gsap.matchMedia> | null = null;
 
 const BLUR_AMOUNT = 4; // Pixels
 const SCALE_AMOUNT = 0.8; // Factor
 const ANIMATION_DURATION = 0.2;
+
+const removeOverlapListeners = () => {
+  if (!checkOverlapThrottled) return;
+
+  window.removeEventListener("scroll", checkOverlapThrottled);
+  window.removeEventListener("resize", checkOverlapThrottled);
+  checkOverlapThrottled = null;
+};
+
+const resetLogoImmediately = () => {
+  if (!logoElement) return;
+
+  gsap.killTweensOf(logoElement);
+  gsap.set(logoElement, { filter: "blur(0px)", scale: 1 });
+};
 
 /**
  * Checks if a text element from the main content is overlapping the fixed logo.
@@ -85,6 +103,8 @@ function checkOverlap() {
  * Initializes the logo animation by setting up the scroll listener.
  */
 export function initLogoAnimation() {
+  if (motionMatchMedia) return;
+
   logoContainer = document.getElementById("fixed-logo-container");
   if (!logoContainer) {
     console.warn(
@@ -94,37 +114,63 @@ export function initLogoAnimation() {
   }
   logoElement = logoContainer.querySelector("a"); // Assuming the 'a' tag within is the animated element
 
+  if (!logoElement) {
+    console.warn(
+      "Fixed logo element not found. Animation will not initialize.",
+    );
+    return;
+  }
+
   // Initial / base state
+  gsap.killTweensOf(logoElement);
   gsap.set(logoElement, { filter: "blur(0px)", scale: 1 });
 
-  checkOverlapThrottled = throttle(checkOverlap, 100);
+  motionMatchMedia = gsap.matchMedia();
+  motionMatchMedia.add(NO_PREFERENCE_MOTION_QUERY, () => {
+    checkOverlapThrottled = throttle(checkOverlap, 100);
 
-  window.addEventListener("scroll", checkOverlapThrottled);
-  window.addEventListener("resize", checkOverlapThrottled);
-  checkOverlapThrottled(); // Initial check
+    window.addEventListener("scroll", checkOverlapThrottled);
+    window.addEventListener("resize", checkOverlapThrottled);
+    checkOverlapThrottled();
+
+    return () => {
+      removeOverlapListeners();
+      isLogoObscured = false;
+
+      if (!isCleaningUp) {
+        resetLogoImmediately();
+      }
+    };
+  });
 }
 
 /**
  * Cleans up the logo animation by removing the scroll listener.
  */
 export function cleanUpLogoAnimation() {
-  if (checkOverlapThrottled) {
-    window.removeEventListener("scroll", checkOverlapThrottled);
-    window.removeEventListener("resize", checkOverlapThrottled);
-  }
+  isCleaningUp = true;
+  motionMatchMedia?.revert();
+  motionMatchMedia = null;
+  isCleaningUp = false;
+  removeOverlapListeners();
+
   // Reset state
   isLogoObscured = false;
   // Ensure logo is reset if animation was active (e.g., during swup transition)
   if (logoElement) {
-    gsap.to(logoElement, {
-      duration: 0.3,
-      filter: "blur(0px)",
-      scale: 1,
-      ease: "power2.out",
-      overwrite: true, // Ensure any ongoing animation is stopped
-    });
+    gsap.killTweensOf(logoElement);
+    if (prefersReducedMotion()) {
+      gsap.set(logoElement, { filter: "blur(0px)", scale: 1 });
+    } else {
+      gsap.to(logoElement, {
+        duration: 0.3,
+        filter: "blur(0px)",
+        scale: 1,
+        ease: "power2.out",
+        overwrite: true, // Ensure any ongoing animation is stopped
+      });
+    }
   }
   logoContainer = null;
   logoElement = null;
-  checkOverlapThrottled = null;
 }

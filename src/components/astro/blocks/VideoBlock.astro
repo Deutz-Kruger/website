@@ -13,12 +13,10 @@ type CaseVideoBlock = z.infer<typeof videoBlock>;
 
 interface Props {
   block: CaseVideoBlock;
-  loading: string;
   className?: string;
-  index: number;
 }
 
-const { block, loading, className = "" } = Astro.props;
+const { block, className = "" } = Astro.props;
 const { video, base } = block;
 const { background, layout } = base;
 const positioning = generateGridPosition(layout);
@@ -36,10 +34,10 @@ const poster = getVideoPoster(video);
   <Background
     className={cn("h-full w-full", className)}
     background={background}
+    fitContent={false}
   >
     <HlsVideo
       src={video}
-      loading={loading}
       className={cn({})}
       hasBackground={background.background !== "none"}
       poster={poster}

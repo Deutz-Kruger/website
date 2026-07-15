@@ -3,17 +3,16 @@ import { logoSize, setLogoSize } from "@/stores/logoStore";
 let isSubscribed: boolean;
 let unsub: ReturnType<typeof logoSize.subscribe>;
 const fixedLogo = document.getElementById("fixed-logo-container");
+const resizeHandler = () => setSize();
 
 export const initLogoSizer = () => {
   setSize();
   initLogoSizerSubscription();
-  window.addEventListener("resize", () => {
-    setSize();
-  });
+  window.addEventListener("resize", resizeHandler);
 };
 
 export const cleanUpLogoSizer = () => {
-  window.removeEventListener("resize", setSize);
+  window.removeEventListener("resize", resizeHandler);
   if (isSubscribed) {
     unsub();
     isSubscribed = false;

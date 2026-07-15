@@ -6,6 +6,7 @@ import { caseSchema } from "@/content/schemas/pageSchemas";
 import { getVideoPoster } from "@/utils/media";
 
 import Tags from "./Tags.astro";
+import ImageWrapper from "./util/ImageWrapper.astro";
 import PreviewVideo from "./util/PreviewVideo.astro";
 
 type CasePreview = z.infer<typeof caseSchema.shape.case_preview>;
@@ -51,14 +52,12 @@ const videoPoster = preview_video
           className="xl:w-4/9 h-full mx-auto block w-full lg:mx-0"
         />
       ) : (
-        <div class="xl:w-4/9 mx-auto block w-full lg:mx-0">
-          <img
-            src={preview_image.src}
-            alt={preview_image.alt}
-            class="h-full w-full object-contain lg:h-full lg:max-h-full"
-            loading={loading}
-          />
-        </div>
+        <ImageWrapper
+          src={preview_image.src}
+          altText={preview_image.alt}
+          loading={loading}
+          className="xl:w-4/9 mx-auto block w-full lg:mx-0"
+        />
       )
     }
 
@@ -69,7 +68,7 @@ const videoPoster = preview_video
         {title}
       </h2>
       <p
-        class="text-normal md:text-medium xl:text-big md:w-13/14 hidden -translate-y-1 pt-4 text-base leading-tight tracking-[-0.0175em] transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 md:block xl:opacity-0"
+        class="text-normal md:text-medium xl:text-big md:w-13/14 hidden pt-4 text-base leading-tight tracking-[-0.0175em] group-hover:opacity-100 motion-safe:-translate-y-1 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-y-0 md:block xl:opacity-0"
       >
         {description}
       </p>

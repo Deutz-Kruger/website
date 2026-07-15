@@ -1,9 +1,12 @@
 import "./hls-video";
+import "./preview-video";
 
 import SwupHeadPlugin from "@swup/head-plugin";
 import SwupPreloadPlugin from "@swup/preload-plugin";
-import SwupScriptsPlugin from "@swup/scripts-plugin";
 import Swup from "swup";
+
+import { getLocaleFromPath } from "@/utils/locale";
+import { prefersReducedMotion, subscribeToReducedMotion } from "@/utils/motion";
 
 import {
   cleanUpColorSwitcher,
@@ -24,35 +27,51 @@ import { cleanUpServices, initServices } from "./services";
 
 const swup = new Swup({
   plugins: [
-    new SwupPreloadPlugin(),
+    new SwupPreloadPlugin({ preloadInitialPage: false }),
     new SwupHeadPlugin({
       persistAssets: true,
       persistTags: "style, link[rel=stylesheet]",
     }),
-    new SwupScriptsPlugin({}),
-    // new SwupDebugPlugin(),
   ],
   containers: ["#swup"],
   cache: true,
   animationSelector: '[class*="transition-"]',
 });
 
-// Register swup instance with languageSelect
 setSwupInstance(swup);
 
 let isInitialized = false;
+let isPageActive = false;
+let reducedMotion = prefersReducedMotion();
 
-swup.hooks.on("page:view", () => {
-  init();
+const syncMotionAwareFeatures = () => {
+  if (!isPageActive) return;
+
+  if (reducedMotion) {
+    cleanUpLenis();
+    cleanUpHeaderLogic();
+    return;
+  }
+
+  initLenis();
+  initHeaderLogic();
+};
+
+subscribeToReducedMotion((shouldReduceMotion) => {
+  const preferenceChanged = reducedMotion !== shouldReduceMotion;
+  reducedMotion = shouldReduceMotion;
+
+  if (preferenceChanged) {
+    syncMotionAwareFeatures();
+  }
 });
 
-swup.hooks.before("content:replace", () => {
-  cleanUp();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  init();
-});
+const syncDocumentLocale = () => {
+  const locale = getLocaleFromPath(window.location.pathname);
+  if (locale) {
+    document.documentElement.lang = locale;
+  }
+};
 
 const init = () => {
   if (!isInitialized) {
@@ -60,17 +79,20 @@ const init = () => {
     isInitialized = true;
   }
 
+  syncDocumentLocale();
   initColorSwitcher();
   initColor();
-  initLenis();
+  if (!reducedMotion) initLenis();
   initLogoSizer();
   initLangSelect();
-  initHeaderLogic();
+  if (!reducedMotion) initHeaderLogic();
   initLogoAnimation();
   initServices();
+  isPageActive = true;
 };
 
 const cleanUp = () => {
+  isPageActive = false;
   cleanUpColorSwitcher();
   cleanUpHeaderLogic();
   cleanUpLenis();
@@ -79,3 +101,17 @@ const cleanUp = () => {
   cleanUpLangSelect();
   cleanUpServices();
 };
+
+swup.hooks.on("page:view", init);
+swup.hooks.on("visit:start", (visit) => {
+  if (reducedMotion) {
+    visit.animation.animate = false;
+  }
+});
+swup.hooks.before("content:replace", cleanUp);
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init, { once: true });
+} else {
+  init();
+}
