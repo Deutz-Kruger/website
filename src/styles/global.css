@@ -89,7 +89,7 @@
   .keyword {
     text-decoration: underline;
     font-style: italic;
-    @apply inline-block transition-all duration-200 will-change-auto hover:rotate-1 hover:scale-[99.5%];
+    @apply inline-block will-change-auto motion-safe:transition-all motion-safe:duration-200 motion-safe:hover:rotate-1 motion-safe:hover:scale-[99.5%];
   }
 
   .keyword-active {
@@ -102,7 +102,7 @@
   .inactive-lang {
     @apply hidden;
   }
-  @media (width >= 48rem) {
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
     .inactive-lang svg {
       fill-opacity: 0.65;
       scale: 0.9;
@@ -210,6 +210,16 @@ section[data-desktop-start] {
 .hide-me.scroll-up {
   opacity: 1; /* Visible when scrolling up */
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hide-me,
+  .hide-me.hide,
+  .hide-me.scroll-up {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
 }
 
 pre {

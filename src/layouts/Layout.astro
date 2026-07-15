@@ -83,4 +83,16 @@ const documentLocale = Astro.currentLocale === "de" ? "de" : "en";
   html.is-leaving.to-left .transition-main {
     transform: translateX(-1em);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .transition-main,
+    html.is-animating .transition-main,
+    html.is-leaving .transition-main,
+    html.is-animating.to-left .transition-main,
+    html.is-leaving.to-left .transition-main {
+      opacity: 1;
+      transform: translateX(0);
+      transition: none;
+    }
+  }
 </style>

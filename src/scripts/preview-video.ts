@@ -1,3 +1,8 @@
+import {
+  shouldLoadMotionVideo,
+  subscribeToReducedMotion,
+} from "@/utils/motion";
+
 import { HlsPlayer } from "./hls-player";
 
 const PRELOAD_MARGIN = "300px 0px";
@@ -31,9 +36,12 @@ class PreviewVideoElement extends HTMLElement {
   private hlsPlayer: HlsPlayer | null = null;
   private hasPlayed = false;
   private isMobile = false;
+  private motionPreferenceInitialized = false;
   private parentLink: HTMLElement | null = null;
   private playbackPromise: Promise<void> | null = null;
   private preloadObserver: IntersectionObserver | null = null;
+  private prefersReducedMotion = false;
+  private unsubscribeFromReducedMotion: (() => void) | null = null;
   private visibilityObserver: IntersectionObserver | null = null;
   private readonly videoElement: HTMLVideoElement;
 
@@ -70,27 +78,22 @@ class PreviewVideoElement extends HTMLElement {
     this.updatePoster();
 
     window.addEventListener("resize", this.updateMobileState);
-    this.setupHoverInteraction();
-    this.setupIntersectionObservers();
+    this.unsubscribeFromReducedMotion = subscribeToReducedMotion(
+      this.handleMotionPreferenceChange,
+    );
   }
 
   disconnectedCallback() {
     this.connectionVersion += 1;
+    this.unsubscribeFromReducedMotion?.();
     window.removeEventListener("resize", this.updateMobileState);
+    this.teardownHoverInteraction();
+    this.teardownIntersectionObservers();
+    this.destroyPlayer();
 
-    this.parentLink?.removeEventListener("mouseenter", this.handleMouseEnter);
-    this.parentLink?.removeEventListener("mouseleave", this.handleMouseLeave);
-
-    this.preloadObserver?.disconnect();
-    this.visibilityObserver?.disconnect();
-    this.hlsPlayer?.destroy();
-
-    this.hlsPlayer = null;
-    this.parentLink = null;
-    this.playbackPromise = null;
-    this.preloadObserver = null;
-    this.visibilityObserver = null;
     this.hasPlayed = false;
+    this.motionPreferenceInitialized = false;
+    this.unsubscribeFromReducedMotion = null;
   }
 
   attributeChangedCallback(name: string) {
@@ -104,16 +107,46 @@ class PreviewVideoElement extends HTMLElement {
   };
 
   private readonly handleMouseEnter = () => {
-    if (this.isMobile) return;
+    if (this.isMobile || this.prefersReducedMotion) return;
 
     this.videoElement.loop = this.hasPlayed;
     void this.playVideo().catch(this.handlePlayerError);
   };
 
   private readonly handleMouseLeave = () => {
-    if (!this.isMobile) {
+    if (!this.isMobile && !this.prefersReducedMotion) {
       this.videoElement.loop = false;
     }
+  };
+
+  private readonly handleMotionPreferenceChange = (
+    prefersReducedMotion: boolean,
+  ) => {
+    if (
+      this.motionPreferenceInitialized &&
+      this.prefersReducedMotion === prefersReducedMotion
+    ) {
+      return;
+    }
+
+    if (this.motionPreferenceInitialized) {
+      this.connectionVersion += 1;
+    }
+
+    this.motionPreferenceInitialized = true;
+    this.prefersReducedMotion = prefersReducedMotion;
+    this.teardownHoverInteraction();
+    this.teardownIntersectionObservers();
+
+    if (prefersReducedMotion) {
+      this.hasPlayed = false;
+      this.videoElement.loop = false;
+      this.destroyPlayer();
+      return;
+    }
+
+    this.setupHoverInteraction();
+    this.setupIntersectionObservers();
   };
 
   private readonly handlePlayerError = (error: unknown) => {
@@ -130,6 +163,10 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   private ensurePlayer(): Promise<void> {
+    if (!shouldLoadMotionVideo(this.prefersReducedMotion)) {
+      return Promise.resolve();
+    }
+
     if (!this.hlsPlayer) {
       const manifestUrl = this.getAttribute("src");
       if (!manifestUrl) return Promise.resolve();
@@ -157,6 +194,8 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   private playVideo(): Promise<void> {
+    if (this.prefersReducedMotion) return Promise.resolve();
+
     if (!this.playbackPromise) {
       const connectionVersion = this.connectionVersion;
       const playbackPromise = this.startPlayback(connectionVersion)
@@ -185,21 +224,31 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   private async startPlayback(connectionVersion: number): Promise<void> {
+    if (this.prefersReducedMotion) return;
+
     await this.ensurePlayer();
 
-    if (this.connectionVersion !== connectionVersion || !this.isConnected) {
+    if (
+      this.connectionVersion !== connectionVersion ||
+      !this.isConnected ||
+      this.prefersReducedMotion
+    ) {
       return;
     }
     await this.videoElement.play();
   }
 
   private setupHoverInteraction() {
+    if (this.prefersReducedMotion || this.parentLink) return;
+
     this.parentLink = this.closest("a");
     this.parentLink?.addEventListener("mouseenter", this.handleMouseEnter);
     this.parentLink?.addEventListener("mouseleave", this.handleMouseLeave);
   }
 
   private setupIntersectionObservers() {
+    if (this.prefersReducedMotion) return;
+
     const connectionVersion = this.connectionVersion;
 
     if (!("IntersectionObserver" in window)) {
@@ -217,13 +266,15 @@ class PreviewVideoElement extends HTMLElement {
 
     this.preloadObserver = new IntersectionObserver(
       (entries) => {
+        if (this.prefersReducedMotion) return;
         if (!entries.some((entry) => entry.isIntersecting)) return;
 
         void this.ensurePlayer()
           .then(() => {
             if (
               this.connectionVersion !== connectionVersion ||
-              !this.isConnected
+              !this.isConnected ||
+              this.prefersReducedMotion
             ) {
               return;
             }
@@ -242,7 +293,12 @@ class PreviewVideoElement extends HTMLElement {
 
     this.visibilityObserver = new IntersectionObserver(
       (entries) => {
-        if (this.connectionVersion !== connectionVersion) return;
+        if (
+          this.connectionVersion !== connectionVersion ||
+          this.prefersReducedMotion
+        ) {
+          return;
+        }
 
         const isFullyVisible = entries.some(
           (entry) => entry.isIntersecting && entry.intersectionRatio >= 1,
@@ -257,6 +313,26 @@ class PreviewVideoElement extends HTMLElement {
 
     this.preloadObserver.observe(this);
     this.visibilityObserver.observe(this);
+  }
+
+  private teardownHoverInteraction() {
+    this.parentLink?.removeEventListener("mouseenter", this.handleMouseEnter);
+    this.parentLink?.removeEventListener("mouseleave", this.handleMouseLeave);
+    this.parentLink = null;
+  }
+
+  private teardownIntersectionObservers() {
+    this.preloadObserver?.disconnect();
+    this.visibilityObserver?.disconnect();
+    this.preloadObserver = null;
+    this.visibilityObserver = null;
+  }
+
+  private destroyPlayer() {
+    this.videoElement.pause();
+    this.hlsPlayer?.destroy();
+    this.hlsPlayer = null;
+    this.playbackPromise = null;
   }
 }
 

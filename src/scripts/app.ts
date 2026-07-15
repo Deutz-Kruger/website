@@ -6,6 +6,7 @@ import SwupPreloadPlugin from "@swup/preload-plugin";
 import Swup from "swup";
 
 import { getLocaleFromPath } from "@/utils/locale";
+import { prefersReducedMotion, subscribeToReducedMotion } from "@/utils/motion";
 
 import {
   cleanUpColorSwitcher,
@@ -40,6 +41,30 @@ const swup = new Swup({
 setSwupInstance(swup);
 
 let isInitialized = false;
+let isPageActive = false;
+let reducedMotion = prefersReducedMotion();
+
+const syncMotionAwareFeatures = () => {
+  if (!isPageActive) return;
+
+  if (reducedMotion) {
+    cleanUpLenis();
+    cleanUpHeaderLogic();
+    return;
+  }
+
+  initLenis();
+  initHeaderLogic();
+};
+
+subscribeToReducedMotion((shouldReduceMotion) => {
+  const preferenceChanged = reducedMotion !== shouldReduceMotion;
+  reducedMotion = shouldReduceMotion;
+
+  if (preferenceChanged) {
+    syncMotionAwareFeatures();
+  }
+});
 
 const syncDocumentLocale = () => {
   const locale = getLocaleFromPath(window.location.pathname);
@@ -57,15 +82,17 @@ const init = () => {
   syncDocumentLocale();
   initColorSwitcher();
   initColor();
-  initLenis();
+  if (!reducedMotion) initLenis();
   initLogoSizer();
   initLangSelect();
-  initHeaderLogic();
+  if (!reducedMotion) initHeaderLogic();
   initLogoAnimation();
   initServices();
+  isPageActive = true;
 };
 
 const cleanUp = () => {
+  isPageActive = false;
   cleanUpColorSwitcher();
   cleanUpHeaderLogic();
   cleanUpLenis();
@@ -76,6 +103,11 @@ const cleanUp = () => {
 };
 
 swup.hooks.on("page:view", init);
+swup.hooks.on("visit:start", (visit) => {
+  if (reducedMotion) {
+    visit.animation.animate = false;
+  }
+});
 swup.hooks.before("content:replace", cleanUp);
 
 if (document.readyState === "loading") {

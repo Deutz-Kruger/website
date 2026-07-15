@@ -188,6 +188,13 @@ const { services } = Astro.props;
       );
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .service-animated-bg,
+    .service-placeholder-bg {
+      transition: none;
+    }
+  }
+
   .service-card:first-child.is-active .service-animated-bg {
     left: calc(-1 * var(--spacing-page-desktop)) !important;
     width: calc(100% + var(--spacing-page-desktop)) !important;

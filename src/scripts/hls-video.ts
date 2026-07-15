@@ -1,3 +1,8 @@
+import {
+  shouldLoadMotionVideo,
+  subscribeToReducedMotion,
+} from "@/utils/motion";
+
 import { HlsPlayer } from "./hls-player";
 
 const PRELOAD_MARGIN = "300px 0px";
@@ -19,7 +24,10 @@ class HlsVideoElement extends HTMLElement {
   private connectionVersion = 0;
   private hlsPlayer: HlsPlayer | null = null;
   private isVisible = false;
+  private motionPreferenceInitialized = false;
   private preloadObserver: IntersectionObserver | null = null;
+  private prefersReducedMotion = false;
+  private unsubscribeFromReducedMotion: (() => void) | null = null;
   private visibilityObserver: IntersectionObserver | null = null;
   private readonly videoElement: HTMLVideoElement;
 
@@ -44,20 +52,21 @@ class HlsVideoElement extends HTMLElement {
     this.updatePlaybackAttributes();
     this.updatePoster();
     this.videoElement.addEventListener("canplay", this.handleCanPlay);
-    this.setupIntersectionObservers();
+    this.unsubscribeFromReducedMotion = subscribeToReducedMotion(
+      this.handleMotionPreferenceChange,
+    );
   }
 
   disconnectedCallback() {
     this.connectionVersion += 1;
-    this.preloadObserver?.disconnect();
-    this.visibilityObserver?.disconnect();
+    this.unsubscribeFromReducedMotion?.();
     this.videoElement.removeEventListener("canplay", this.handleCanPlay);
-    this.hlsPlayer?.destroy();
+    this.teardownIntersectionObservers();
+    this.destroyPlayer();
 
-    this.hlsPlayer = null;
-    this.preloadObserver = null;
-    this.visibilityObserver = null;
     this.isVisible = false;
+    this.motionPreferenceInitialized = false;
+    this.unsubscribeFromReducedMotion = null;
   }
 
   attributeChangedCallback(name: string) {
@@ -70,9 +79,41 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private readonly handleCanPlay = () => {
-    if (this.isVisible && this.hasAttribute("autoplay")) {
+    if (
+      !this.prefersReducedMotion &&
+      this.isVisible &&
+      this.hasAttribute("autoplay")
+    ) {
       this.playVideo();
     }
+  };
+
+  private readonly handleMotionPreferenceChange = (
+    prefersReducedMotion: boolean,
+  ) => {
+    if (
+      this.motionPreferenceInitialized &&
+      this.prefersReducedMotion === prefersReducedMotion
+    ) {
+      return;
+    }
+
+    if (this.motionPreferenceInitialized) {
+      this.connectionVersion += 1;
+    }
+
+    this.motionPreferenceInitialized = true;
+    this.prefersReducedMotion = prefersReducedMotion;
+    this.updatePlaybackAttributes();
+    this.teardownIntersectionObservers();
+
+    if (prefersReducedMotion) {
+      this.isVisible = false;
+      this.destroyPlayer();
+      return;
+    }
+
+    this.setupIntersectionObservers();
   };
 
   private readonly handlePlayerError = (error: unknown) => {
@@ -91,7 +132,8 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private updatePlaybackAttributes() {
-    this.videoElement.loop = this.hasAttribute("loop");
+    this.videoElement.loop =
+      !this.prefersReducedMotion && this.hasAttribute("loop");
     this.videoElement.muted = this.hasAttribute("muted");
     this.videoElement.playsInline = this.hasAttribute("playsinline");
   }
@@ -104,6 +146,10 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private ensurePlayer(): Promise<void> {
+    if (!shouldLoadMotionVideo(this.prefersReducedMotion)) {
+      return Promise.resolve();
+    }
+
     if (!this.hlsPlayer) {
       const manifestUrl = this.getAttribute("src");
       if (!manifestUrl) return Promise.resolve();
@@ -129,16 +175,20 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private playVideo() {
+    if (this.prefersReducedMotion) return;
     void this.videoElement.play().catch(() => undefined);
   }
 
   private prepareAndPlay() {
+    if (this.prefersReducedMotion) return;
+
     const connectionVersion = this.connectionVersion;
     void this.ensurePlayer()
       .then(() => {
         if (
           this.connectionVersion === connectionVersion &&
           this.isConnected &&
+          !this.prefersReducedMotion &&
           this.isVisible &&
           this.videoElement.readyState >= 3
         ) {
@@ -153,6 +203,8 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private setupIntersectionObservers() {
+    if (this.prefersReducedMotion) return;
+
     const connectionVersion = this.connectionVersion;
 
     if (!("IntersectionObserver" in window)) {
@@ -163,13 +215,15 @@ class HlsVideoElement extends HTMLElement {
 
     this.preloadObserver = new IntersectionObserver(
       (entries) => {
+        if (this.prefersReducedMotion) return;
         if (!entries.some((entry) => entry.isIntersecting)) return;
 
         void this.ensurePlayer()
           .then(() => {
             if (
               this.connectionVersion !== connectionVersion ||
-              !this.isConnected
+              !this.isConnected ||
+              this.prefersReducedMotion
             ) {
               return;
             }
@@ -187,7 +241,12 @@ class HlsVideoElement extends HTMLElement {
     );
 
     this.visibilityObserver = new IntersectionObserver((entries) => {
-      if (this.connectionVersion !== connectionVersion) return;
+      if (
+        this.connectionVersion !== connectionVersion ||
+        this.prefersReducedMotion
+      ) {
+        return;
+      }
 
       this.isVisible = entries.some((entry) => entry.isIntersecting);
 
@@ -200,6 +259,19 @@ class HlsVideoElement extends HTMLElement {
 
     this.preloadObserver.observe(this);
     this.visibilityObserver.observe(this);
+  }
+
+  private teardownIntersectionObservers() {
+    this.preloadObserver?.disconnect();
+    this.visibilityObserver?.disconnect();
+    this.preloadObserver = null;
+    this.visibilityObserver = null;
+  }
+
+  private destroyPlayer() {
+    this.videoElement.pause();
+    this.hlsPlayer?.destroy();
+    this.hlsPlayer = null;
   }
 }
 
