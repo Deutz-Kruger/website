@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pnpm perf:budget",
+    "build": "astro build && pnpm perf:budget && pnpm verify:build",
     "preview": "astro build && wrangler dev",
     "deploy": "wrangler deploy",
     "deploy-cf": "astro build && wrangler deploy",
@@ -27,11 +27,14 @@
     "type-check": "astro check",
     "check": "eslint . --ext .js,.ts,.astro && prettier --check . && astro check",
     "perf:budget": "node ./scripts/performance-budget.mjs",
+    "verify:build": "node ./scripts/verify-build.mjs",
     "prepare": "husky",
     "sync-media": "tsx ./media-sync/cli.ts sync",
     "sync-media:prune": "tsx ./media-sync/cli.ts prune",
     "sync-media:audit": "tsx ./media-sync/cli.ts audit",
     "sync-media:cleanup-legacy": "tsx ./media-sync/cli.ts cleanup-legacy",
+    "test": "pnpm test:unit && pnpm test:media",
+    "test:unit": "tsx --test ./test/*.test.ts",
     "test:media": "tsx --test ./media-sync/**/*.test.ts",
     "reset:cache": "rm -rf .astro .cache .wrangler dist"
   },

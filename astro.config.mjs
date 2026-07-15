@@ -28,8 +28,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       changefreq: "monthly",
+      filter: (page) => new URL(page).pathname !== "/",
       priority: 0.7,
-      lastmod: new Date(),
       i18n: {
         defaultLocale: "en",
         locales: {

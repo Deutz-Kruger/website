@@ -9,37 +9,22 @@ interface Props {
   hero: Hero;
 }
 
-const keywords = ["development", "brands", "digital experiences"];
-
-const generateKeywords = (match: string) => {
-  let keywordColor = "--color-branding";
-  switch (match) {
-    case "brands":
-      keywordColor = "--color-branding";
-      break;
-    case "development":
-      keywordColor = "--color-development";
-      break;
-    case "digital experiences":
-      keywordColor = "--color-design";
-      break;
-  }
-  return `<span class="keyword" data-color="${keywordColor}" style="cursor: pointer;">${match}</span>`;
-};
+const keywordColors = new Map([
+  ["brands", "--color-branding"],
+  ["development", "--color-development"],
+  ["digital experiences", "--color-design"],
+]);
+const keywordPattern = new RegExp(
+  `(${[...keywordColors.keys()].join("|")})`,
+  "gi",
+);
+const contactEmail = "hi@deutzkrueger.de";
 
 const { hero } = Astro.props;
-
-const highlightedHeadline = hero.headline.replace(
-  new RegExp(`(${keywords.join("|")})`, "gi"),
-  generateKeywords,
+const headlineParts = hero.headline.split(keywordPattern);
+const contactParts = hero.contact.split(
+  new RegExp(`(${contactEmail}|\\n)`, "g"),
 );
-
-const contactLine = hero.contact
-  .replace(
-    "hi@deutzkrueger.de",
-    "<a href='mailto:hi@deutzkrueger.de' class='keyword not-italic!'>hi@deutzkrueger.de</a>",
-  )
-  .replace(/\n/g, "<br />");
 ---
 
 <section
@@ -52,10 +37,35 @@ const contactLine = hero.contact
   </div>
   <h1
     class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop xl:w-12/17 mb-4 w-11/12 md:mb-12"
-    set:html={highlightedHeadline}
-  />
+  >
+    {
+      headlineParts.map((part) => {
+        const keywordColor = keywordColors.get(part.toLowerCase());
+        return keywordColor ? (
+          <span class="keyword cursor-pointer" data-color={keywordColor}>
+            {part}
+          </span>
+        ) : (
+          part
+        );
+      })
+    }
+  </h1>
   <h2
     class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop md:w-15/17 2xl:w-8/17 3xl:w- ml-auto w-5/6 text-right"
-    set:html={contactLine}
-  />
+  >
+    {
+      contactParts.map((part) =>
+        part === "\n" ? (
+          <br />
+        ) : part === contactEmail ? (
+          <a href="mailto:hi@deutzkrueger.de" class="keyword not-italic!">
+            {contactEmail}
+          </a>
+        ) : (
+          part
+        ),
+      )
+    }
+  </h2>
 </section>

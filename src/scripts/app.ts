@@ -5,6 +5,8 @@ import SwupHeadPlugin from "@swup/head-plugin";
 import SwupPreloadPlugin from "@swup/preload-plugin";
 import Swup from "swup";
 
+import { getLocaleFromPath } from "@/utils/locale";
+
 import {
   cleanUpColorSwitcher,
   initColor,
@@ -39,12 +41,20 @@ setSwupInstance(swup);
 
 let isInitialized = false;
 
+const syncDocumentLocale = () => {
+  const locale = getLocaleFromPath(window.location.pathname);
+  if (locale) {
+    document.documentElement.lang = locale;
+  }
+};
+
 const init = () => {
   if (!isInitialized) {
     initColorStore();
     isInitialized = true;
   }
 
+  syncDocumentLocale();
   initColorSwitcher();
   initColor();
   initLenis();

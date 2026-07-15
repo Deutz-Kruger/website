@@ -1,6 +1,6 @@
 import { throttle } from "@/utils/throttle";
 
-const elements = Array.from(document.getElementsByClassName("hide-me"));
+let elements: Element[] = [];
 let lastScrollPos = 0;
 
 let isHidden = false;
@@ -11,8 +11,14 @@ let throttledScrollHandler: (() => void) | null = null;
 export const initHeaderLogic = () => {
   if (throttledScrollHandler) return;
 
+  elements = Array.from(document.getElementsByClassName("hide-me"));
+  resetHeaderState();
+  lastScrollPos = window.scrollY;
+  hidePos = lastScrollPos;
+
   throttledScrollHandler = throttle(renderHeader, 50);
   window.addEventListener("scroll", throttledScrollHandler, true);
+  renderHeader();
 };
 
 export const cleanUpHeaderLogic = () => {
@@ -20,6 +26,19 @@ export const cleanUpHeaderLogic = () => {
     window.removeEventListener("scroll", throttledScrollHandler, true);
     throttledScrollHandler = null;
   }
+
+  resetHeaderState();
+  elements = [];
+  lastScrollPos = window.scrollY;
+  hidePos = lastScrollPos;
+  isHidden = false;
+};
+
+const resetHeaderState = () => {
+  elements.forEach((element) => {
+    element.classList.remove("hide", "scroll-up");
+  });
+  isHidden = false;
 };
 
 const renderHeader = () => {

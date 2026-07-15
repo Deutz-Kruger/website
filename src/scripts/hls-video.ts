@@ -16,6 +16,7 @@ sheet.replaceSync(`
 `);
 
 class HlsVideoElement extends HTMLElement {
+  private connectionVersion = 0;
   private hlsPlayer: HlsPlayer | null = null;
   private isVisible = false;
   private preloadObserver: IntersectionObserver | null = null;
@@ -38,6 +39,7 @@ class HlsVideoElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.connectionVersion += 1;
     this.updateAspectRatio();
     this.updatePlaybackAttributes();
     this.updatePoster();
@@ -46,6 +48,7 @@ class HlsVideoElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.connectionVersion += 1;
     this.preloadObserver?.disconnect();
     this.visibilityObserver?.disconnect();
     this.videoElement.removeEventListener("canplay", this.handleCanPlay);
@@ -69,6 +72,12 @@ class HlsVideoElement extends HTMLElement {
   private readonly handleCanPlay = () => {
     if (this.isVisible && this.hasAttribute("autoplay")) {
       this.playVideo();
+    }
+  };
+
+  private readonly handlePlayerError = (error: unknown) => {
+    if (this.isConnected) {
+      console.warn("Unable to start HLS video.", error);
     }
   };
 
@@ -99,7 +108,21 @@ class HlsVideoElement extends HTMLElement {
       const manifestUrl = this.getAttribute("src");
       if (!manifestUrl) return Promise.resolve();
 
-      this.hlsPlayer = new HlsPlayer(this.videoElement, manifestUrl);
+      const connectionVersion = this.connectionVersion;
+      const player = new HlsPlayer(this.videoElement, manifestUrl, {
+        onFatalError: (error) => {
+          if (
+            this.connectionVersion === connectionVersion &&
+            this.hlsPlayer === player
+          ) {
+            this.hlsPlayer = null;
+          }
+          if (this.connectionVersion === connectionVersion) {
+            this.handlePlayerError(error);
+          }
+        },
+      });
+      this.hlsPlayer = player;
     }
 
     return this.hlsPlayer.start();
@@ -110,18 +133,28 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private prepareAndPlay() {
-    void this.ensurePlayer().then(() => {
-      if (
-        this.isConnected &&
-        this.isVisible &&
-        this.videoElement.readyState >= 3
-      ) {
-        this.playVideo();
-      }
-    });
+    const connectionVersion = this.connectionVersion;
+    void this.ensurePlayer()
+      .then(() => {
+        if (
+          this.connectionVersion === connectionVersion &&
+          this.isConnected &&
+          this.isVisible &&
+          this.videoElement.readyState >= 3
+        ) {
+          this.playVideo();
+        }
+      })
+      .catch((error: unknown) => {
+        if (this.connectionVersion === connectionVersion) {
+          this.handlePlayerError(error);
+        }
+      });
   }
 
   private setupIntersectionObservers() {
+    const connectionVersion = this.connectionVersion;
+
     if (!("IntersectionObserver" in window)) {
       this.isVisible = true;
       this.prepareAndPlay();
@@ -132,14 +165,30 @@ class HlsVideoElement extends HTMLElement {
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
 
-        void this.ensurePlayer();
-        this.preloadObserver?.disconnect();
-        this.preloadObserver = null;
+        void this.ensurePlayer()
+          .then(() => {
+            if (
+              this.connectionVersion !== connectionVersion ||
+              !this.isConnected
+            ) {
+              return;
+            }
+
+            this.preloadObserver?.disconnect();
+            this.preloadObserver = null;
+          })
+          .catch((error: unknown) => {
+            if (this.connectionVersion === connectionVersion) {
+              this.handlePlayerError(error);
+            }
+          });
       },
       { rootMargin: PRELOAD_MARGIN },
     );
 
     this.visibilityObserver = new IntersectionObserver((entries) => {
+      if (this.connectionVersion !== connectionVersion) return;
+
       this.isVisible = entries.some((entry) => entry.isIntersecting);
 
       if (this.isVisible) {

@@ -27,11 +27,12 @@ sheet.replaceSync(`
 `);
 
 class PreviewVideoElement extends HTMLElement {
+  private connectionVersion = 0;
   private hlsPlayer: HlsPlayer | null = null;
   private hasPlayed = false;
-  private hoverContainer: HTMLElement | null = null;
   private isMobile = false;
   private parentLink: HTMLElement | null = null;
+  private playbackPromise: Promise<void> | null = null;
   private preloadObserver: IntersectionObserver | null = null;
   private visibilityObserver: IntersectionObserver | null = null;
   private readonly videoElement: HTMLVideoElement;
@@ -62,6 +63,7 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.connectionVersion += 1;
     this.hasPlayed = false;
     this.videoElement.loop = false;
     this.updateMobileState();
@@ -73,29 +75,19 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.connectionVersion += 1;
     window.removeEventListener("resize", this.updateMobileState);
 
-    this.parentLink?.removeEventListener(
-      "mouseenter",
-      this.handleInitialMouseEnter,
-    );
-    this.hoverContainer?.removeEventListener(
-      "mouseenter",
-      this.handleRepeatMouseEnter,
-    );
-    this.hoverContainer?.removeEventListener(
-      "mouseleave",
-      this.handleMouseLeave,
-    );
-    this.videoElement.removeEventListener("canplay", this.handleCanPlay);
+    this.parentLink?.removeEventListener("mouseenter", this.handleMouseEnter);
+    this.parentLink?.removeEventListener("mouseleave", this.handleMouseLeave);
 
     this.preloadObserver?.disconnect();
     this.visibilityObserver?.disconnect();
     this.hlsPlayer?.destroy();
 
     this.hlsPlayer = null;
-    this.hoverContainer = null;
     this.parentLink = null;
+    this.playbackPromise = null;
     this.preloadObserver = null;
     this.visibilityObserver = null;
     this.hasPlayed = false;
@@ -108,20 +100,14 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   private readonly updateMobileState = () => {
-    this.isMobile = window.innerWidth <= 1024;
+    this.isMobile = window.matchMedia("(width < 1024px)").matches;
   };
 
-  private readonly handleInitialMouseEnter = () => {
-    if (!this.isMobile && !this.hasPlayed) {
-      this.playVideo();
-    }
-  };
+  private readonly handleMouseEnter = () => {
+    if (this.isMobile) return;
 
-  private readonly handleRepeatMouseEnter = () => {
-    if (!this.isMobile && this.hasPlayed) {
-      this.videoElement.loop = true;
-      this.playVideoElement();
-    }
+    this.videoElement.loop = this.hasPlayed;
+    void this.playVideo().catch(this.handlePlayerError);
   };
 
   private readonly handleMouseLeave = () => {
@@ -130,8 +116,10 @@ class PreviewVideoElement extends HTMLElement {
     }
   };
 
-  private readonly handleCanPlay = () => {
-    this.playVideoElement();
+  private readonly handlePlayerError = (error: unknown) => {
+    if (this.isConnected) {
+      console.warn("Unable to start preview video.", error);
+    }
   };
 
   private updatePoster() {
@@ -146,56 +134,84 @@ class PreviewVideoElement extends HTMLElement {
       const manifestUrl = this.getAttribute("src");
       if (!manifestUrl) return Promise.resolve();
 
-      this.hlsPlayer = new HlsPlayer(this.videoElement, manifestUrl);
+      const connectionVersion = this.connectionVersion;
+      const player = new HlsPlayer(this.videoElement, manifestUrl, {
+        onFatalError: (error) => {
+          if (
+            this.connectionVersion === connectionVersion &&
+            this.hlsPlayer === player
+          ) {
+            this.hlsPlayer = null;
+          }
+          if (this.connectionVersion === connectionVersion) {
+            this.hasPlayed = false;
+            this.videoElement.loop = false;
+            this.handlePlayerError(error);
+          }
+        },
+      });
+      this.hlsPlayer = player;
     }
 
     return this.hlsPlayer.start();
   }
 
-  private playVideo() {
-    if (this.hasPlayed) return;
+  private playVideo(): Promise<void> {
+    if (!this.playbackPromise) {
+      const connectionVersion = this.connectionVersion;
+      const playbackPromise = this.startPlayback(connectionVersion)
+        .then(() => {
+          if (this.connectionVersion === connectionVersion) {
+            this.hasPlayed = true;
+          }
+        })
+        .catch((error: unknown) => {
+          if (this.connectionVersion !== connectionVersion) return;
 
-    this.hasPlayed = true;
-    void this.startPlayback();
-  }
+          this.hasPlayed = false;
+          this.videoElement.loop = false;
+          throw error;
+        })
+        .finally(() => {
+          if (this.playbackPromise === playbackPromise) {
+            this.playbackPromise = null;
+          }
+        });
 
-  private async startPlayback() {
-    await this.ensurePlayer();
-
-    if (!this.isConnected || !this.hasPlayed) return;
-
-    if (this.videoElement.readyState >= 3) {
-      this.playVideoElement();
-      return;
+      this.playbackPromise = playbackPromise;
     }
 
-    this.videoElement.addEventListener("canplay", this.handleCanPlay, {
-      once: true,
-    });
+    return this.playbackPromise;
   }
 
-  private playVideoElement() {
-    void this.videoElement.play().catch(() => undefined);
+  private async startPlayback(connectionVersion: number): Promise<void> {
+    await this.ensurePlayer();
+
+    if (this.connectionVersion !== connectionVersion || !this.isConnected) {
+      return;
+    }
+    await this.videoElement.play();
   }
 
   private setupHoverInteraction() {
     this.parentLink = this.closest("a");
-    this.hoverContainer = this.parentElement;
-
-    this.parentLink?.addEventListener(
-      "mouseenter",
-      this.handleInitialMouseEnter,
-    );
-    this.hoverContainer?.addEventListener(
-      "mouseenter",
-      this.handleRepeatMouseEnter,
-    );
-    this.hoverContainer?.addEventListener("mouseleave", this.handleMouseLeave);
+    this.parentLink?.addEventListener("mouseenter", this.handleMouseEnter);
+    this.parentLink?.addEventListener("mouseleave", this.handleMouseLeave);
   }
 
   private setupIntersectionObservers() {
+    const connectionVersion = this.connectionVersion;
+
     if (!("IntersectionObserver" in window)) {
-      void this.ensurePlayer();
+      if (this.isMobile) {
+        void this.playVideo().catch(this.handlePlayerError);
+      } else {
+        void this.ensurePlayer().catch((error: unknown) => {
+          if (this.connectionVersion === connectionVersion) {
+            this.handlePlayerError(error);
+          }
+        });
+      }
       return;
     }
 
@@ -203,23 +219,37 @@ class PreviewVideoElement extends HTMLElement {
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
 
-        void this.ensurePlayer();
-        this.preloadObserver?.disconnect();
-        this.preloadObserver = null;
+        void this.ensurePlayer()
+          .then(() => {
+            if (
+              this.connectionVersion !== connectionVersion ||
+              !this.isConnected
+            ) {
+              return;
+            }
+
+            this.preloadObserver?.disconnect();
+            this.preloadObserver = null;
+          })
+          .catch((error: unknown) => {
+            if (this.connectionVersion === connectionVersion) {
+              this.handlePlayerError(error);
+            }
+          });
       },
       { rootMargin: PRELOAD_MARGIN },
     );
 
     this.visibilityObserver = new IntersectionObserver(
       (entries) => {
+        if (this.connectionVersion !== connectionVersion) return;
+
         const isFullyVisible = entries.some(
           (entry) => entry.isIntersecting && entry.intersectionRatio >= 1,
         );
 
         if (this.isMobile && isFullyVisible && !this.hasPlayed) {
-          this.playVideo();
-          this.visibilityObserver?.disconnect();
-          this.visibilityObserver = null;
+          void this.playVideo().catch(this.handlePlayerError);
         }
       },
       { threshold: 1 },

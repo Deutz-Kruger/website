@@ -15,6 +15,10 @@ const shouldUseNativeIosHls = (videoElement: HTMLVideoElement) => {
   );
 };
 
+interface HlsPlayerOptions {
+  onFatalError?: (error: unknown) => void;
+}
+
 /**
  * Lazily attaches a native or HLS.js-backed stream to a video element.
  */
@@ -26,10 +30,26 @@ export class HlsPlayer {
   constructor(
     private readonly videoElement: HTMLVideoElement,
     private readonly manifestUrl: string,
+    private readonly options: HlsPlayerOptions = {},
   ) {}
 
   start(): Promise<void> {
-    this.startPromise ??= this.attachStream();
+    if (!this.startPromise) {
+      const startPromise = this.attachStream().catch((error: unknown) => {
+        this.hls?.destroy();
+        this.hls = null;
+        this.clearMedia();
+
+        if (this.startPromise === startPromise) {
+          this.startPromise = null;
+        }
+
+        throw error;
+      });
+
+      this.startPromise = startPromise;
+    }
+
     return this.startPromise;
   }
 
@@ -37,7 +57,12 @@ export class HlsPlayer {
     this.abortController.abort();
     this.hls?.destroy();
     this.hls = null;
+    this.startPromise = null;
 
+    this.clearMedia();
+  }
+
+  private clearMedia(): void {
     this.videoElement.pause();
     this.videoElement.removeAttribute("src");
     this.videoElement.load();
@@ -60,8 +85,10 @@ export class HlsPlayer {
     if (!HlsConstructor.isSupported()) {
       if (canPlayNativeHls(this.videoElement)) {
         this.videoElement.src = this.manifestUrl;
+        return;
       }
-      return;
+
+      throw new Error("HLS playback is not supported by this browser");
     }
 
     const hls = new HlsConstructor({
@@ -77,6 +104,20 @@ export class HlsPlayer {
     }
 
     this.hls = hls;
+    hls.on(HlsConstructor.Events.ERROR, (_event, data) => {
+      if (!data.fatal) return;
+
+      hls.stopLoad();
+      hls.destroy();
+
+      if (this.hls === hls) {
+        this.hls = null;
+        this.startPromise = null;
+      }
+
+      this.clearMedia();
+      this.options.onFatalError?.(data);
+    });
     hls.loadSource(this.manifestUrl);
     hls.attachMedia(this.videoElement);
   }

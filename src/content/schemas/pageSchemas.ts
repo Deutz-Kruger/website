@@ -4,21 +4,26 @@ import { groupsSchema } from "./blockSchemas";
 import { imageField } from "./fieldSchemas";
 
 export const casePreviewSchema = z.array(z.string());
-
-export const servicesSchema = z.array(
-  z.object({
-    title: z.string(),
-    body: z.string().optional(),
-    bodyRich: z.string().optional(),
+const localeSchema = z.enum(["en", "de"]);
+const serviceSchema = z
+  .object({
+    title: z.string().trim().min(1),
+    body: z.string().trim().min(1).optional(),
+    bodyRich: z.string().trim().min(1).optional(),
     icon: z.object({
       icon_logo: imageField,
       icon_color: z.string(),
     }),
-  }),
-);
+  })
+  .refine(({ body, bodyRich }) => Boolean(body || bodyRich), {
+    message: "Service requires body or bodyRich content",
+    path: ["body"],
+  });
+
+export const servicesSchema = z.array(serviceSchema);
 
 export const landingPageSchema = z.object({
-  lang: z.string(),
+  lang: localeSchema,
   hero: z.object({
     headline: z.string(),
     contact: z.string(),
@@ -28,14 +33,14 @@ export const landingPageSchema = z.object({
 });
 
 export const aboutSchema = z.object({
-  lang: z.string(),
+  lang: localeSchema,
   headline: z.string(),
   body: z.string(),
 });
 
 export const caseSchema = z.object({
-  slug: z.string(),
-  lang: z.string(),
+  slug: z.string().regex(/^\/[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  lang: localeSchema,
   client: z.string(),
   tags: z.array(z.string()).optional(),
   groups: groupsSchema,

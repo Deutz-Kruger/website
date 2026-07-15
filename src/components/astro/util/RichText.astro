@@ -1,7 +1,6 @@
 ---
-import { marked } from "marked";
-
 import { cn } from "@/utils/cn";
+import { renderSafeMarkdown } from "@/utils/contentSecurity";
 
 interface Props {
   richText: string | undefined;
@@ -12,7 +11,7 @@ const { richText, className } = Astro.props;
 
 if (!richText) return;
 
-const innerHtml = marked.parse(richText);
+const innerHtml = renderSafeMarkdown(richText);
 ---
 
 <div class={cn("rich-text", className)} set:html={innerHtml} />

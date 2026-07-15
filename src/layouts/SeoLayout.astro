@@ -1,6 +1,9 @@
 ---
 import { SEO } from "astro-seo";
 
+import { serializeJsonLd } from "@/utils/contentSecurity";
+import { getLocaleAlternates } from "@/utils/locale";
+
 const siteUrl = import.meta.env.SITE_URL || "https://deutzkrueger.de";
 const appEnv = import.meta.env.APP_ENV || "development";
 
@@ -21,6 +24,44 @@ const DEFAULT_TITLE = "Deutz & Krüger";
 
 const pageTitle = isIndexPage ? DEFAULT_TITLE : title || DEFAULT_TITLE;
 const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
+const localeAlternates = getLocaleAlternates(siteUrl, Astro.url.pathname);
+const jsonLd = serializeJsonLd({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: "Deutz & Krüger",
+      url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/android-chrome-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Berlin",
+        addressCountry: "DE",
+      },
+      sameAs: [
+        "https://www.linkedin.com/company/deutzkrueger",
+        "https://github.com/deutz-kruger",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "Deutz & Krüger",
+      description,
+      publisher: {
+        "@id": `${siteUrl}/#organization`,
+      },
+      inLanguage: currentLocale,
+    },
+  ],
+});
 ---
 
 <SEO
@@ -99,44 +140,18 @@ const titleTemplate = isIndexPage ? "%s" : "%s | Deutz & Krüger";
 />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+{
+  localeAlternates && (
+    <>
+      <link rel="alternate" hreflang="en" href={localeAlternates.en} />
+      <link rel="alternate" hreflang="de" href={localeAlternates.de} />
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={localeAlternates.xDefault}
+      />
+    </>
+  )
+}
 
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": `${siteUrl}/#organization`,
-        name: "Deutz & Krüger",
-        url: siteUrl,
-        logo: {
-          "@type": "ImageObject",
-          url: `${siteUrl}/web-app-manifest-512x512.png`,
-          width: 512,
-          height: 512,
-        },
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Berlin",
-          addressCountry: "DE",
-        },
-        sameAs: [
-          "https://www.linkedin.com/company/deutzkrueger",
-          "https://github.com/deutz-kruger",
-        ],
-      },
-      {
-        "@type": "WebSite",
-        "@id": `${siteUrl}/#website`,
-        url: siteUrl,
-        name: "Deutz & Krüger",
-        description: description,
-        publisher: {
-          "@id": `${siteUrl}/#organization`,
-        },
-        inLanguage: currentLocale,
-      },
-    ],
-  })}
-/>
+<script is:inline type="application/ld+json" set:html={jsonLd} />

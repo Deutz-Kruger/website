@@ -67,13 +67,24 @@ export const extractSlugsFromPaths = (paths: CasePaths): string[] => {
  * @param ids - An array of string IDs for case entries.
  * @returns A promise that resolves to an array of `CollectionEntry<"cases">`.
  */
-export const resolveCasePreview = (
+export const resolveCasePreview = async (
   ids: string[],
 ): Promise<CollectionEntry<"cases">[]> => {
   if (!ids?.length) {
-    return Promise.resolve([]);
+    return [];
   }
-  return getEntries(ids.map((id) => ({ collection: "cases" as const, id })));
+
+  const entries = await getEntries(
+    ids.map((id) => ({ collection: "cases" as const, id })),
+  );
+  const resolvedIds = new Set(entries.map((entry) => entry.id));
+  const missingIds = ids.filter((id) => !resolvedIds.has(id));
+
+  if (missingIds.length > 0) {
+    throw new Error(`Case preview entries not found: ${missingIds.join(", ")}`);
+  }
+
+  return entries;
 };
 
 /**
