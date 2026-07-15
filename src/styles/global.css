@@ -5,7 +5,9 @@
   font-style: normal;
   font-weight: 200 400;
   font-display: swap;
-  src: url("/fonts/ArialRegular.woff") format("woff");
+  src:
+    url("/fonts/ArialRegular.woff2") format("woff2"),
+    url("/fonts/ArialRegular.woff") format("woff");
 }
 
 @font-face {
@@ -13,7 +15,9 @@
   font-style: italic;
   font-weight: 200 400;
   font-display: swap;
-  src: url("/fonts/ArialItalic.woff") format("woff");
+  src:
+    url("/fonts/ArialItalic.woff2") format("woff2"),
+    url("/fonts/ArialItalic.woff") format("woff");
 }
 
 @theme static {

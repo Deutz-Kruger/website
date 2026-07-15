@@ -5,7 +5,13 @@ import "lenis/dist/lenis.css";
 import SeoLayout from "./SeoLayout.astro";
 import SiteLayout from "./SiteLayout.astro";
 
-const { title, description } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  streamPreconnect?: boolean;
+}
+
+const { title, description, streamPreconnect = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -16,29 +22,32 @@ const { title, description } = Astro.props;
 
     <link
       rel="preload"
-      href="/fonts/ArialRegular.woff"
+      href="/fonts/ArialRegular.woff2"
       as="font"
-      type="font/woff"
+      type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/ArialItalic.woff"
+      href="/fonts/ArialItalic.woff2"
       as="font"
-      type="font/woff"
+      type="font/woff2"
       crossorigin
     />
+    <link rel="preconnect" href="https://imagedelivery.net" crossorigin />
+    {
+      streamPreconnect && (
+        <link
+          rel="preconnect"
+          href="https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com"
+          crossorigin
+        />
+      )
+    }
     <link rel="manifest" href="/site.webmanifest" />
     <SeoLayout title={title} description={description} />
 
-    <script src="@/scripts/backgroundColorSwitch.ts"></script>
-    <script src="@/scripts/swup.ts"></script>
-    <script src="@/scripts/headerLogic.ts"></script>
-    <script src="@/scripts/lenis.ts"></script>
-    <script src="@/scripts/hideLogo.ts"></script>
-    <script src="@/scripts/logoSizer.ts"></script>
-    <script src="@/scripts/languageSelect.ts"></script>
-    <script src="@/scripts/services.ts"></script>
+    <script src="@/scripts/app.ts"></script>
   </head>
   <body>
     <SiteLayout>

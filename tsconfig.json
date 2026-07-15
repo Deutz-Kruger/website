@@ -1,14 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": [
-    "dist",
-    "react",
-    "r3f",
-    "Carousel.astro",
-    "carousel.ts",
-    "gradients.ts"
-  ],
+  "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": "./",
     "verbatimModuleSyntax": true,
@@ -20,8 +13,6 @@
       "@styles/*": ["src/styles/*"]
     },
     "noUnusedLocals": false,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
     "skipLibCheck": true
   }
 }

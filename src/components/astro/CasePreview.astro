@@ -46,7 +46,7 @@ function findFirstVideo(
       const firstVideo = findFirstVideo(groups);
 
       const { title, preview_image } = case_preview;
-      const isPriority = index < 2;
+      const isPriority = index === 0;
       return (
         <CasePreviewCard
           preview_image={preview_image}

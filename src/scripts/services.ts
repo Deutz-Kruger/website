@@ -17,6 +17,8 @@ export const cleanUpServices = () => {
   const services = document.querySelectorAll<HTMLElement>(".service-card");
   services.forEach((card) => {
     card.removeEventListener("click", servicesClickHandler);
+    card.removeEventListener("mouseover", servicesHoverHandler);
+    card.removeEventListener("mouseleave", servicesLeaveHandler);
   });
   window.removeEventListener("resize", snapPositions);
 };

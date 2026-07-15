@@ -32,11 +32,29 @@ interface Props {
 
 const { caseEntry } = Astro.props;
 const { client, groups, tags } = caseEntry;
+
+let mediaIndex = 0;
+const indexedGroups = groups.map((group) => {
+  const mediaStartIndex = mediaIndex;
+  mediaIndex += group.blocks.filter(
+    (block) => block._block === "image" || block._block === "video",
+  ).length;
+
+  return { group, mediaStartIndex };
+});
 ---
 
-<Layout title={client}>
+<Layout title={client} streamPreconnect>
   <hr class="mb-4 lg:mb-6" />
   <main class="relative grid grid-cols-1 lg:grid-cols-4 lg:gap-6">
-    {groups.map((group) => <GroupRenderer group={group} tags={tags} />)}
+    {
+      indexedGroups.map(({ group, mediaStartIndex }) => (
+        <GroupRenderer
+          group={group}
+          mediaStartIndex={mediaStartIndex}
+          tags={tags}
+        />
+      ))
+    }
   </main>
 </Layout>

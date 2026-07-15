@@ -20,7 +20,7 @@ if (!page) {
 const { hero, cases, services } = page.data;
 ---
 
-<Layout>
+<Layout streamPreconnect>
   <Hero hero={hero} />
   <main class="main-full-bleed-bg relative flex w-full flex-col lg:block">
     <CasePreview cases={cases} />

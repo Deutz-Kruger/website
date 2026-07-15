@@ -1,9 +1,6 @@
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { throttle } from "@/utils/throttle";
-
-gsap.registerPlugin(ScrollTrigger);
 
 let logoContainer: HTMLElement | null = null;
 let logoElement: HTMLElement | null = null;
@@ -94,7 +91,15 @@ export function initLogoAnimation() {
   }
   logoElement = logoContainer.querySelector("a"); // Assuming the 'a' tag within is the animated element
 
+  if (!logoElement) {
+    console.warn(
+      "Fixed logo element not found. Animation will not initialize.",
+    );
+    return;
+  }
+
   // Initial / base state
+  gsap.killTweensOf(logoElement);
   gsap.set(logoElement, { filter: "blur(0px)", scale: 1 });
 
   checkOverlapThrottled = throttle(checkOverlap, 100);
@@ -116,6 +121,7 @@ export function cleanUpLogoAnimation() {
   isLogoObscured = false;
   // Ensure logo is reset if animation was active (e.g., during swup transition)
   if (logoElement) {
+    gsap.killTweensOf(logoElement);
     gsap.to(logoElement, {
       duration: 0.3,
       filter: "blur(0px)",

@@ -7,9 +7,9 @@ This is the portfolio website for Deutz & Krüger, a digital agency specializing
 ### Key Technologies
 
 - **Framework**: [Astro](https://astro.build/)
-- **UI Components**: Astro components, with some [React](https://react.dev/) components for interactive elements (using `@astrojs/react`).
+- **UI Components**: Astro components with framework-free client scripts and custom elements for interactive behavior.
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Languages**: TypeScript, JavaScript, GLSL (for shaders)
+- **Languages**: TypeScript and JavaScript
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com/)
 - **Package Manager**: [pnpm](https://pnpm.io/)
 - **Content Management**: Astro's content collections are used to manage text and media content.
@@ -17,7 +17,7 @@ This is the portfolio website for Deutz & Krüger, a digital agency specializing
 ### Architecture
 
 - **Static Site Generation (SSG)**: Astro is used to build a static website, which is fast and SEO-friendly.
-- **Component-Based**: The UI is built with a combination of `.astro` and `.tsx` (React) components.
+- **Component-Based**: The UI is built with `.astro` components and framework-free TypeScript.
 - **Internationalization (i18n)**: The site supports English and German, with content organized accordingly.
 - **Content Collections**: Data for pages, cases, and layout is managed through Astro's content collections in the `src/content` directory.
 - **Cloudflare Integration**: The project is configured to deploy to Cloudflare Pages, with a custom image service for optimizing images.

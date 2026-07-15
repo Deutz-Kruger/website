@@ -12,9 +12,16 @@ interface Props {
   margin?: string;
   className?: string;
   width?: number;
+  fitContent?: boolean;
 }
 
-const { background, className = "", margin, width } = Astro.props;
+const {
+  background,
+  className = "",
+  margin,
+  width,
+  fitContent = true,
+} = Astro.props;
 const staticCol = background?.background_colors
   ? background?.background_colors[0]
   : "#EBEBEB";
@@ -36,7 +43,9 @@ const staticCol = background?.background_colors
       </div>
     ) : (
       <div
-        class={cn(className, "p-0! h-full w-full lg:w-fit", {
+        class={cn(className, "p-0! h-full w-full", {
+          "lg:w-fit": fitContent,
+          "lg:w-full": !fitContent,
           "w-full": !margin || margin === "NONE",
           "ml-auto": margin === "LEFT",
           "mr-auto": margin === "RIGHT",
