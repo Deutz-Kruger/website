@@ -1,6 +1,13 @@
 import type Swup from "swup";
 
 import { setLang } from "@/stores/langStore";
+import {
+  getGermanLegalPath,
+  getLocaleFromPath,
+  isGermanLegalPath,
+  resolveNavigationLocale,
+  type SupportedLocale,
+} from "@/utils/locale";
 
 let swupInstance: Swup | null = null;
 
@@ -11,10 +18,34 @@ export const setSwupInstance = (instance: Swup) => {
 let enClickHandler: (() => void) | null = null;
 let deClickHandler: (() => void) | null = null;
 
+const setSelectedLanguage = (lang: SupportedLocale) => {
+  const enElement = document.getElementById("en");
+  const deElement = document.getElementById("de");
+
+  enElement?.classList.toggle("inactive-lang", lang !== "en");
+  deElement?.classList.toggle("inactive-lang", lang !== "de");
+};
+
+const getLanguageCookie = (): SupportedLocale | undefined => {
+  const cookieLocale = document.cookie.match(
+    /(?:^|;\s*)lang=([A-Za-z-]+)/,
+  )?.[1];
+  return cookieLocale === "en" || cookieLocale === "de"
+    ? cookieLocale
+    : undefined;
+};
+
 const handleLanguageSwitch = (newLang: "de" | "en") => {
   setLang(newLang);
   document.cookie = `lang=${newLang}; path=/; SameSite=None; Secure`;
   const currentPath = window.location.pathname;
+
+  if (isGermanLegalPath(currentPath)) {
+    setSelectedLanguage(newLang);
+    updateNavLinks(newLang);
+    return;
+  }
+
   const pathSegments = currentPath.split("/");
 
   if (pathSegments[1] === newLang) return;
@@ -33,10 +64,21 @@ const updateNavLinks = (lang: "de" | "en") => {
   const navLinks = document.querySelectorAll("nav a, footer a");
   navLinks.forEach((link) => {
     const href = link.getAttribute("href");
-    if (href?.startsWith("/en/") || href?.startsWith("/de/")) {
-      const pathWithoutLang = href.substring(3);
-      link.setAttribute("href", `/${lang}${pathWithoutLang}`);
+    if (!href?.startsWith("/")) return;
+
+    const url = new URL(href, window.location.origin);
+    if (url.origin !== window.location.origin) return;
+
+    const legalPath = getGermanLegalPath(url.pathname);
+    if (legalPath) {
+      link.setAttribute("href", `${legalPath}${url.search}${url.hash}`);
+      return;
     }
+
+    if (!getLocaleFromPath(url.pathname)) return;
+
+    url.pathname = url.pathname.replace(/^\/(?:en|de)(?=\/|$)/, `/${lang}`);
+    link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`);
   });
 
   const logoLink = document.querySelector("#fixed-logo-container a");
@@ -47,10 +89,13 @@ const updateNavLinks = (lang: "de" | "en") => {
 
 const syncLanguageWithUrl = () => {
   const currentPath = window.location.pathname;
-  const pathSegments = currentPath.split("/");
-  const currentLang = pathSegments[1];
+  const pathLocale = getLocaleFromPath(currentPath);
 
-  if (currentLang === "en" || currentLang === "de") {
+  if (pathLocale) {
+    const currentLang = resolveNavigationLocale(
+      currentPath,
+      getLanguageCookie(),
+    );
     setLang(currentLang);
     document.cookie = `lang=${currentLang}; path=/; SameSite=None; Secure`;
     return currentLang;
@@ -66,16 +111,7 @@ export const initLangSelect = () => {
 
   const lang = currentLang;
 
-  switch (lang) {
-    case "en":
-      enElement?.classList.remove("inactive-lang");
-      deElement?.classList.add("inactive-lang");
-      break;
-    case "de":
-      deElement?.classList.remove("inactive-lang");
-      enElement?.classList.add("inactive-lang");
-      break;
-  }
+  setSelectedLanguage(lang);
 
   updateNavLinks(lang);
 

@@ -7,7 +7,13 @@
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",
-    "run_worker_first": ["/"],
+    "run_worker_first": [
+      "/",
+      "/en/impressum",
+      "/en/impressum/",
+      "/en/privacy",
+      "/en/privacy/"
+    ],
     "not_found_handling": "404-page"
   },
   "observability": {

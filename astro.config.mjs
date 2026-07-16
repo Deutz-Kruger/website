@@ -14,6 +14,20 @@ const { APP_ENV } = loadEnv(
   "",
 );
 
+const SITEMAP_EXCLUDED_PATHS = new Set([
+  "/",
+  "/de/about/",
+  "/en/about/",
+  "/en/impressum/",
+  "/en/privacy/",
+]);
+
+/** @param {string} page */
+const normalizeSitemapPath = (page) => {
+  const pathname = new URL(page).pathname;
+  return pathname === "/" ? pathname : `${pathname.replace(/\/+$/, "")}/`;
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://deutzkrueger.de",
@@ -28,7 +42,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       changefreq: "monthly",
-      filter: (page) => new URL(page).pathname !== "/",
+      filter: (page) => !SITEMAP_EXCLUDED_PATHS.has(normalizeSitemapPath(page)),
       priority: 0.7,
       i18n: {
         defaultLocale: "en",

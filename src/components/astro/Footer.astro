@@ -12,6 +12,7 @@ interface Props {
 }
 
 const { footerItems, lang } = Astro.props;
+const GERMAN_ONLY_LEGAL_PATHS = new Set(["/impressum", "/privacy"]);
 ---
 
 <footer
@@ -25,7 +26,11 @@ const { footerItems, lang } = Astro.props;
   {
     footerItems.map((item) => {
       const { href, title } = item;
-      const link = getRelativeLocaleUrl(lang, href);
+      const linkLocale = GERMAN_ONLY_LEGAL_PATHS.has(href) ? "de" : lang;
+      const localizedLink = getRelativeLocaleUrl(linkLocale, href);
+      const link = localizedLink.endsWith("/")
+        ? localizedLink
+        : `${localizedLink}/`;
       return (
         <NavItem
           link={link}

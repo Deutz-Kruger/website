@@ -5,6 +5,8 @@ import Services from "@components/astro/Services.astro";
 import Layout from "@layouts/Layout.astro";
 import { type CollectionEntry, getEntry } from "astro:content";
 
+import { normalizeMetaDescription } from "@/utils/seo";
+
 type LandingPageEntry = CollectionEntry<"landing-page">;
 
 const lang = Astro.currentLocale;
@@ -18,9 +20,10 @@ if (!page) {
 }
 
 const { hero, cases, services } = page.data;
+const description = normalizeMetaDescription(hero.headline);
 ---
 
-<Layout streamPreconnect>
+<Layout description={description} streamPreconnect>
   <Hero hero={hero} />
   <main class="main-full-bleed-bg relative flex w-full flex-col lg:block">
     <CasePreview cases={cases} />

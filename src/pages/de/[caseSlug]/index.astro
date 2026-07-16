@@ -5,6 +5,8 @@ import { getCollection, type z } from "astro:content";
 import GroupRenderer from "@/components/astro/GroupRenderer.astro";
 import { caseSchema } from "@/content/schemas/pageSchemas";
 import Layout from "@/layouts/Layout.astro";
+import { getCloudflareImageUrl, getMedia } from "@/utils/media";
+import { getCaseSeoData } from "@/utils/seo";
 
 export const getStaticPaths = (async () => {
   const cases = await getCollection("cases", (entry) =>
@@ -31,7 +33,19 @@ interface Props {
 }
 
 const { caseEntry } = Astro.props;
-const { client, groups, tags } = caseEntry;
+const { case_preview, groups, tags } = caseEntry;
+const previewMedia = getMedia(case_preview.preview_image.src);
+const seo = getCaseSeoData(
+  caseEntry,
+  import.meta.env.SITE_URL || "https://deutzkrueger.de",
+  Astro.url.pathname,
+  {
+    url: getCloudflareImageUrl(case_preview.preview_image.src),
+    alt: case_preview.preview_image.alt,
+    width: previewMedia.width,
+    height: previewMedia.height,
+  },
+);
 
 let mediaIndex = 0;
 const indexedGroups = groups.map((group) => {
@@ -44,7 +58,14 @@ const indexedGroups = groups.map((group) => {
 });
 ---
 
-<Layout title={client} streamPreconnect>
+<Layout
+  title={seo.title}
+  description={seo.description}
+  socialImage={seo.socialImage}
+  canonical={seo.canonical}
+  structuredData={seo.structuredData}
+  streamPreconnect
+>
   <hr class="mb-4 lg:mb-6" />
   <main class="relative grid grid-cols-1 lg:grid-cols-4 lg:gap-6">
     {
