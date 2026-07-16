@@ -2,16 +2,33 @@
 import "../styles/global.css";
 import "lenis/dist/lenis.css";
 
+import type { LocaleAlternates } from "@/utils/locale";
+import type { SeoImage, StructuredData } from "@/utils/seo";
+
 import SeoLayout from "./SeoLayout.astro";
 import SiteLayout from "./SiteLayout.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  socialImage?: SeoImage;
+  noIndex?: boolean;
+  canonical?: string | false;
+  localeAlternates?: LocaleAlternates | false;
+  structuredData?: StructuredData | false;
   streamPreconnect?: boolean;
 }
 
-const { title, description, streamPreconnect = false } = Astro.props;
+const {
+  title,
+  description,
+  socialImage,
+  noIndex,
+  canonical,
+  localeAlternates,
+  structuredData,
+  streamPreconnect = false,
+} = Astro.props;
 const documentLocale = Astro.currentLocale === "de" ? "de" : "en";
 ---
 
@@ -46,7 +63,15 @@ const documentLocale = Astro.currentLocale === "de" ? "de" : "en";
       )
     }
     <link rel="manifest" href="/site.webmanifest" />
-    <SeoLayout title={title} description={description} />
+    <SeoLayout
+      title={title}
+      description={description}
+      socialImage={socialImage}
+      noIndex={noIndex}
+      canonical={canonical}
+      localeAlternates={localeAlternates}
+      structuredData={structuredData}
+    />
 
     <script src="@/scripts/app.ts"></script>
   </head>

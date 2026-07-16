@@ -2,6 +2,8 @@ import type { Manifest, ManifestEntry } from "../../media-sync/schema.ts";
 
 const CLOUDFLARE_STREAM_URL =
   "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
+const CLOUDFLARE_IMAGE_URL = "https://imagedelivery.net";
+const CLOUDFLARE_IMAGE_ACCOUNT = "MdnPOFk9l0bFpoVPozEWbw";
 
 const manifestModules = import.meta.glob<{ default: Manifest }>(
   "../generated/media-manifest.json",
@@ -19,6 +21,21 @@ export const getMedia = (src: string): ManifestEntry => {
     );
   }
   return media;
+};
+
+/** Generates an absolute Cloudflare Images URL for a local image source path. */
+export const getCloudflareImageUrl = (
+  src: string,
+  variant = "public",
+): string => {
+  const media = getMedia(src);
+  if (media.type !== "image") {
+    throw new Error(
+      `Expected image media for "${src}", received "${media.type}"`,
+    );
+  }
+
+  return `${CLOUDFLARE_IMAGE_URL}/${CLOUDFLARE_IMAGE_ACCOUNT}/${encodeURIComponent(media.id)}/${encodeURIComponent(variant)}`;
 };
 
 /** Generates a Cloudflare Stream player URL for a video ID. */

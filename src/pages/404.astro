@@ -2,7 +2,13 @@
 import Layout from "@/layouts/Layout.astro";
 ---
 
-<Layout>
+<Layout
+  title="404"
+  noIndex
+  canonical={false}
+  localeAlternates={false}
+  structuredData={false}
+>
   <main class="mx-auto flex h-[80vh] w-fit flex-col justify-center gap-4">
     <h1 class="text-largest text-center">404</h1>
     <p
