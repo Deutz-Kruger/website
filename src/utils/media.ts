@@ -1,4 +1,8 @@
 import type { Manifest, ManifestEntry } from "../../media-sync/schema.ts";
+import {
+  buildVideoPosterSources,
+  type VideoPosterSources,
+} from "./videoPoster";
 
 const CLOUDFLARE_STREAM_URL =
   "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
@@ -44,8 +48,8 @@ export const getVideoPlayerUrl = (id: string) => {
   return `${CLOUDFLARE_STREAM_URL}/${encodedId}/iframe?autoplay=true&muted=true&controls=false&loop=true`;
 };
 
-/** Generates a Cloudflare Stream poster URL for a local video source path. */
-export const getVideoPoster = (src: string): string => {
-  const encodedId = encodeURIComponent(getMedia(src).id);
-  return `${CLOUDFLARE_STREAM_URL}/${encodedId}/thumbnails/thumbnail.jpg?time=0s&width=1280&height=720`;
-};
+/** Generates responsive Cloudflare Stream poster sources for a local video. */
+export const getVideoPosterSources = (src: string): VideoPosterSources =>
+  buildVideoPosterSources(getMedia(src), src);
+
+export type { VideoPosterSources } from "./videoPoster";

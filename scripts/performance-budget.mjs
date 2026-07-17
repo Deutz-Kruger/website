@@ -11,7 +11,10 @@ const BUDGETS = {
   css: 7 * 1024,
   fontReduction: 0.2,
   eagerImagesPerRoute: 2,
+  eagerImagesPerCaseRoute: 3,
 };
+
+const CASE_SLUGS = new Set(["bl-thermo", "kamikuratcg", "krumphof", "skaut"]);
 
 const failures = [];
 
@@ -69,6 +72,10 @@ const routeMetrics = [];
 
 for (const htmlPath of htmlFiles) {
   const html = await readFile(htmlPath, "utf8");
+  const routePath = path
+    .relative(DIST_DIRECTORY, htmlPath)
+    .split(path.sep)
+    .join("/");
   const scriptUrls = [
     ...html.matchAll(/<script\b[^>]*\bsrc="([^"]+\.js)"[^>]*>/g),
   ].map((match) => match[1]);
@@ -78,15 +85,19 @@ for (const htmlPath of htmlFiles) {
     ),
   ].map((match) => match[1]);
   const eagerImages = [...html.matchAll(/\bloading="eager"/g)].length;
+  const routeSegments = routePath.split("/");
+  const eagerImageLimit = CASE_SLUGS.has(routeSegments[1])
+    ? BUDGETS.eagerImagesPerCaseRoute
+    : BUDGETS.eagerImagesPerRoute;
 
   if (scriptUrls.length > 1) {
     fail(
       `${path.relative(DIST_DIRECTORY, htmlPath)} has ${scriptUrls.length} direct client scripts`,
     );
   }
-  if (eagerImages > BUDGETS.eagerImagesPerRoute) {
+  if (eagerImages > eagerImageLimit) {
     fail(
-      `${path.relative(DIST_DIRECTORY, htmlPath)} has ${eagerImages} eager images`,
+      `${routePath} has ${eagerImages} eager images (limit ${eagerImageLimit})`,
     );
   }
 

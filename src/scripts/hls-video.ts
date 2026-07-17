@@ -4,8 +4,9 @@ import {
 } from "@/utils/motion";
 
 import { HlsPlayer } from "./hls-player";
+import { onNextPresentedVideoFrame } from "./video-frame";
 
-const PRELOAD_MARGIN = "300px 0px";
+const PRELOAD_MARGIN = "100px 0px";
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
@@ -21,6 +22,7 @@ sheet.replaceSync(`
 `);
 
 class HlsVideoElement extends HTMLElement {
+  private cancelPendingReveal: (() => void) | null = null;
   private connectionVersion = 0;
   private hlsPlayer: HlsPlayer | null = null;
   private isVisible = false;
@@ -31,27 +33,24 @@ class HlsVideoElement extends HTMLElement {
   private visibilityObserver: IntersectionObserver | null = null;
   private readonly videoElement: HTMLVideoElement;
 
-  static get observedAttributes() {
-    return ["width", "height", "poster"];
-  }
-
   constructor() {
     super();
 
     const shadow = this.attachShadow({ mode: "open" });
     this.videoElement = document.createElement("video");
+    this.videoElement.setAttribute("aria-hidden", "true");
+    this.videoElement.controls = false;
+    this.videoElement.preload = "none";
 
     shadow.appendChild(this.videoElement);
     shadow.adoptedStyleSheets = [sheet];
-    this.updatePoster();
   }
 
   connectedCallback() {
     this.connectionVersion += 1;
-    this.updateAspectRatio();
     this.updatePlaybackAttributes();
-    this.updatePoster();
     this.videoElement.addEventListener("canplay", this.handleCanPlay);
+    this.videoElement.addEventListener("playing", this.handlePlaying);
     this.unsubscribeFromReducedMotion = subscribeToReducedMotion(
       this.handleMotionPreferenceChange,
     );
@@ -61,21 +60,13 @@ class HlsVideoElement extends HTMLElement {
     this.connectionVersion += 1;
     this.unsubscribeFromReducedMotion?.();
     this.videoElement.removeEventListener("canplay", this.handleCanPlay);
+    this.videoElement.removeEventListener("playing", this.handlePlaying);
     this.teardownIntersectionObservers();
     this.destroyPlayer();
 
     this.isVisible = false;
     this.motionPreferenceInitialized = false;
     this.unsubscribeFromReducedMotion = null;
-  }
-
-  attributeChangedCallback(name: string) {
-    if (name === "width" || name === "height") {
-      this.updateAspectRatio();
-    }
-    if (name === "poster") {
-      this.updatePoster();
-    }
   }
 
   private readonly handleCanPlay = () => {
@@ -86,6 +77,26 @@ class HlsVideoElement extends HTMLElement {
     ) {
       this.playVideo();
     }
+  };
+
+  private readonly handlePlaying = () => {
+    if (this.hasAttribute("data-playing")) return;
+
+    this.cancelPendingReveal?.();
+    const connectionVersion = this.connectionVersion;
+    this.cancelPendingReveal = onNextPresentedVideoFrame(
+      this.videoElement,
+      () => {
+        this.cancelPendingReveal = null;
+        if (
+          this.connectionVersion === connectionVersion &&
+          this.isConnected &&
+          !this.prefersReducedMotion
+        ) {
+          this.setAttribute("data-playing", "");
+        }
+      },
+    );
   };
 
   private readonly handleMotionPreferenceChange = (
@@ -117,32 +128,19 @@ class HlsVideoElement extends HTMLElement {
   };
 
   private readonly handlePlayerError = (error: unknown) => {
+    this.cancelPendingReveal?.();
+    this.cancelPendingReveal = null;
+    this.removeAttribute("data-playing");
     if (this.isConnected) {
       console.warn("Unable to start HLS video.", error);
     }
   };
-
-  private updateAspectRatio() {
-    const width = this.getAttribute("width");
-    const height = this.getAttribute("height");
-
-    if (width && height) {
-      this.style.aspectRatio = `${width} / ${height}`;
-    }
-  }
 
   private updatePlaybackAttributes() {
     this.videoElement.loop =
       !this.prefersReducedMotion && this.hasAttribute("loop");
     this.videoElement.muted = this.hasAttribute("muted");
     this.videoElement.playsInline = this.hasAttribute("playsinline");
-  }
-
-  private updatePoster() {
-    const poster = this.getAttribute("poster");
-    if (poster) {
-      this.videoElement.poster = poster;
-    }
   }
 
   private ensurePlayer(): Promise<void> {
@@ -269,9 +267,12 @@ class HlsVideoElement extends HTMLElement {
   }
 
   private destroyPlayer() {
+    this.cancelPendingReveal?.();
+    this.cancelPendingReveal = null;
     this.videoElement.pause();
     this.hlsPlayer?.destroy();
     this.hlsPlayer = null;
+    this.removeAttribute("data-playing");
   }
 }
 

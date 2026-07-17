@@ -33,6 +33,44 @@ const assertSafeHead = (html) => {
   assert.doesNotMatch(html, /<meta name="keywords"/i);
   assert.doesNotMatch(html, /href="javascript:|<script>alert\(/i);
 };
+const getOpeningTags = (html, tagName) =>
+  [...html.matchAll(new RegExp(`<${tagName}\\b[^>]*>`, "gi"))].map(
+    (match) => match[0],
+  );
+const assertVideoMarkup = (html, tagName) => {
+  const players = getOpeningTags(html, tagName);
+  const posters = getOpeningTags(html, "img").filter((tag) =>
+    /\bdata-media-poster\b/i.test(tag),
+  );
+  const frames = [
+    ...html.matchAll(
+      /<div\b(?=[^>]*\bdata-video-frame(?=[\s=>]))(?=[^>]*\bstyle="aspect-ratio: \d+ \/ \d+;")[^>]*>/gi,
+    ),
+  ];
+
+  assert.ok(players.length > 0, `Expected at least one <${tagName}>`);
+  assert.equal(posters.length, players.length);
+  assert.equal(frames.length, players.length);
+  assert.equal(
+    posters.filter((tag) => /\bloading="eager"/i.test(tag)).length,
+    1,
+  );
+
+  for (const player of players) {
+    assert.match(player, /\bdata-media-player\b/i);
+    assert.match(player, /\bwidth="\d+"/i);
+    assert.match(player, /\bheight="\d+"/i);
+    assert.doesNotMatch(player, /\bposter=/i);
+  }
+
+  for (const poster of posters) {
+    assert.match(poster, /\bwidth="\d+"/i);
+    assert.match(poster, /\bheight="\d+"/i);
+    assert.match(poster, /\bsrcset="[^"]* 480w,[^"]* 768w,[^"]* 1280w"/i);
+    assert.match(poster, /\bloading="(?:eager|lazy)"/i);
+    assert.match(poster, /\bfetchpriority="(?:auto|low)"/i);
+  }
+};
 
 const [
   englishHome,
@@ -74,6 +112,7 @@ for (const [locale, html] of [
   assert.match(html, new RegExp(`${SITE_URL}/android-chrome-512x512\\.png`));
   assert.doesNotMatch(html, /web-app-manifest-512x512\.png/);
   assertSafeHead(html);
+  assertVideoMarkup(html, "preview-video");
 
   const graph = getJsonLd(html)?.["@graph"];
   assert.deepEqual(
@@ -120,6 +159,12 @@ for (const locale of LOCALES) {
     assert.equal(graph[0].description, graph[1].description);
     assert.match(graph[2].url, /^https:\/\/imagedelivery\.net\/.*\/public$/);
     assertSafeHead(html);
+    assertVideoMarkup(html, "hls-video");
+    assert.match(
+      html,
+      /<img\b(?=[^>]*\bloading="eager")(?=[^>]*\bfetchpriority="high")[^>]*>/i,
+      `${canonical} is missing an eager high-priority content image`,
+    );
   }
 
   assert.equal(localeTitles.size, CASE_SLUGS.length);

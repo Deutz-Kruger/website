@@ -4,14 +4,13 @@ import { Image } from "astro:assets";
 import { cn } from "@/utils/cn";
 import { getMedia } from "@/utils/media";
 
-export const prerender = false;
-
 interface Props {
   src: string;
   altText: string;
   className?: string;
   imgClassName?: string;
-  loading?: string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
   sizes?: string;
   positioning?: string;
 }
@@ -22,6 +21,7 @@ const {
   className = "",
   imgClassName = "",
   loading = "lazy",
+  fetchpriority = "auto",
   sizes = "(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw",
 } = Astro.props;
 
@@ -56,6 +56,7 @@ const height = mediaEntry?.height;
           imgClassName,
         )}
         loading={loadingOrder}
+        fetchpriority={fetchpriority}
       />
     ) : (
       <div class="flex w-full items-center justify-center bg-gray-100 text-gray-500 md:h-full">

@@ -3,7 +3,6 @@ import { type z } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 import { caseSchema } from "@/content/schemas/pageSchemas";
-import { getVideoPoster } from "@/utils/media";
 
 import Tags from "./Tags.astro";
 import ImageWrapper from "./util/ImageWrapper.astro";
@@ -33,9 +32,6 @@ const {
 } = Astro.props;
 
 const lang = Astro.currentLocale ?? "en";
-const videoPoster = preview_video
-  ? getVideoPoster(preview_video.video)
-  : undefined;
 ---
 
 <a
@@ -48,7 +44,7 @@ const videoPoster = preview_video
       preview_video ? (
         <PreviewVideo
           src={preview_video.video}
-          poster={videoPoster}
+          priority={loading === "eager"}
           className="xl:w-4/9 h-full mx-auto block w-full lg:mx-0"
         />
       ) : (
