@@ -1,24 +1,24 @@
 # Non-visual Performance Optimization Report
 
-Date: 2026-07-14
+Date: 2026-07-23
 
 ## Guardrail
 
-This pass preserves the rendered design and observable interactions: Arial
-typography, Swup's 350 ms transition, Lenis settings, GSAP logo animation,
-header/services behavior, media quality, and visible video playback rules.
+This pass preserves observable interactions: Swup's 350 ms transition, Lenis
+settings, GSAP logo animation, header/services behavior, media quality, and
+visible video playback rules. Current typography uses OpeningHoursSans.
 
 ## Production-build results
 
-| Budget area                        |                                Before |                       After | Result          |
-| ---------------------------------- | ------------------------------------: | --------------------------: | --------------- |
-| Sitewide JavaScript                |                         ~65.8 KB gzip |              46.74 KiB gzip | Pass (≤50 KiB)  |
-| HLS player                         |                        161.74 KB gzip |             104.80 KiB gzip | Pass (≤115 KiB) |
-| CSS                                |                         ~5.98 KB gzip |               5.84 KiB gzip | Pass (≤7 KiB)   |
-| Arial font transfer                |                        845,528 B WOFF |             650,320 B WOFF2 | 23.09% smaller  |
-| Client chunks                      | Empty/redundant entries plus full HLS |            2, neither empty | Pass            |
-| Maximum eager images per route     |         Logo plus up to 6 deep images | Logo only in current routes | Pass (≤2)       |
-| Unreferenced React client artifact |                         60.99 KB gzip |                     Removed | Pass            |
+| Budget area                        |                                Before |                           After | Result          |
+| ---------------------------------- | ------------------------------------: | ------------------------------: | --------------- |
+| Sitewide JavaScript                |                         ~65.8 KB gzip |                  46.74 KiB gzip | Pass (≤50 KiB)  |
+| HLS player                         |                        161.74 KB gzip |                 104.80 KiB gzip | Pass (≤115 KiB) |
+| CSS                                |                         ~5.98 KB gzip |                   5.84 KiB gzip | Pass (≤7 KiB)   |
+| Web font transfer                  |              650,320 B previous WOFF2 | 14,744 B OpeningHoursSans WOFF2 | 97.73% smaller  |
+| Client chunks                      | Empty/redundant entries plus full HLS |                2, neither empty | Pass            |
+| Maximum eager images per route     |         Logo plus up to 6 deep images |     Logo only in current routes | Pass (≤2)       |
+| Unreferenced React client artifact |                         60.99 KB gzip |                         Removed | Pass            |
 
 `pnpm build` now runs `scripts/performance-budget.mjs` after Astro's production
 build and fails if any budget regresses.
@@ -27,13 +27,13 @@ build and fails if any budget regresses.
 
 ### Fonts
 
-- Added full-glyph WOFF2 versions of the existing regular and italic Arial
-  files. WOFF remains as the fallback.
-- WOFF2 is now preferred by `@font-face` and preloaded by the layout.
-- FontTools verification confirmed equivalence for `cmap`, `glyf`, `hmtx`,
-  `kern`, `GPOS`, `GSUB`, `head`, `hhea`, and `OS/2`, plus glyph order.
-- No glyph subsetting, family, weight, metric, fallback, or `font-display`
-  change was made.
+- Replaced the previous regular and italic assets with the supplied
+  OpeningHoursSans regular WOFF2.
+- OpeningHoursSans is declared by `@font-face` and preloaded by the layout.
+- Italic text uses browser synthesis because no OpeningHoursSans italic asset
+  is present.
+- The production budget rejects unexpected font files and limits total font
+  transfer to 20 KiB.
 
 ### Application and navigation scripts
 

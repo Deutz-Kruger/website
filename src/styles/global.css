@@ -1,23 +1,11 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: Arial;
+  font-family: "OpeningHoursSans";
   font-style: normal;
-  font-weight: 200 400;
+  font-weight: 400;
   font-display: swap;
-  src:
-    url("/fonts/ArialRegular.woff2") format("woff2"),
-    url("/fonts/ArialRegular.woff") format("woff");
-}
-
-@font-face {
-  font-family: Arial;
-  font-style: italic;
-  font-weight: 200 400;
-  font-display: swap;
-  src:
-    url("/fonts/ArialItalic.woff2") format("woff2"),
-    url("/fonts/ArialItalic.woff") format("woff");
+  src: url("/fonts/OpeningHoursSans-Regular.woff2") format("woff2");
 }
 
 @theme static {
@@ -29,7 +17,7 @@
 
 @theme {
   /* Typo */
-  --font-sans: Arial, "sans-serif";
+  --font-sans: "OpeningHoursSans", sans-serif;
   --text-largest: 3.5rem;
   --text-largerer: 3rem;
   --text-larger: 2.175rem;
