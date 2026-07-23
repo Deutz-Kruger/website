@@ -12,11 +12,12 @@ type ImageBlock = z.infer<typeof imageBlock>;
 
 interface Props {
   block: ImageBlock;
-  loading: string;
+  loading: "eager" | "lazy";
+  fetchpriority: "high" | "auto";
   className?: string;
 }
 
-const { block, loading, className } = Astro.props;
+const { block, loading, fetchpriority, className } = Astro.props;
 const { base, images } = block;
 const { layout, background } = base;
 const positioning = generateGridPosition(layout);
@@ -56,6 +57,7 @@ if (positioning.desktopSpan === 1) {
       imgClassName={cn({ "max-h-[33vh]": positioning.desktopSpan < 2 })}
       altText={images[0].alt}
       sizes={dynamicSizes}
+      fetchpriority={fetchpriority}
     />
   </Background>
 </section>

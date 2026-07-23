@@ -2,6 +2,7 @@
 import { type z } from "astro:content";
 
 import { groupSchema } from "@/content/schemas/blockSchemas";
+import { indexMediaBlocks } from "@/utils/mediaOrder";
 
 import BlockRenderer from "./BlockRenderer.astro";
 
@@ -10,26 +11,27 @@ export type Group = z.infer<typeof groupSchema>;
 interface Props {
   group: Group;
   mediaStartIndex: number;
+  imageStartIndex: number;
   tags: Array<string> | undefined;
 }
 
-const { group, mediaStartIndex, tags } = Astro.props;
-
-let nextMediaIndex = mediaStartIndex;
-const indexedBlocks = group.blocks.map((block) => {
-  const mediaIndex = nextMediaIndex;
-  if (block._block === "image" || block._block === "video") {
-    nextMediaIndex += 1;
-  }
-
-  return { block, mediaIndex };
-});
+const { group, mediaStartIndex, imageStartIndex, tags } = Astro.props;
+const indexedBlocks = indexMediaBlocks(
+  group.blocks,
+  mediaStartIndex,
+  imageStartIndex,
+);
 ---
 
 <div class="mb-5 flex h-fit flex-col gap-3 lg:mb-0 lg:contents lg:gap-0">
   {
-    indexedBlocks.map(({ block, mediaIndex }) => (
-      <BlockRenderer block={block} mediaIndex={mediaIndex} tags={tags} />
+    indexedBlocks.map(({ block, mediaIndex, imageIndex }) => (
+      <BlockRenderer
+        block={block}
+        mediaIndex={mediaIndex}
+        imageIndex={imageIndex}
+        tags={tags}
+      />
     ))
   }
 </div>

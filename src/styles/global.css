@@ -184,6 +184,14 @@ section[data-desktop-start] {
   aspect-ratio: unset;
 }
 
+[data-media-player][data-playing] {
+  opacity: 1;
+}
+
+[data-media-player][data-playing] + [data-media-poster] {
+  opacity: 0;
+}
+
 @media (min-width: 1024px) {
   section[data-desktop-start] {
     grid-column-start: var(--desktop-start);

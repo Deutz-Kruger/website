@@ -1,5 +1,6 @@
 allowBuilds:
   esbuild: true
+  ffmpeg-static: true
   sharp: true
   swup: true
   workerd: true
@@ -7,6 +8,7 @@ allowBuilds:
 onlyBuiltDependencies:
   - "@tailwindcss/oxide"
   - esbuild
+  - ffmpeg-static
   - sharp
   - swup
   - workerd

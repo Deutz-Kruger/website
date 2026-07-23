@@ -25,6 +25,18 @@ import {
 } from "./sync";
 
 const hash = (character: string) => character.repeat(64);
+const TEST_LQIP = {
+  src: "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASogABAAPwFqrE6rJiQiMAgBYCAJaQAAeyAA/vDBoAA=",
+  width: 32,
+  height: 16,
+  hasAlpha: false,
+} as const;
+const SQUARE_TEST_LQIP = {
+  src: "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoKAAoAA8BgJaQAA3AA/vS4AAA=",
+  width: 10,
+  height: 10,
+  hasAlpha: false,
+} as const;
 
 const imageFile = (overrides?: Partial<LocalMediaFile>): LocalMediaFile => ({
   absolutePath: "/tmp/image.png",
@@ -33,6 +45,7 @@ const imageFile = (overrides?: Partial<LocalMediaFile>): LocalMediaFile => ({
   type: "image",
   width: 100,
   height: 50,
+  lqip: TEST_LQIP,
   ...overrides,
 });
 
@@ -67,6 +80,7 @@ class FakeClient implements MediaClient {
   deleted: RemoteMedia[] = [];
   failDeleteIds = new Set<string>();
   getRequests: Array<{ id: string; type: MediaType }> = [];
+  listManagedRequests = 0;
   updates: Array<{ media: RemoteMedia; metadata: ManagedMetadata }> = [];
   uploads: LocalMediaFile[] = [];
   failUpload = false;
@@ -99,6 +113,7 @@ class FakeClient implements MediaClient {
   }
 
   async listManagedMedia() {
+    this.listManagedRequests += 1;
     return this.remote.filter((entry) => entry.creator === MEDIA_CREATOR);
   }
 
@@ -204,13 +219,57 @@ test("unchanged sync reuses remote asset and writes complete manifest", async (t
   assert.equal(summary.uploaded, 0);
   assert.equal(client.uploads.length, 0);
   assert.deepEqual(await readManifest(manifestPath), {
-    [local.sourcePath]: {
-      id: client.remote[0].id,
-      type: "image",
-      width: 100,
-      height: 50,
+    schemaVersion: "2",
+    entries: {
+      [local.sourcePath]: {
+        id: client.remote[0].id,
+        type: "image",
+        width: 100,
+        height: 50,
+        lqip: TEST_LQIP,
+      },
     },
   });
+});
+
+test("manifest output is versioned and deterministically ordered", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-manifest-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const manifestPath = join(directory, "manifest.json");
+  const entry = {
+    id: "image-id",
+    type: "image" as const,
+    width: 100,
+    height: 50,
+    lqip: TEST_LQIP,
+  };
+
+  await writeManifest(
+    {
+      "src/content/media/z.png": entry,
+      "src/content/media/a.png": entry,
+    },
+    manifestPath,
+  );
+
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  assert.equal(manifest.schemaVersion, "2");
+  assert.deepEqual(Object.keys(manifest.entries), [
+    "src/content/media/a.png",
+    "src/content/media/z.png",
+  ]);
+});
+
+test("outdated manifests fail with a sync recovery instruction", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-manifest-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const manifestPath = join(directory, "manifest.json");
+  await writeFile(manifestPath, '{"src/content/media/image.png":{}}', "utf8");
+
+  await assert.rejects(
+    readManifest(manifestPath),
+    /manifest is invalid or outdated.*pnpm sync-media/i,
+  );
 });
 
 test("changed file uploads once without deleting previous asset", async (t) => {
@@ -283,6 +342,7 @@ test("failed upload preserves previous manifest", async (t) => {
         type: "image",
         width: 10,
         height: 10,
+        lqip: SQUARE_TEST_LQIP,
       },
     },
     manifestPath,
@@ -302,6 +362,43 @@ test("failed upload preserves previous manifest", async (t) => {
   );
   assert.equal(await readFile(manifestPath, "utf8"), before);
   assert.equal(client.deleted.length, 0);
+});
+
+test("invalid LQIP aborts before Cloudflare access and preserves manifest", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-sync-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const manifestPath = join(directory, "manifest.json");
+  await writeManifest(
+    {
+      "src/content/media/old.png": {
+        id: "old-id",
+        type: "image",
+        width: 100,
+        height: 50,
+        lqip: TEST_LQIP,
+      },
+    },
+    manifestPath,
+  );
+  const before = await readFile(manifestPath, "utf8");
+  const client = new FakeClient();
+  const invalidFile = {
+    ...imageFile(),
+    lqip: { ...TEST_LQIP, src: "https://example.com/placeholder.webp" },
+  } as unknown as LocalMediaFile;
+
+  await assert.rejects(
+    syncMedia({
+      client,
+      localMedia: [invalidFile],
+      logger: silentLogger,
+      manifestPath,
+    }),
+  );
+  assert.equal(client.listManagedRequests, 0);
+  assert.equal(client.uploads.length, 0);
+  assert.equal(client.updates.length, 0);
+  assert.equal(await readFile(manifestPath, "utf8"), before);
 });
 
 test("interrupted processing video is waited for and reused", async (t) => {
@@ -369,6 +466,7 @@ test("prune marks, retains, deletes, and isolates managed media", async (t) => {
         type: "image",
         width: current.width,
         height: current.height,
+        lqip: TEST_LQIP,
       },
     },
     manifestPath,
@@ -469,6 +567,7 @@ test("legacy cleanup dry run classifies candidates without deletion", async (t) 
         type: "image",
         width: 10,
         height: 10,
+        lqip: SQUARE_TEST_LQIP,
       },
     },
     manifestPath,

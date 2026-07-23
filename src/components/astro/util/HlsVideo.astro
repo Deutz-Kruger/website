@@ -1,40 +1,79 @@
 ---
 import { cn } from "@/utils/cn";
-import { getMedia } from "@/utils/media";
+import { getMedia, getVideoPosterSources } from "@/utils/media";
 
 interface Props {
   src: string;
   className?: string;
-  width?: number;
-  height?: number;
   hasBackground?: boolean;
-  poster?: string;
+  priority?: boolean;
+  sizes?: string;
 }
 
 const {
   src,
   className = "",
-  width,
-  height,
   hasBackground = false,
-  poster,
+  priority = false,
+  sizes = "100vw",
 } = Astro.props;
 
-const videoId = getMedia(src).id;
+const media = getMedia(src);
+const poster = getVideoPosterSources(src);
+const videoId = media.id;
 
 const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${videoId}/manifest/video.m3u8`;
 ---
 
-<hls-video
-  src={manifestUrl}
-  class={cn(className)}
-  autoplay
-  loop
-  muted
-  playsInline
-  width={width}
-  height={height}
-  has-background={hasBackground}
-  poster={poster}
+<div
+  class={cn("relative w-full overflow-hidden", className)}
+  data-video-frame
+  style={`aspect-ratio: ${poster.width} / ${poster.height};`}
 >
-</hls-video>
+  <img
+    src={media.lqip.src}
+    alt=""
+    aria-hidden="true"
+    width={media.lqip.width}
+    height={media.lqip.height}
+    decoding="sync"
+    draggable="false"
+    data-media-lqip
+    class={cn(
+      "pointer-events-none absolute inset-0 z-0 block h-full w-full scale-[1.08] object-contain blur-[10px]",
+      { "rounded-[0.625rem]": hasBackground },
+    )}
+  />
+  <hls-video
+    src={manifestUrl}
+    class="absolute inset-0 z-10 block h-full w-full opacity-0"
+    data-media-player
+    aria-hidden="true"
+    autoplay
+    loop
+    muted
+    playsinline
+    width={poster.width}
+    height={poster.height}
+    has-background={hasBackground}
+  >
+  </hls-video>
+  <img
+    src={poster.src}
+    srcset={poster.srcset}
+    sizes={sizes}
+    alt=""
+    aria-hidden="true"
+    width={poster.width}
+    height={poster.height}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "auto" : "low"}
+    decoding="async"
+    draggable="false"
+    data-media-poster
+    class={cn(
+      "pointer-events-none absolute inset-0 z-20 block h-full w-full object-contain opacity-100 transition-opacity duration-150 ease-out",
+      { "rounded-[0.625rem]": hasBackground },
+    )}
+  />
+</div>

@@ -16,9 +16,11 @@ import {
   type LegacyCleanupResultItem,
   legacyCleanupResultSchema,
   type LocalMediaFile,
+  localMediaFileSchema,
   type ManagedMetadata,
   managedMetadataSchema,
   type Manifest,
+  MANIFEST_SCHEMA_VERSION,
   type ManifestEntry,
   manifestSchema,
   MEDIA_CREATOR,
@@ -171,11 +173,14 @@ const toManifestEntry = (
   type: file.type,
   width: file.width,
   height: file.height,
+  lqip: file.lqip,
 });
 
-const sortManifest = (manifest: Manifest): Manifest =>
+const sortManifestEntries = (
+  entries: Manifest["entries"],
+): Manifest["entries"] =>
   Object.fromEntries(
-    Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)),
+    Object.entries(entries).sort(([a], [b]) => a.localeCompare(b)),
   );
 
 const writeJsonAtomic = async (path: string, value: unknown): Promise<void> => {
@@ -187,10 +192,13 @@ const writeJsonAtomic = async (path: string, value: unknown): Promise<void> => {
 
 /** Writes a generated manifest atomically to avoid partial builds. */
 export const writeManifest = async (
-  manifest: Manifest,
+  entries: Manifest["entries"],
   manifestPath = DEFAULT_MANIFEST_PATH,
 ): Promise<void> => {
-  const parsed = manifestSchema.parse(sortManifest(manifest));
+  const parsed = manifestSchema.parse({
+    schemaVersion: MANIFEST_SCHEMA_VERSION,
+    entries: sortManifestEntries(entries),
+  });
   await writeJsonAtomic(manifestPath, parsed);
 };
 
@@ -199,7 +207,13 @@ export const readManifest = async (
   manifestPath = DEFAULT_MANIFEST_PATH,
 ): Promise<Manifest> => {
   const contents = await readFile(manifestPath, "utf8");
-  return manifestSchema.parse(JSON.parse(contents));
+  try {
+    return manifestSchema.parse(JSON.parse(contents));
+  } catch (error) {
+    throw new Error(
+      `Generated media manifest is invalid or outdated. Run "pnpm sync-media" first. ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
 };
 
 const buildRemoteIndex = (remoteMedia: RemoteMedia[]) => {
@@ -252,12 +266,13 @@ const resolveExistingMedia = async (
 /** Reconciles local media with tagged Cloudflare assets without deleting anything. */
 export const syncMedia = async (options: SyncOptions): Promise<SyncSummary> => {
   const logger = options.logger ?? defaultLogger;
-  const localMedia =
+  const scannedMedia =
     options.localMedia ??
     (await scanLocalMedia({
       mediaRoot: options.mediaRoot ?? DEFAULT_MEDIA_ROOT,
       projectRoot: options.projectRoot ?? DEFAULT_PROJECT_ROOT,
     }));
+  const localMedia = localMediaFileSchema.array().parse(scannedMedia);
   const remoteMedia = await options.client.listManagedMedia();
   if (
     options.requireExistingInventory &&
@@ -344,7 +359,9 @@ export const pruneMedia = async (
   const manifest = await readManifest(
     options.manifestPath ?? DEFAULT_MANIFEST_PATH,
   );
-  const keepIds = new Set(Object.values(manifest).map((entry) => entry.id));
+  const keepIds = new Set(
+    Object.values(manifest.entries).map((entry) => entry.id),
+  );
   const remoteMedia = await options.client.listManagedMedia();
   const summary: PruneSummary = {
     kept: 0,
@@ -859,7 +876,7 @@ export const cleanupLegacyMedia = async (
     throw error;
   }
   const protectedIds = new Set(
-    Object.values(manifest).map((entry) => entry.id),
+    Object.values(manifest.entries).map((entry) => entry.id),
   );
   const [images, videos] = await Promise.all([
     options.client.listImages(),

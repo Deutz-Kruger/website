@@ -33,6 +33,9 @@ test("media scan ignores dotfiles and extracts image dimensions", async (t) => {
   assert.equal(files[0].sourcePath, "src/content/media/pixel.png");
   assert.equal(files[0].width, 1);
   assert.equal(files[0].height, 1);
+  assert.equal(files[0].lqip.width, 1);
+  assert.equal(files[0].lqip.height, 1);
+  assert.match(files[0].lqip.src, /^data:image\/webp;base64,/);
 });
 
 test("media scan rejects unsupported visible files", async (t) => {

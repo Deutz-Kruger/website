@@ -15,19 +15,28 @@ type Block = z.infer<typeof blocksUnion>;
 interface Props {
   block: Block;
   mediaIndex: number;
+  imageIndex: number;
   tags: Array<string> | undefined;
 }
 
-const { block, mediaIndex, tags } = Astro.props;
+const { block, mediaIndex, imageIndex, tags } = Astro.props;
 
-const loadingOrder = mediaIndex === 0 ? "eager" : "lazy";
+const isFirstImage = imageIndex === 0;
 ---
 
 {block._block === "title" && <TitleBlock block={block} tags={tags} />}
-{block._block === "video" && <VideoBlock block={block} />}
+{
+  block._block === "video" && (
+    <VideoBlock block={block} priority={mediaIndex === 0} />
+  )
+}
 {
   block._block === "image" && (
-    <ImageBlock block={block} loading={loadingOrder} />
+    <ImageBlock
+      block={block}
+      loading={isFirstImage ? "eager" : "lazy"}
+      fetchpriority={isFirstImage ? "high" : "auto"}
+    />
   )
 }
 {block._block === "text" && <TextBlock block={block} />}

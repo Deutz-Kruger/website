@@ -4,34 +4,25 @@ import {
 } from "@/utils/motion";
 
 import { HlsPlayer } from "./hls-player";
+import { onNextPresentedVideoFrame } from "./video-frame";
 
-const PRELOAD_MARGIN = "300px 0px";
+const PRELOAD_MARGIN = "100px 0px";
 
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`
   :host {
     display: block;
   }
-  .frame {
-    position: relative;
-    width: 100%;
-    aspect-ratio: var(--preview-aspect-ratio);
-  }
-  .baseline-spacer {
-    height: 0.4375rem;
-  }
   video {
-    position: absolute;
-    inset: 0 auto auto 0;
     display: block;
     width: 100%;
-    height: auto;
-    aspect-ratio: var(--preview-aspect-ratio);
+    height: 100%;
     object-fit: contain;
   }
 `);
 
 class PreviewVideoElement extends HTMLElement {
+  private cancelPendingReveal: (() => void) | null = null;
   private connectionVersion = 0;
   private hlsPlayer: HlsPlayer | null = null;
   private hasPlayed = false;
@@ -45,29 +36,20 @@ class PreviewVideoElement extends HTMLElement {
   private visibilityObserver: IntersectionObserver | null = null;
   private readonly videoElement: HTMLVideoElement;
 
-  static get observedAttributes() {
-    return ["src", "poster"];
-  }
-
   constructor() {
     super();
 
     const shadow = this.attachShadow({ mode: "open" });
     this.videoElement = document.createElement("video");
+    this.videoElement.setAttribute("aria-hidden", "true");
     this.videoElement.muted = true;
     this.videoElement.playsInline = true;
     this.videoElement.loop = false;
     this.videoElement.controls = false;
-    this.videoElement.preload = "metadata";
+    this.videoElement.preload = "none";
 
-    const frame = document.createElement("div");
-    const baselineSpacer = document.createElement("div");
-    frame.className = "frame";
-    baselineSpacer.className = "baseline-spacer";
-    frame.appendChild(this.videoElement);
-    shadow.append(frame, baselineSpacer);
+    shadow.appendChild(this.videoElement);
     shadow.adoptedStyleSheets = [sheet];
-    this.updatePoster();
   }
 
   connectedCallback() {
@@ -75,7 +57,7 @@ class PreviewVideoElement extends HTMLElement {
     this.hasPlayed = false;
     this.videoElement.loop = false;
     this.updateMobileState();
-    this.updatePoster();
+    this.videoElement.addEventListener("playing", this.handlePlaying);
 
     window.addEventListener("resize", this.updateMobileState);
     this.unsubscribeFromReducedMotion = subscribeToReducedMotion(
@@ -87,6 +69,7 @@ class PreviewVideoElement extends HTMLElement {
     this.connectionVersion += 1;
     this.unsubscribeFromReducedMotion?.();
     window.removeEventListener("resize", this.updateMobileState);
+    this.videoElement.removeEventListener("playing", this.handlePlaying);
     this.teardownHoverInteraction();
     this.teardownIntersectionObservers();
     this.destroyPlayer();
@@ -96,14 +79,15 @@ class PreviewVideoElement extends HTMLElement {
     this.unsubscribeFromReducedMotion = null;
   }
 
-  attributeChangedCallback(name: string) {
-    if (name === "poster") {
-      this.updatePoster();
-    }
-  }
-
   private readonly updateMobileState = () => {
-    this.isMobile = window.matchMedia("(width < 1024px)").matches;
+    const isMobile = window.matchMedia("(width < 1024px)").matches;
+    if (this.isMobile === isMobile) return;
+
+    this.isMobile = isMobile;
+    if (this.motionPreferenceInitialized && !this.prefersReducedMotion) {
+      this.teardownIntersectionObservers();
+      this.setupIntersectionObservers();
+    }
   };
 
   private readonly handleMouseEnter = () => {
@@ -117,6 +101,39 @@ class PreviewVideoElement extends HTMLElement {
     if (!this.isMobile && !this.prefersReducedMotion) {
       this.videoElement.loop = false;
     }
+  };
+
+  private readonly handleFocusIn = () => {
+    if (this.isMobile || this.prefersReducedMotion) return;
+
+    this.videoElement.loop = this.hasPlayed;
+    void this.playVideo().catch(this.handlePlayerError);
+  };
+
+  private readonly handleFocusOut = () => {
+    if (!this.isMobile && !this.prefersReducedMotion) {
+      this.videoElement.loop = false;
+    }
+  };
+
+  private readonly handlePlaying = () => {
+    if (this.hasAttribute("data-playing")) return;
+
+    this.cancelPendingReveal?.();
+    const connectionVersion = this.connectionVersion;
+    this.cancelPendingReveal = onNextPresentedVideoFrame(
+      this.videoElement,
+      () => {
+        this.cancelPendingReveal = null;
+        if (
+          this.connectionVersion === connectionVersion &&
+          this.isConnected &&
+          !this.prefersReducedMotion
+        ) {
+          this.setAttribute("data-playing", "");
+        }
+      },
+    );
   };
 
   private readonly handleMotionPreferenceChange = (
@@ -150,17 +167,13 @@ class PreviewVideoElement extends HTMLElement {
   };
 
   private readonly handlePlayerError = (error: unknown) => {
+    this.cancelPendingReveal?.();
+    this.cancelPendingReveal = null;
+    this.removeAttribute("data-playing");
     if (this.isConnected) {
       console.warn("Unable to start preview video.", error);
     }
   };
-
-  private updatePoster() {
-    const poster = this.getAttribute("poster");
-    if (poster) {
-      this.videoElement.poster = poster;
-    }
-  }
 
   private ensurePlayer(): Promise<void> {
     if (!shouldLoadMotionVideo(this.prefersReducedMotion)) {
@@ -244,23 +257,17 @@ class PreviewVideoElement extends HTMLElement {
     this.parentLink = this.closest("a");
     this.parentLink?.addEventListener("mouseenter", this.handleMouseEnter);
     this.parentLink?.addEventListener("mouseleave", this.handleMouseLeave);
+    this.parentLink?.addEventListener("focusin", this.handleFocusIn);
+    this.parentLink?.addEventListener("focusout", this.handleFocusOut);
   }
 
   private setupIntersectionObservers() {
-    if (this.prefersReducedMotion) return;
+    if (this.prefersReducedMotion || !this.isMobile) return;
 
     const connectionVersion = this.connectionVersion;
 
     if (!("IntersectionObserver" in window)) {
-      if (this.isMobile) {
-        void this.playVideo().catch(this.handlePlayerError);
-      } else {
-        void this.ensurePlayer().catch((error: unknown) => {
-          if (this.connectionVersion === connectionVersion) {
-            this.handlePlayerError(error);
-          }
-        });
-      }
+      void this.playVideo().catch(this.handlePlayerError);
       return;
     }
 
@@ -318,6 +325,8 @@ class PreviewVideoElement extends HTMLElement {
   private teardownHoverInteraction() {
     this.parentLink?.removeEventListener("mouseenter", this.handleMouseEnter);
     this.parentLink?.removeEventListener("mouseleave", this.handleMouseLeave);
+    this.parentLink?.removeEventListener("focusin", this.handleFocusIn);
+    this.parentLink?.removeEventListener("focusout", this.handleFocusOut);
     this.parentLink = null;
   }
 
@@ -329,10 +338,13 @@ class PreviewVideoElement extends HTMLElement {
   }
 
   private destroyPlayer() {
+    this.cancelPendingReveal?.();
+    this.cancelPendingReveal = null;
     this.videoElement.pause();
     this.hlsPlayer?.destroy();
     this.hlsPlayer = null;
     this.playbackPromise = null;
+    this.removeAttribute("data-playing");
   }
 }
 

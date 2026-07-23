@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 const SITE_URL = "https://deutzkrueger.de";
 const CASE_SLUGS = ["bl-thermo", "kamikuratcg", "krumphof", "skaut"];
 const LOCALES = ["en", "de"];
+const LQIP_PATTERN = /^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/;
+const LQIP_MAX_DATA_URI_LENGTH = 4 * 1024;
 
 const readOutput = (path) =>
   readFile(new URL(`../dist/${path}`, import.meta.url), "utf8");
@@ -33,6 +35,130 @@ const assertSafeHead = (html) => {
   assert.doesNotMatch(html, /<meta name="keywords"/i);
   assert.doesNotMatch(html, /href="javascript:|<script>alert\(/i);
 };
+const getOpeningTags = (html, tagName) =>
+  [...html.matchAll(new RegExp(`<${tagName}\\b[^>]*>`, "gi"))].map(
+    (match) => match[0],
+  );
+const assertLqipTag = (tag) => {
+  const src = tag.match(/\bsrc="([^"]+)"/i)?.[1];
+  assert.ok(src, "LQIP is missing src");
+  assert.match(src, LQIP_PATTERN);
+  assert.ok(src.length <= LQIP_MAX_DATA_URI_LENGTH);
+  assert.match(tag, /\balt=""/i);
+  assert.match(tag, /\baria-hidden="true"/i);
+  assert.match(tag, /\bwidth="\d+"/i);
+  assert.match(tag, /\bheight="\d+"/i);
+  assert.doesNotMatch(tag, /\bloading=|\bfetchpriority=/i);
+};
+const assertImageMarkup = (html) => {
+  const logoMarkup = html.match(
+    /<div\b(?=[^>]*\bid="fixed-logo-container")[^>]*>([\s\S]*?)<\/a>/i,
+  )?.[1];
+  assert.ok(logoMarkup, "Expected fixed logo markup");
+  assert.doesNotMatch(
+    logoMarkup,
+    /\bdata-media-lqip\b/i,
+    "Fixed logo must not retain a low-resolution underlay",
+  );
+
+  const frames = [
+    ...html.matchAll(
+      /<div\b(?=[^>]*\bdata-image-frame\b)[^>]*>([\s\S]*?)<\/div>/gi,
+    ),
+  ];
+  for (const frame of frames) {
+    const finalImages = getOpeningTags(frame[1], "img").filter((tag) =>
+      /\bdata-media-image\b/i.test(tag),
+    );
+    const lqips = getOpeningTags(frame[1], "img").filter((tag) =>
+      /\bdata-media-lqip\b/i.test(tag),
+    );
+    assert.equal(finalImages.length, 1);
+    assert.equal(lqips.length, 1);
+    assertLqipTag(lqips[0]);
+  }
+};
+const assertVideoMarkup = (html, tagName) => {
+  const players = getOpeningTags(html, tagName);
+  const posters = getOpeningTags(html, "img").filter((tag) =>
+    /\bdata-media-poster\b/i.test(tag),
+  );
+  const frames = [
+    ...html.matchAll(
+      /<div\b(?=[^>]*\bdata-video-frame(?=[\s=>]))(?=[^>]*\bstyle="aspect-ratio: \d+ \/ \d+;")[^>]*>([\s\S]*?)<\/div>/gi,
+    ),
+  ];
+
+  assert.ok(players.length > 0, `Expected at least one <${tagName}>`);
+  assert.equal(posters.length, players.length);
+  assert.equal(frames.length, players.length);
+  assert.equal(
+    posters.filter((tag) => /\bloading="eager"/i.test(tag)).length,
+    1,
+  );
+
+  for (const player of players) {
+    assert.match(player, /\bdata-media-player\b/i);
+    assert.match(player, /\bwidth="\d+"/i);
+    assert.match(player, /\bheight="\d+"/i);
+    assert.doesNotMatch(player, /\bposter=/i);
+  }
+
+  for (const poster of posters) {
+    assert.match(poster, /\bwidth="\d+"/i);
+    assert.match(poster, /\bheight="\d+"/i);
+    assert.match(poster, /\bsrcset="[^"]* 480w,[^"]* 768w,[^"]* 1280w"/i);
+    assert.match(poster, /\bloading="(?:eager|lazy)"/i);
+    assert.match(poster, /\bfetchpriority="(?:auto|low)"/i);
+  }
+
+  for (const frame of frames) {
+    const lqips = getOpeningTags(frame[1], "img").filter((tag) =>
+      /\bdata-media-lqip\b/i.test(tag),
+    );
+    assert.equal(lqips.length, 1);
+    assertLqipTag(lqips[0]);
+  }
+};
+
+const manifest = JSON.parse(
+  await readFile(
+    new URL("../src/generated/media-manifest.json", import.meta.url),
+    "utf8",
+  ),
+);
+assert.equal(manifest.schemaVersion, "2");
+assert.ok(Object.keys(manifest.entries).length > 0);
+for (const [sourcePath, entry] of Object.entries(manifest.entries)) {
+  assert.ok(entry.id, `${sourcePath} is missing an ID`);
+  assert.ok(["image", "video"].includes(entry.type));
+  assert.ok(Number.isInteger(entry.width) && entry.width > 0);
+  assert.ok(Number.isInteger(entry.height) && entry.height > 0);
+  assert.match(entry.lqip?.src ?? "", LQIP_PATTERN);
+  assert.ok(entry.lqip.src.length <= LQIP_MAX_DATA_URI_LENGTH);
+  assert.ok(
+    Number.isInteger(entry.lqip.width) &&
+      entry.lqip.width > 0 &&
+      entry.lqip.width <= 32,
+  );
+  assert.ok(
+    Number.isInteger(entry.lqip.height) &&
+      entry.lqip.height > 0 &&
+      entry.lqip.height <= 32,
+  );
+  assert.equal(typeof entry.lqip.hasAlpha, "boolean");
+  const lqipScale = Math.min(32 / entry.width, 32 / entry.height, 1);
+  assert.equal(
+    entry.lqip.width,
+    Math.max(1, Math.round(entry.width * lqipScale)),
+    `${sourcePath} has mismatched LQIP width`,
+  );
+  assert.equal(
+    entry.lqip.height,
+    Math.max(1, Math.round(entry.height * lqipScale)),
+    `${sourcePath} has mismatched LQIP height`,
+  );
+}
 
 const [
   englishHome,
@@ -74,6 +200,8 @@ for (const [locale, html] of [
   assert.match(html, new RegExp(`${SITE_URL}/android-chrome-512x512\\.png`));
   assert.doesNotMatch(html, /web-app-manifest-512x512\.png/);
   assertSafeHead(html);
+  assertImageMarkup(html);
+  assertVideoMarkup(html, "preview-video");
 
   const graph = getJsonLd(html)?.["@graph"];
   assert.deepEqual(
@@ -120,6 +248,13 @@ for (const locale of LOCALES) {
     assert.equal(graph[0].description, graph[1].description);
     assert.match(graph[2].url, /^https:\/\/imagedelivery\.net\/.*\/public$/);
     assertSafeHead(html);
+    assertImageMarkup(html);
+    assertVideoMarkup(html, "hls-video");
+    assert.match(
+      html,
+      /<img\b(?=[^>]*\bloading="eager")(?=[^>]*\bfetchpriority="high")[^>]*>/i,
+      `${canonical} is missing an eager high-priority content image`,
+    );
   }
 
   assert.equal(localeTitles.size, CASE_SLUGS.length);
@@ -130,6 +265,7 @@ for (const html of [germanImpressum, germanPrivacy]) {
   assert.doesNotMatch(html, /hreflang=/i);
   assert.equal(getMeta(html, "robots"), expectedPageRobots);
   assertSafeHead(html);
+  assertImageMarkup(html);
 }
 
 assert.equal(getMeta(notFound, "robots"), expectedNotFoundRobots);
@@ -137,6 +273,7 @@ assert.equal(getMeta(notFound, "googlebot"), expectedNotFoundRobots);
 assert.equal(getCanonical(notFound), undefined);
 assert.equal(getJsonLd(notFound), undefined);
 assertSafeHead(notFound);
+assertImageMarkup(notFound);
 
 await assert.rejects(readOutput("en/impressum/index.html"), /ENOENT/);
 await assert.rejects(readOutput("en/privacy/index.html"), /ENOENT/);
