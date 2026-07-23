@@ -39,25 +39,48 @@ if (!(mediaEntry.width && mediaEntry.height)) {
 
 const width = mediaEntry?.width;
 const height = mediaEntry?.height;
+const imageClass = cn(
+  "h-full w-full object-contain lg:h-full lg:max-h-full",
+  imgClassName,
+);
 ---
 
-<div class={cn("lg:h-full w-full lg:max-h-full", className)}>
+<div
+  class={cn(
+    "relative w-full overflow-hidden lg:h-full lg:max-h-full",
+    className,
+  )}
+  data-image-frame
+>
   {
     cloudflareBaseUrl && width && height ? (
-      <Image
-        src={mediaEntry.id}
-        alt={altText}
-        width={width}
-        height={height}
-        widths={[320, 640, 1024, 1920]}
-        sizes={sizes}
-        class={cn(
-          "h-full w-full object-contain lg:h-full lg:max-h-full",
-          imgClassName,
-        )}
-        loading={loadingOrder}
-        fetchpriority={fetchpriority}
-      />
+      <>
+        <img
+          src={mediaEntry.lqip.src}
+          alt=""
+          aria-hidden="true"
+          width={mediaEntry.lqip.width}
+          height={mediaEntry.lqip.height}
+          decoding="sync"
+          draggable="false"
+          data-media-lqip
+          class={cn(imageClass, "pointer-events-none absolute inset-0 z-0", {
+            "scale-[1.08] blur-[10px]": !mediaEntry.lqip.hasAlpha,
+          })}
+        />
+        <Image
+          src={mediaEntry.id}
+          alt={altText}
+          width={width}
+          height={height}
+          widths={[320, 640, 1024, 1920]}
+          sizes={sizes}
+          class={cn(imageClass, "relative z-10")}
+          loading={loadingOrder}
+          fetchpriority={fetchpriority}
+          data-media-image
+        />
+      </>
     ) : (
       <div class="flex w-full items-center justify-center bg-gray-100 text-gray-500 md:h-full">
         <p>Image not found: {src}</p>

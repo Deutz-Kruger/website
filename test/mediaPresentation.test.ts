@@ -11,6 +11,12 @@ test("video poster sources are responsive, ordered, and aspect-correct", () => {
       type: "video",
       width: 1920,
       height: 1080,
+      lqip: {
+        src: "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAA8BgJaQAA3AA/vS4AAA=",
+        width: 2,
+        height: 1,
+        hasAlpha: false,
+      },
     },
     "/src/content/media/video.mp4",
   );
@@ -41,6 +47,12 @@ test("video poster sources reject image manifest entries", () => {
           type: "image",
           width: 100,
           height: 50,
+          lqip: {
+            src: "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAA8BgJaQAA3AA/vS4AAA=",
+            width: 2,
+            height: 1,
+            hasAlpha: false,
+          },
         },
         "/src/content/media/image.png",
       ),

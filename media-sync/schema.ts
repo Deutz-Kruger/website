@@ -2,19 +2,62 @@ import { z } from "zod";
 
 export const MEDIA_CREATOR = "deutz-krueger-portfolio";
 export const MEDIA_SCHEMA_VERSION = "1";
+export const MANIFEST_SCHEMA_VERSION = "2";
+export const LQIP_MAX_DIMENSION = 32;
+export const LQIP_MAX_DATA_URI_LENGTH = 4 * 1024;
 
 export const mediaTypeSchema = z.enum(["image", "video"]);
 export type MediaType = z.infer<typeof mediaTypeSchema>;
 
-export const manifestValueSchema = z.object({
-  id: z.string().min(1),
-  type: mediaTypeSchema,
-  width: z.number().positive(),
-  height: z.number().positive(),
+export const lqipSchema = z.object({
+  src: z
+    .string()
+    .max(LQIP_MAX_DATA_URI_LENGTH)
+    .regex(/^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/),
+  width: z.number().int().positive().max(LQIP_MAX_DIMENSION),
+  height: z.number().int().positive().max(LQIP_MAX_DIMENSION),
+  hasAlpha: z.boolean(),
 });
+export type Lqip = z.infer<typeof lqipSchema>;
+
+const validateLqipDimensions = (
+  source: { width: number; height: number; lqip: Lqip },
+  context: z.RefinementCtx,
+) => {
+  const scale = Math.min(
+    LQIP_MAX_DIMENSION / source.width,
+    LQIP_MAX_DIMENSION / source.height,
+    1,
+  );
+  const expectedWidth = Math.max(1, Math.round(source.width * scale));
+  const expectedHeight = Math.max(1, Math.round(source.height * scale));
+  if (
+    source.lqip.width !== expectedWidth ||
+    source.lqip.height !== expectedHeight
+  ) {
+    context.addIssue({
+      code: "custom",
+      message: `LQIP dimensions must be ${expectedWidth}x${expectedHeight}`,
+      path: ["lqip"],
+    });
+  }
+};
+
+export const manifestValueSchema = z
+  .object({
+    id: z.string().min(1),
+    type: mediaTypeSchema,
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+    lqip: lqipSchema,
+  })
+  .superRefine(validateLqipDimensions);
 export type ManifestEntry = z.infer<typeof manifestValueSchema>;
 
-export const manifestSchema = z.record(z.string(), manifestValueSchema);
+export const manifestSchema = z.object({
+  schemaVersion: z.literal(MANIFEST_SCHEMA_VERSION),
+  entries: z.record(z.string(), manifestValueSchema),
+});
 export type Manifest = z.infer<typeof manifestSchema>;
 
 export const managedMetadataSchema = z.object({
@@ -25,15 +68,19 @@ export const managedMetadataSchema = z.object({
 });
 export type ManagedMetadata = z.infer<typeof managedMetadataSchema>;
 
-export interface LocalMediaFile {
-  absolutePath: string;
-  sourcePath: string;
-  sha256: string;
-  type: MediaType;
-  width: number;
-  height: number;
-  duration?: number;
-}
+export const localMediaFileSchema = z
+  .object({
+    absolutePath: z.string().min(1),
+    sourcePath: z.string().min(1),
+    sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    type: mediaTypeSchema,
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+    duration: z.number().positive().optional(),
+    lqip: lqipSchema,
+  })
+  .superRefine(validateLqipDimensions);
+export type LocalMediaFile = z.infer<typeof localMediaFileSchema>;
 
 export interface RemoteMedia {
   id: string;

@@ -26,13 +26,27 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
 ---
 
 <div
-  class={cn("relative w-full", className)}
+  class={cn("relative w-full overflow-hidden", className)}
   data-video-frame
   style={`aspect-ratio: ${poster.width} / ${poster.height};`}
 >
+  <img
+    src={media.lqip.src}
+    alt=""
+    aria-hidden="true"
+    width={media.lqip.width}
+    height={media.lqip.height}
+    decoding="sync"
+    draggable="false"
+    data-media-lqip
+    class={cn(
+      "pointer-events-none absolute inset-0 z-0 block h-full w-full scale-[1.08] object-contain blur-[10px]",
+      { "rounded-[0.625rem]": hasBackground },
+    )}
+  />
   <hls-video
     src={manifestUrl}
-    class="absolute inset-0 z-0 block h-full w-full opacity-0"
+    class="absolute inset-0 z-10 block h-full w-full opacity-0"
     data-media-player
     aria-hidden="true"
     autoplay
@@ -58,7 +72,7 @@ const manifestUrl = `https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com/${vi
     draggable="false"
     data-media-poster
     class={cn(
-      "pointer-events-none absolute inset-0 z-10 block h-full w-full object-contain opacity-100 transition-opacity duration-150 ease-out",
+      "pointer-events-none absolute inset-0 z-20 block h-full w-full object-contain opacity-100 transition-opacity duration-150 ease-out",
       { "rounded-[0.625rem]": hasBackground },
     )}
   />

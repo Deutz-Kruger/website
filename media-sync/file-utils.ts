@@ -7,6 +7,7 @@ import ffprobeStatic from "ffprobe-static";
 import { glob } from "glob";
 import sharp from "sharp";
 
+import { generateImageLqip, generateVideoLqip, preflightFfmpeg } from "./lqip";
 import type { LocalMediaFile, MediaType } from "./schema";
 
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".svg"]);
@@ -64,7 +65,7 @@ export const mapConcurrent = async <T, R>(
 const inspectFile = async (
   absolutePath: string,
   sourcePath: string,
-): Promise<LocalMediaFile> => {
+): Promise<Omit<LocalMediaFile, "lqip">> => {
   const type = getMediaType(absolutePath);
   if (!type) {
     throw new Error(`Unsupported media file: ${sourcePath}`);
@@ -74,7 +75,9 @@ const inspectFile = async (
 
   if (type === "image") {
     const metadata = await sharp(absolutePath).metadata();
-    if (!metadata.width || !metadata.height) {
+    const width = metadata.autoOrient?.width ?? metadata.width;
+    const height = metadata.autoOrient?.height ?? metadata.height;
+    if (!width || !height) {
       throw new Error(`Image dimensions unavailable: ${sourcePath}`);
     }
     return {
@@ -82,8 +85,8 @@ const inspectFile = async (
       sourcePath,
       sha256,
       type,
-      width: metadata.width,
-      height: metadata.height,
+      width,
+      height,
     };
   }
 
@@ -108,6 +111,45 @@ const inspectFile = async (
     height: videoStream.height,
     duration: Number.isFinite(duration) ? duration : undefined,
   };
+};
+
+const attachLqips = async (
+  files: Array<Omit<LocalMediaFile, "lqip">>,
+): Promise<LocalMediaFile[]> => {
+  const imageFiles = files.filter((file) => file.type === "image");
+  const videoFiles = files.filter((file) => file.type === "video");
+
+  const [imageLqips, videoLqips] = await Promise.all([
+    mapConcurrent(imageFiles, 4, (file) =>
+      generateImageLqip(file.absolutePath, file.sourcePath),
+    ),
+    (async () => {
+      if (videoFiles.length === 0) return [];
+      await preflightFfmpeg();
+      return mapConcurrent(videoFiles, 2, (file) =>
+        generateVideoLqip(file.absolutePath, file.sourcePath),
+      );
+    })(),
+  ]);
+
+  const lqipsByPath = new Map([
+    ...imageFiles.map(
+      (file, index) => [file.sourcePath, imageLqips[index]] as const,
+    ),
+    ...videoFiles.map(
+      (file, index) => [file.sourcePath, videoLqips[index]] as const,
+    ),
+  ]);
+
+  return files.map((file) => {
+    const lqip = lqipsByPath.get(file.sourcePath);
+    if (!lqip) {
+      throw new Error(
+        `LQIP generation produced no result for ${file.sourcePath}`,
+      );
+    }
+    return { ...file, lqip };
+  });
 };
 
 /** Scans supported local media and returns deterministic metadata. */
@@ -137,7 +179,7 @@ export const scanLocalMedia = async (options?: {
     );
   }
 
-  return mapConcurrent(
+  const files = await mapConcurrent(
     visiblePaths,
     options?.concurrency ?? 4,
     async (path) => {
@@ -146,6 +188,7 @@ export const scanLocalMedia = async (options?: {
       return inspectFile(absolutePath, sourcePath);
     },
   );
+  return attachLqips(files);
 };
 
 /** Returns possible legacy upload names for a source file. */

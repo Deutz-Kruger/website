@@ -4,6 +4,7 @@ import { gzipSync } from "node:zlib";
 
 const DIST_DIRECTORY = path.resolve("dist");
 const ASTRO_DIRECTORY = path.join(DIST_DIRECTORY, "_astro");
+const MEDIA_MANIFEST_PATH = path.resolve("src/generated/media-manifest.json");
 
 const BUDGETS = {
   sitewideJavaScript: 50 * 1024,
@@ -12,6 +13,9 @@ const BUDGETS = {
   fontReduction: 0.2,
   eagerImagesPerRoute: 2,
   eagerImagesPerCaseRoute: 3,
+  lqipPerRoute: 12 * 1024,
+  lqipPerCaseRoute: 32 * 1024,
+  mediaManifest: 128 * 1024,
 };
 
 const CASE_SLUGS = new Set(["bl-thermo", "kamikuratcg", "krumphof", "skaut"]);
@@ -85,10 +89,19 @@ for (const htmlPath of htmlFiles) {
     ),
   ].map((match) => match[1]);
   const eagerImages = [...html.matchAll(/\bloading="eager"/g)].length;
+  const lqipBytes = [
+    ...html.matchAll(
+      /<img\b(?=[^>]*\bdata-media-lqip\b)[^>]*\bsrc="(data:image\/webp;base64,[^"]+)"[^>]*>/gi,
+    ),
+  ].reduce((total, match) => total + Buffer.byteLength(match[1]), 0);
   const routeSegments = routePath.split("/");
-  const eagerImageLimit = CASE_SLUGS.has(routeSegments[1])
+  const isCaseRoute = CASE_SLUGS.has(routeSegments[1]);
+  const eagerImageLimit = isCaseRoute
     ? BUDGETS.eagerImagesPerCaseRoute
     : BUDGETS.eagerImagesPerRoute;
+  const lqipLimit = isCaseRoute
+    ? BUDGETS.lqipPerCaseRoute
+    : BUDGETS.lqipPerRoute;
 
   if (scriptUrls.length > 1) {
     fail(
@@ -98,6 +111,11 @@ for (const htmlPath of htmlFiles) {
   if (eagerImages > eagerImageLimit) {
     fail(
       `${routePath} has ${eagerImages} eager images (limit ${eagerImageLimit})`,
+    );
+  }
+  if (lqipBytes > lqipLimit) {
+    fail(
+      `${routePath} has ${lqipBytes} inline LQIP bytes (limit ${lqipLimit})`,
     );
   }
 
@@ -113,7 +131,7 @@ for (const htmlPath of htmlFiles) {
     await Promise.all(cssUrls.map((url) => gzipSize(assetPathFromUrl(url))))
   ).reduce((total, size) => total + size, 0);
 
-  routeMetrics.push({ eagerImages, sitewideJavaScript, css });
+  routeMetrics.push({ eagerImages, lqipBytes, sitewideJavaScript, css });
 }
 
 const clientFiles = await readdir(ASTRO_DIRECTORY);
@@ -146,6 +164,8 @@ const css = Math.max(...routeMetrics.map((metric) => metric.css));
 const eagerImages = Math.max(
   ...routeMetrics.map((metric) => metric.eagerImages),
 );
+const lqipBytes = Math.max(...routeMetrics.map((metric) => metric.lqipBytes));
+const mediaManifest = (await stat(MEDIA_MANIFEST_PATH)).size;
 
 const fontNames = ["ArialRegular", "ArialItalic"];
 let woffBytes = 0;
@@ -174,6 +194,9 @@ if (css > BUDGETS.css) {
 if (fontReduction < BUDGETS.fontReduction) {
   fail(`WOFF2 font reduction is ${(fontReduction * 100).toFixed(2)}%`);
 }
+if (mediaManifest > BUDGETS.mediaManifest) {
+  fail(`Generated media manifest is ${mediaManifest} bytes`);
+}
 
 const kilobytes = (bytes) => `${(bytes / 1024).toFixed(2)} KiB`;
 
@@ -183,6 +206,8 @@ console.log(`  HLS light: ${kilobytes(hlsJavaScript)} gzip`);
 console.log(`  CSS: ${kilobytes(css)} gzip`);
 console.log(`  WOFF2 reduction: ${(fontReduction * 100).toFixed(2)}%`);
 console.log(`  Maximum eager images per route: ${eagerImages}`);
+console.log(`  Maximum inline LQIP data per route: ${kilobytes(lqipBytes)}`);
+console.log(`  Generated media manifest: ${kilobytes(mediaManifest)}`);
 console.log(
   `  Client chunks: ${javaScriptFiles.length} (${emptyJavaScriptFiles.length} empty)`,
 );

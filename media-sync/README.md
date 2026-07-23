@@ -15,6 +15,24 @@ Run `pnpm sync-media -- --help` for the complete command and flag reference.
 `sourcePath + sha256` matches, uploads missing media, waits for Stream encoding,
 and atomically writes the frontend manifest. It never deletes media.
 
+Before contacting Cloudflare, sync generates a 32px inline WebP LQIP for every
+local asset. Sharp handles images and the exact-pinned `ffmpeg-static` binary
+extracts each video's first frame. Video extraction is limited to two
+concurrent processes and has a 30-second per-file timeout. LQIPs are regenerated
+deterministically on every sync; there is no cache, sidecar output, or remote
+thumbnail request.
+
+Placeholder generation is fail-closed. If any source is invalid, FFmpeg is
+unavailable, or the generated data does not pass the manifest schema, sync stops
+before listing or mutating Cloudflare assets. The previous generated manifest
+is left byte-for-byte unchanged. Fix the reported source or reinstall
+dependencies, then rerun `pnpm sync-media`; there is no skip flag.
+
+The generated manifest is a versioned, validated artifact. Astro only consumes
+it during static generation and performs no media processing in the deployed
+Worker. A missing, version-1, or incomplete manifest fails the build with an
+instruction to rerun sync.
+
 `pnpm sync-media:prune` runs only after a successful deployment. It marks stale
 managed media, retains it for seven days, then deletes it on a later successful
 deployment. Untagged legacy media is never pruned.

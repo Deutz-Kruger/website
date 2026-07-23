@@ -29,7 +29,10 @@ jobs:
         with:
           node-version: "24"
           # cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+
+      - name: Test media pipeline
+        run: pnpm test:media
 
       - name: Sync media files
         run: pnpm sync-media
