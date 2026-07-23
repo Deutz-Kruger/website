@@ -11,6 +11,7 @@ interface Props {
   imgClassName?: string;
   loading?: "eager" | "lazy";
   fetchpriority?: "high" | "low" | "auto";
+  showLqip?: boolean;
   sizes?: string;
   positioning?: string;
 }
@@ -22,6 +23,7 @@ const {
   imgClassName = "",
   loading = "lazy",
   fetchpriority = "auto",
+  showLqip = true,
   sizes = "(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw",
 } = Astro.props;
 
@@ -50,24 +52,26 @@ const imageClass = cn(
     "relative w-full overflow-hidden lg:h-full lg:max-h-full",
     className,
   )}
-  data-image-frame
+  data-image-frame={showLqip ? true : undefined}
 >
   {
     cloudflareBaseUrl && width && height ? (
       <>
-        <img
-          src={mediaEntry.lqip.src}
-          alt=""
-          aria-hidden="true"
-          width={mediaEntry.lqip.width}
-          height={mediaEntry.lqip.height}
-          decoding="sync"
-          draggable="false"
-          data-media-lqip
-          class={cn(imageClass, "pointer-events-none absolute inset-0 z-0", {
-            "scale-[1.08] blur-[10px]": !mediaEntry.lqip.hasAlpha,
-          })}
-        />
+        {showLqip && (
+          <img
+            src={mediaEntry.lqip.src}
+            alt=""
+            aria-hidden="true"
+            width={mediaEntry.lqip.width}
+            height={mediaEntry.lqip.height}
+            decoding="sync"
+            draggable="false"
+            data-media-lqip
+            class={cn(imageClass, "pointer-events-none absolute inset-0 z-0", {
+              "scale-[1.08] blur-[10px]": !mediaEntry.lqip.hasAlpha,
+            })}
+          />
+        )}
         <Image
           src={mediaEntry.id}
           alt={altText}

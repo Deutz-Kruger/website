@@ -51,6 +51,16 @@ const assertLqipTag = (tag) => {
   assert.doesNotMatch(tag, /\bloading=|\bfetchpriority=/i);
 };
 const assertImageMarkup = (html) => {
+  const logoMarkup = html.match(
+    /<div\b(?=[^>]*\bid="fixed-logo-container")[^>]*>([\s\S]*?)<\/a>/i,
+  )?.[1];
+  assert.ok(logoMarkup, "Expected fixed logo markup");
+  assert.doesNotMatch(
+    logoMarkup,
+    /\bdata-media-lqip\b/i,
+    "Fixed logo must not retain a low-resolution underlay",
+  );
+
   const frames = [
     ...html.matchAll(
       /<div\b(?=[^>]*\bdata-image-frame\b)[^>]*>([\s\S]*?)<\/div>/gi,
