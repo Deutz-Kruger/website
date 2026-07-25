@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { gzipSync } from "node:zlib";
@@ -5,12 +6,17 @@ import { gzipSync } from "node:zlib";
 const DIST_DIRECTORY = path.resolve("dist");
 const ASTRO_DIRECTORY = path.join(DIST_DIRECTORY, "_astro");
 const MEDIA_MANIFEST_PATH = path.resolve("src/generated/media-manifest.json");
+const EXPECTED_FONT = {
+  file: "OpeningHoursSans-Regular.woff2",
+  // hhea metrics normalized to the OS/2 typographic values: 780 / -220 / 200.
+  sha256: "1f4f50af24f859a8dfd50f6c3e21fc23223c1158b361768a2cd5b31ab30a13f0",
+};
 
 const BUDGETS = {
   sitewideJavaScript: 50 * 1024,
   hlsJavaScript: 115 * 1024,
   css: 7 * 1024,
-  fontReduction: 0.2,
+  fontAssets: 20 * 1024,
   eagerImagesPerRoute: 2,
   eagerImagesPerCaseRoute: 3,
   lqipPerRoute: 12 * 1024,
@@ -167,20 +173,35 @@ const eagerImages = Math.max(
 const lqipBytes = Math.max(...routeMetrics.map((metric) => metric.lqipBytes));
 const mediaManifest = (await stat(MEDIA_MANIFEST_PATH)).size;
 
-const fontNames = ["ArialRegular", "ArialItalic"];
-let woffBytes = 0;
-let woff2Bytes = 0;
+const expectedFontFiles = [EXPECTED_FONT.file];
+const fontDirectory = path.join(DIST_DIRECTORY, "fonts");
+const fontFiles = (await readdir(fontDirectory))
+  .filter((file) => /\.(?:eot|otf|ttf|woff2?)$/i.test(file))
+  .sort();
+const fontAssets = (
+  await Promise.all(
+    fontFiles.map(
+      async (file) => (await stat(path.join(fontDirectory, file))).size,
+    ),
+  )
+).reduce((total, size) => total + size, 0);
 
-for (const fontName of fontNames) {
-  woffBytes += (
-    await stat(path.join(DIST_DIRECTORY, "fonts", `${fontName}.woff`))
-  ).size;
-  woff2Bytes += (
-    await stat(path.join(DIST_DIRECTORY, "fonts", `${fontName}.woff2`))
-  ).size;
+if (fontFiles.join(",") !== expectedFontFiles.join(",")) {
+  fail(`Unexpected font assets: ${fontFiles.join(", ") || "none"}`);
 }
 
-const fontReduction = 1 - woff2Bytes / woffBytes;
+const fontPath = path.join(fontDirectory, EXPECTED_FONT.file);
+const fontSha256 = fontFiles.includes(EXPECTED_FONT.file)
+  ? createHash("sha256")
+      .update(await readFile(fontPath))
+      .digest("hex")
+  : "";
+
+if (fontSha256 !== EXPECTED_FONT.sha256) {
+  fail(
+    `Font checksum is ${fontSha256 || "unavailable"}; revalidate vertical metrics before updating the guard`,
+  );
+}
 
 if (sitewideJavaScript > BUDGETS.sitewideJavaScript) {
   fail(`Sitewide JavaScript is ${sitewideJavaScript} bytes gzip`);
@@ -191,8 +212,8 @@ if (hlsJavaScript > BUDGETS.hlsJavaScript) {
 if (css > BUDGETS.css) {
   fail(`CSS is ${css} bytes gzip`);
 }
-if (fontReduction < BUDGETS.fontReduction) {
-  fail(`WOFF2 font reduction is ${(fontReduction * 100).toFixed(2)}%`);
+if (fontAssets > BUDGETS.fontAssets) {
+  fail(`Font assets are ${fontAssets} bytes`);
 }
 if (mediaManifest > BUDGETS.mediaManifest) {
   fail(`Generated media manifest is ${mediaManifest} bytes`);
@@ -204,7 +225,7 @@ console.log("Performance budget report");
 console.log(`  Sitewide JavaScript: ${kilobytes(sitewideJavaScript)} gzip`);
 console.log(`  HLS light: ${kilobytes(hlsJavaScript)} gzip`);
 console.log(`  CSS: ${kilobytes(css)} gzip`);
-console.log(`  WOFF2 reduction: ${(fontReduction * 100).toFixed(2)}%`);
+console.log(`  Font assets: ${kilobytes(fontAssets)}`);
 console.log(`  Maximum eager images per route: ${eagerImages}`);
 console.log(`  Maximum inline LQIP data per route: ${kilobytes(lqipBytes)}`);
 console.log(`  Generated media manifest: ${kilobytes(mediaManifest)}`);
