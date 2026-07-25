@@ -103,7 +103,7 @@
 
   /* Padding Utils */
   .padding-nav-item {
-    @apply md:pt-1.525 px-2.5 py-0.5 md:px-3 md:pb-1;
+    @apply px-2.5 py-0.5 md:px-3 md:pb-1 md:pt-1.5;
   }
 
   .padding-background {
