@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { gzipSync } from "node:zlib";
@@ -5,6 +6,11 @@ import { gzipSync } from "node:zlib";
 const DIST_DIRECTORY = path.resolve("dist");
 const ASTRO_DIRECTORY = path.join(DIST_DIRECTORY, "_astro");
 const MEDIA_MANIFEST_PATH = path.resolve("src/generated/media-manifest.json");
+const EXPECTED_FONT = {
+  file: "OpeningHoursSans-Regular.woff2",
+  // hhea metrics normalized to the OS/2 typographic values: 780 / -220 / 200.
+  sha256: "1f4f50af24f859a8dfd50f6c3e21fc23223c1158b361768a2cd5b31ab30a13f0",
+};
 
 const BUDGETS = {
   sitewideJavaScript: 50 * 1024,
@@ -167,7 +173,7 @@ const eagerImages = Math.max(
 const lqipBytes = Math.max(...routeMetrics.map((metric) => metric.lqipBytes));
 const mediaManifest = (await stat(MEDIA_MANIFEST_PATH)).size;
 
-const expectedFontFiles = ["OpeningHoursSans-Regular.woff2"];
+const expectedFontFiles = [EXPECTED_FONT.file];
 const fontDirectory = path.join(DIST_DIRECTORY, "fonts");
 const fontFiles = (await readdir(fontDirectory))
   .filter((file) => /\.(?:eot|otf|ttf|woff2?)$/i.test(file))
@@ -182,6 +188,19 @@ const fontAssets = (
 
 if (fontFiles.join(",") !== expectedFontFiles.join(",")) {
   fail(`Unexpected font assets: ${fontFiles.join(", ") || "none"}`);
+}
+
+const fontPath = path.join(fontDirectory, EXPECTED_FONT.file);
+const fontSha256 = fontFiles.includes(EXPECTED_FONT.file)
+  ? createHash("sha256")
+      .update(await readFile(fontPath))
+      .digest("hex")
+  : "";
+
+if (fontSha256 !== EXPECTED_FONT.sha256) {
+  fail(
+    `Font checksum is ${fontSha256 || "unavailable"}; revalidate vertical metrics before updating the guard`,
+  );
 }
 
 if (sitewideJavaScript > BUDGETS.sitewideJavaScript) {

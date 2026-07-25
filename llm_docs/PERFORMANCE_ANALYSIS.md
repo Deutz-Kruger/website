@@ -1,6 +1,6 @@
 # Non-visual Performance Optimization Report
 
-Date: 2026-07-23
+Date: 2026-07-25
 
 ## Guardrail
 
@@ -15,7 +15,7 @@ visible video playback rules. Current typography uses OpeningHoursSans.
 | Sitewide JavaScript                |                         ~65.8 KB gzip |                  46.74 KiB gzip | Pass (≤50 KiB)  |
 | HLS player                         |                        161.74 KB gzip |                 104.80 KiB gzip | Pass (≤115 KiB) |
 | CSS                                |                         ~5.98 KB gzip |                   5.84 KiB gzip | Pass (≤7 KiB)   |
-| Web font transfer                  |              650,320 B previous WOFF2 | 14,744 B OpeningHoursSans WOFF2 | 97.73% smaller  |
+| Web font transfer                  |              650,320 B previous WOFF2 | 14,656 B OpeningHoursSans WOFF2 | 97.75% smaller  |
 | Client chunks                      | Empty/redundant entries plus full HLS |                2, neither empty | Pass            |
 | Maximum eager images per route     |         Logo plus up to 6 deep images |     Logo only in current routes | Pass (≤2)       |
 | Unreferenced React client artifact |                         60.99 KB gzip |                         Removed | Pass            |
@@ -32,8 +32,13 @@ build and fails if any budget regresses.
 - OpeningHoursSans is declared by `@font-face` and preloaded by the layout.
 - Italic text uses browser synthesis because no OpeningHoursSans italic asset
   is present.
-- The production budget rejects unexpected font files and limits total font
-  transfer to 20 KiB.
+- Normalized the `hhea` ascent from 980 to 780 so it matches the font's
+  `OS/2` typographic ascent. Descent (-220) and line gap (200) already matched.
+- Font comparison confirmed that only `hhea` and the required `head` checksum
+  changed; glyph outlines, character mappings, widths, names, and `OS/2`
+  metadata stayed identical.
+- The production budget rejects unexpected font files, verifies the normalized
+  font checksum, and limits total font transfer to 20 KiB.
 
 ### Application and navigation scripts
 
