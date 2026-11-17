@@ -15,29 +15,24 @@ const { footerItems, lang } = Astro.props;
 const GERMAN_ONLY_LEGAL_PATHS = new Set(["/impressum", "/privacy"]);
 ---
 
-<footer
-  class="relative flex w-full items-center justify-center gap-3 py-4 pt-12 md:mt-0 md:py-6"
->
+<footer class="relative flex w-full items-center justify-center gap-3 py-4 pt-12 md:mt-0 md:py-6">
   <div
     class="absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 transition-colors duration-300"
     style="background-color: var(--theme-color);"
-  >
-  </div>
-  {
-    footerItems.map((item) => {
-      const { href, title } = item;
-      const linkLocale = GERMAN_ONLY_LEGAL_PATHS.has(href) ? "de" : lang;
-      const localizedLink = getRelativeLocaleUrl(linkLocale, href);
-      const link = localizedLink.endsWith("/")
-        ? localizedLink
-        : `${localizedLink}/`;
-      return (
-        <NavItem
-          link={link}
-          title={title}
-          className="text-normal md:text-medium"
-        />
-      );
-    })
-  }
+  ></div>
+  {footerItems.map((item) => {
+    const { href, title } = item;
+    const linkLocale = GERMAN_ONLY_LEGAL_PATHS.has(href) ? "de" : lang;
+    const localizedLink = getRelativeLocaleUrl(linkLocale, href);
+    const link = localizedLink.endsWith("/")
+      ? localizedLink
+      : `${localizedLink}/`;
+    return (
+      <NavItem
+        link={link}
+        title={title}
+        className="text-normal md:text-medium"
+      />
+    );
+  })}
 </footer>

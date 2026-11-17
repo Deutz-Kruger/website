@@ -1,0 +1,70 @@
+language: en-US
+
+tone_instructions: >
+  Keep reviews concise and technical. This is a solo-maintained portfolio
+  site — skip pleasantries, state findings and fixes directly.
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  review_status: true
+  poem: false
+  sequence_diagrams: false
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  suggested_labels: false
+  suggested_reviewers: false
+  auto_assign_reviewers: false
+
+  # Generated, vendored and binary content — no review value
+  path_filters:
+    - "!**/pnpm-lock.yaml"
+    - "!**/dist/**"
+    - "!**/.astro/**"
+    - "!**/.cache/**"
+    - "!**/.sonda/**"
+    - "!**/.wrangler/**"
+    - "!**/src/content/media/**"
+    - "!**/src/generated/**"
+
+  path_instructions:
+    - path: "src/scripts/**"
+      instructions: >
+        This code ships in the sitewide client chunk guarded by a strict
+        performance budget (scripts/performance-budget.mjs, 50 KiB gzip).
+        Flag new runtime dependencies or large additions; prefer platform
+        APIs (WAAPI, matchMedia, fetch) over libraries. Code is cleaned up
+        and re-initialized across swup page transitions — check that all
+        listeners, observers and rAF loops added in init* functions are
+        removed in the matching cleanUp* functions.
+
+    - path: "media-sync/**"
+      instructions: >
+        CLI tooling for syncing media to Cloudflare. Error handling must
+        preserve original errors via { cause }. Operations are
+        checkpointed/resumable — flag changes that could break resume
+        semantics or manifest integrity. Changes here should come with
+        unit tests (node:test via tsx).
+
+    - path: "src/content/**"
+      instructions: >
+        Schemas use zod imported from astro/zod (not the deprecated
+        astro:content re-export). Discriminated unions with
+        z.discriminatedUnion() for block types. Keep schemas and their
+        inferred types exported together.
+
+    - path: "astro.config.mjs"
+      instructions: >
+        Deployed to Cloudflare Workers via wrangler.jsonc; main points at
+        @astrojs/cloudflare/entrypoints/server and dev server runs in
+        workerd. Node-only APIs in SSR code will break at runtime even if
+        builds pass — flag imports of node:* modules in src/ beyond
+        build-time-only code.
+
+    - path: "scripts/**"
+      instructions: >
+        Build verification scripts assert on exact dist/client output
+        structure. Keep them in sync with adapter output layout changes.
+
+chat:
+  auto_reply: true

@@ -46,15 +46,13 @@ const documentLocale = Astro.currentLocale === "de" ? "de" : "en";
       crossorigin
     />
     <link rel="preconnect" href="https://imagedelivery.net" crossorigin />
-    {
-      streamPreconnect && (
-        <link
-          rel="preconnect"
-          href="https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com"
-          crossorigin
-        />
-      )
-    }
+    {streamPreconnect && (
+      <link
+        rel="preconnect"
+        href="https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com"
+        crossorigin
+      />
+    )}
     <link rel="manifest" href="/site.webmanifest" />
     <SeoLayout
       title={title}

@@ -54,41 +54,39 @@ const imageClass = cn(
   )}
   data-image-frame={showLqip ? true : undefined}
 >
-  {
-    cloudflareBaseUrl && width && height ? (
-      <>
-        {showLqip && (
-          <img
-            src={mediaEntry.lqip.src}
-            alt=""
-            aria-hidden="true"
-            width={mediaEntry.lqip.width}
-            height={mediaEntry.lqip.height}
-            decoding="sync"
-            draggable="false"
-            data-media-lqip
-            class={cn(imageClass, "pointer-events-none absolute inset-0 z-0", {
-              "scale-[1.08] blur-[10px]": !mediaEntry.lqip.hasAlpha,
-            })}
-          />
-        )}
-        <Image
-          src={mediaEntry.id}
-          alt={altText}
-          width={width}
-          height={height}
-          widths={[320, 640, 1024, 1920]}
-          sizes={sizes}
-          class={cn(imageClass, "relative z-10")}
-          loading={loadingOrder}
-          fetchpriority={fetchpriority}
-          data-media-image
+  {cloudflareBaseUrl && width && height ? (
+    <>
+      {showLqip && (
+        <img
+          src={mediaEntry.lqip.src}
+          alt=""
+          aria-hidden="true"
+          width={mediaEntry.lqip.width}
+          height={mediaEntry.lqip.height}
+          decoding="sync"
+          draggable="false"
+          data-media-lqip
+          class={cn(imageClass, "pointer-events-none absolute inset-0 z-0", {
+            "scale-[1.08] blur-[10px]": !mediaEntry.lqip.hasAlpha,
+          })}
         />
-      </>
-    ) : (
-      <div class="flex w-full items-center justify-center bg-gray-100 text-gray-500 md:h-full">
-        <p>Image not found: {src}</p>
-      </div>
-    )
-  }
+      )}
+      <Image
+        src={mediaEntry.id}
+        alt={altText}
+        width={width}
+        height={height}
+        widths={[320, 640, 1024, 1920]}
+        sizes={sizes}
+        class={cn(imageClass, "relative z-10")}
+        loading={loadingOrder}
+        fetchpriority={fetchpriority}
+        data-media-image
+      />
+    </>
+  ) : (
+    <div class="flex w-full items-center justify-center bg-gray-100 text-gray-500 md:h-full">
+      <p>Image not found: {src}</p>
+    </div>
+  )}
 </div>

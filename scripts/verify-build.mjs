@@ -8,7 +8,7 @@ const LQIP_PATTERN = /^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/;
 const LQIP_MAX_DATA_URI_LENGTH = 4 * 1024;
 
 const readOutput = (path) =>
-  readFile(new URL(`../dist/${path}`, import.meta.url), "utf8");
+  readFile(new URL(`../dist/client/${path}`, import.meta.url), "utf8");
 
 const getTitle = (html) => html.match(/<title>(.*?)<\/title>/i)?.[1];
 const getMeta = (html, name) =>

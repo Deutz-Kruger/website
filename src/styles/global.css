@@ -77,7 +77,7 @@
   .keyword {
     text-decoration: underline;
     font-style: italic;
-    @apply inline-block will-change-auto motion-safe:transition-all motion-safe:duration-200 motion-safe:hover:rotate-1 motion-safe:hover:scale-[99.5%];
+    @apply inline-block will-change-auto motion-safe:transition-all motion-safe:duration-200 motion-safe:hover:scale-[99.5%] motion-safe:hover:rotate-1;
   }
 
   .keyword-active {
@@ -103,19 +103,19 @@
 
   /* Padding Utils */
   .padding-nav-item {
-    @apply px-2.5 py-0.5 md:px-3 md:pb-1 md:pt-1.5;
+    @apply px-2.5 py-0.5 md:px-3 md:pt-1.5 md:pb-1;
   }
 
   .padding-background {
-    @apply md:py-sub px-4 py-2 md:px-8;
+    @apply px-4 py-2 md:px-8 md:py-sub;
   }
   .padding-background-half {
-    @apply md:py-2.25 px-2 py-1 md:px-4;
+    @apply px-2 py-1 md:px-4 md:py-2.25;
   }
 
   /* Page Padding */
   .page-spacing {
-    @apply p-page-mobile md:p-page-laptop xl:p-page-desktop pb-0!;
+    @apply p-page-mobile pb-0! md:p-page-laptop xl:p-page-desktop;
   }
 
   .page-spacing-neg-margins {
@@ -130,13 +130,13 @@
       /*Font Sizes*/
       @apply text-large md:text-largerer xl:text-largest;
       /* Font Spacing */
-      @apply tracking-heading-mobile leading-heading-mobile md:leading-heading-desktop md:tracking-heading-desktop;
+      @apply leading-heading-mobile tracking-heading-mobile md:leading-heading-desktop md:tracking-heading-desktop;
     }
     & p {
       /*Font Sizes*/
       @apply text-normal md:text-medium xl:text-big;
       /* Font Spacing */
-      @apply tracking-text-mobile leading-text-mobile xl:tracking-text-desktop xl:leading-text-desktop;
+      @apply leading-text-mobile tracking-text-mobile xl:leading-text-desktop xl:tracking-text-desktop;
     }
   }
 }

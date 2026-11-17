@@ -25,14 +25,11 @@ const { navItems, navMinHeight, lang, style = "", aspect } = Astro.props;
   class="z-100 pointer-events-none relative left-0 top-0 w-full items-center transition-colors duration-300"
   style={`position: fixed; width: 100%; min-height: ${navMinHeight}rem; ${style}; z-index: 100;`}
 >
-  <div
-    class="navbar max-w-480 page-spacing mx-auto flex w-full justify-between"
-  >
+  <div class="navbar max-w-480 page-spacing mx-auto flex w-full justify-between">
     <div
       class="pointer-events-none box-content h-full"
       style={`aspect-ratio: ${aspect.width} / ${aspect.height};`}
-    >
-    </div>
+    ></div>
 
     <Navigation navItems={navItems} lang={lang} />
 

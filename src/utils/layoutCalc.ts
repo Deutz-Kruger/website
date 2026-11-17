@@ -1,4 +1,4 @@
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { baseBlock } from "@/content/schemas/blockSchemas";
 

@@ -46,3 +46,6 @@ Carousel.astro
 carousel.ts
 shaders
 gradients.ts
+
+# local wrangler/vite persist state
+.cache/

@@ -1,5 +1,5 @@
 ---
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { titleBlock } from "@/content/schemas/blockSchemas";
 import {
@@ -34,30 +34,28 @@ function findFirstVideo(
 ---
 
 <section class="bigger relative pb-12 pt-12">
-  {
-    resolvedCasePreviews.map((preview, index) => {
-      const { slug, case_preview, groups, tags } = preview.data;
-      const titleBlockGroup = groups.find((group) =>
-        group.blocks.find((block) => block._block === "title"),
-      );
-      const titleBlock: TitleBlock | undefined = titleBlockGroup?.blocks.find(
-        (block) => block._block === "title",
-      );
-      const firstVideo = findFirstVideo(groups);
+  {resolvedCasePreviews.map((preview, index) => {
+    const { slug, case_preview, groups, tags } = preview.data;
+    const titleBlockGroup = groups.find((group) =>
+      group.blocks.find((block) => block._block === "title"),
+    );
+    const titleBlock: TitleBlock | undefined = titleBlockGroup?.blocks.find(
+      (block) => block._block === "title",
+    );
+    const firstVideo = findFirstVideo(groups);
 
-      const { title, preview_image } = case_preview;
-      const isPriority = index === 0;
-      return (
-        <CasePreviewCard
-          preview_image={preview_image}
-          preview_video={firstVideo}
-          title={title}
-          slug={slug}
-          description={titleBlock ? titleBlock.subHeading : ""}
-          tags={tags}
-          loading={isPriority ? "eager" : "lazy"}
-        />
-      );
-    })
-  }
+    const { title, preview_image } = case_preview;
+    const isPriority = index === 0;
+    return (
+      <CasePreviewCard
+        preview_image={preview_image}
+        preview_video={firstVideo}
+        title={title}
+        slug={slug}
+        description={titleBlock ? titleBlock.subHeading : ""}
+        tags={tags}
+        loading={isPriority ? "eager" : "lazy"}
+      />
+    );
+  })}
 </section>

@@ -1,5 +1,5 @@
 ---
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 import { caseSchema } from "@/content/schemas/pageSchemas";
@@ -40,32 +40,26 @@ const lang = Astro.currentLocale ?? "en";
 >
   <hr class="mb-4 md:mb-0 md:block" />
   <div class="flex w-full flex-col xl:flex-row-reverse xl:justify-between">
-    {
-      preview_video ? (
-        <PreviewVideo
-          src={preview_video.video}
-          priority={loading === "eager"}
-          className="xl:w-4/9 h-full mx-auto block w-full lg:mx-0"
-        />
-      ) : (
-        <ImageWrapper
-          src={preview_image.src}
-          altText={preview_image.alt}
-          loading={loading}
-          className="xl:w-4/9 mx-auto block w-full lg:mx-0"
-        />
-      )
-    }
+    {preview_video ? (
+      <PreviewVideo
+        src={preview_video.video}
+        priority={loading === "eager"}
+        className="xl:w-4/9 h-full mx-auto block w-full lg:mx-0"
+      />
+    ) : (
+      <ImageWrapper
+        src={preview_image.src}
+        altText={preview_image.alt}
+        loading={loading}
+        className="xl:w-4/9 mx-auto block w-full lg:mx-0"
+      />
+    )}
 
     <div class="md:w-13/14 relative mt-2 xl:w-2/3">
-      <h2
-        class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop xl:w-6/7"
-      >
+      <h2 class="text-large md:text-largerer tracking-case-mobile leading-case-mobile md:tracking-case-desktop md:leading-case-desktop xl:w-6/7">
         {title}
       </h2>
-      <p
-        class="text-normal md:text-medium xl:text-big md:w-13/14 hidden pt-4 text-base leading-tight tracking-[-0.0175em] group-hover:opacity-100 motion-safe:-translate-y-1 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-y-0 md:block xl:opacity-0"
-      >
+      <p class="text-normal md:text-medium xl:text-big md:w-13/14 hidden pt-4 text-base leading-tight tracking-[-0.0175em] group-hover:opacity-100 motion-safe:-translate-y-1 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-y-0 md:block xl:opacity-0">
         {description}
       </p>
       <Tags tags={tags} className={"xl:absolute xl:bottom-0 xl:mt-0"} />

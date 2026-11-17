@@ -215,6 +215,7 @@ export class CloudflareMediaClient {
         }
         throw new Error(
           `Cloudflare request failed: ${error instanceof Error ? error.message : String(error)}`,
+          { cause: error },
         );
       }
 

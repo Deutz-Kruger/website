@@ -61,8 +61,18 @@ export default defineConfig({
   ],
   vite: {
     plugins: [
-      // @ts-expect-error Compat issues with vite 7 and plugin typing
       tailwindcss(),
+      // Bundle analysis helper: ANALYZE=1 pnpm build
+      ...(process.env.ANALYZE
+        ? [
+            (await import("sonda")).SondaVitePlugin({
+              format: "json",
+              open: false,
+              gzip: true,
+              brotli: true,
+            }),
+          ]
+        : []),
     ],
 
     ssr: {
@@ -81,18 +91,13 @@ export default defineConfig({
       },
     },
     build: {
-      sourcemap: false,
+      sourcemap: process.env.ANALYZE ? true : false,
     },
   },
   adapter: cloudflare({
     imageService: "custom",
-    platformProxy: {
-      enabled: true,
-      configPath: "wrangler.jsonc",
-      persist: {
-        path: "./.cache/wrangler/v3",
-      },
-    },
+    configPath: "wrangler.jsonc",
+    persistState: { path: "./.cache/wrangler/v3" },
   }),
   image: {
     service: {

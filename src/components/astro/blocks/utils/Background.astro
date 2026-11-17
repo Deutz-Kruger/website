@@ -1,5 +1,5 @@
 ---
-import type { z } from "astro:content";
+import type { z } from "astro/zod";
 
 // import { BackgroundGradient } from "@/components/react/BackgroundGradient";
 import type { backgroundField } from "@/content/schemas/fieldSchemas";
@@ -28,31 +28,29 @@ const staticCol = background?.background_colors
 ---
 
 <>
-  {
-    background.background === "static" ? (
-      <div
-        style={`background: ${staticCol};`}
-        class={cn(className, "padding-background h-full w-full", {
-          "md:w-fit": width && width < 2,
-          "w-full": !margin || margin === "NONE",
-          "ml-auto": margin === "LEFT",
-          "mr-auto": margin === "RIGHT",
-        })}
-      >
-        <slot />
-      </div>
-    ) : (
-      <div
-        class={cn(className, "p-0! h-full w-full", {
-          "lg:w-fit": fitContent,
-          "lg:w-full": !fitContent,
-          "w-full": !margin || margin === "NONE",
-          "ml-auto": margin === "LEFT",
-          "mr-auto": margin === "RIGHT",
-        })}
-      >
-        <slot />
-      </div>
-    )
-  }
+  {background.background === "static" ? (
+    <div
+      style={`background: ${staticCol};`}
+      class={cn(className, "padding-background h-full w-full", {
+        "md:w-fit": width && width < 2,
+        "w-full": !margin || margin === "NONE",
+        "ml-auto": margin === "LEFT",
+        "mr-auto": margin === "RIGHT",
+      })}
+    >
+      <slot />
+    </div>
+  ) : (
+    <div
+      class={cn(className, "p-0! h-full w-full", {
+        "lg:w-fit": fitContent,
+        "lg:w-full": !fitContent,
+        "w-full": !margin || margin === "NONE",
+        "ml-auto": margin === "LEFT",
+        "mr-auto": margin === "RIGHT",
+      })}
+    >
+      <slot />
+    </div>
+  )}
 </>

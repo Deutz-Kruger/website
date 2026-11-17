@@ -1,7 +1,8 @@
 import path from "node:path";
 
 import type { casePreviewSchema } from "@content/schemas/pageSchemas";
-import { type CollectionEntry, getEntries, getEntry, z } from "astro:content";
+import { z } from "astro/zod";
+import { type CollectionEntry, getEntries, getEntry } from "astro:content";
 
 export interface PageMetaData {
   /**
@@ -54,7 +55,7 @@ export type CasePaths = z.infer<typeof casePreviewSchema>;
  */
 export const extractSlugsFromPaths = (paths: CasePaths): string[] => {
   if (!paths?.length) return [];
-  return paths.map((filePath) => path.basename(filePath, ".json"));
+  return paths.map((filePath: string) => path.basename(filePath, ".json"));
 };
 
 /**
