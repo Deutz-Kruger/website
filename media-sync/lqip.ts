@@ -146,6 +146,7 @@ export const generateImageLqip = async (
   } catch (error) {
     throw new Error(
       `LQIP generation failed for ${sourcePath}: ${errorMessage(error)}`,
+      { cause: error },
     );
   }
 };
@@ -198,6 +199,7 @@ export const generateVideoLqip = async (
   } catch (error) {
     throw new Error(
       `LQIP generation failed for ${sourcePath}: ${errorMessage(error)}`,
+      { cause: error },
     );
   }
 };

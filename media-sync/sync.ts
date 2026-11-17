@@ -212,6 +212,7 @@ export const readManifest = async (
   } catch (error) {
     throw new Error(
       `Generated media manifest is invalid or outdated. Run "pnpm sync-media" first. ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
 };
@@ -475,8 +476,7 @@ export const auditLegacyMedia = async (options: {
 };
 
 type CleanupClassification =
-  | "eligible"
-  | Exclude<LegacyCleanupResultItem["status"], "deleted" | "failed">;
+  "eligible" | Exclude<LegacyCleanupResultItem["status"], "deleted" | "failed">;
 
 interface ClassifiedLegacyCandidate {
   candidate: LegacyAuditCandidate;
@@ -871,6 +871,7 @@ export const cleanupLegacyMedia = async (
     if (isErrorWithCode(error) && error.code === "ENOENT") {
       throw new Error(
         'Legacy cleanup requires the generated manifest. Run "pnpm sync-media" first.',
+        { cause: error },
       );
     }
     throw error;

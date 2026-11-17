@@ -1,5 +1,5 @@
 ---
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { groupSchema } from "@/content/schemas/blockSchemas";
 import { indexMediaBlocks } from "@/utils/mediaOrder";
@@ -24,14 +24,12 @@ const indexedBlocks = indexMediaBlocks(
 ---
 
 <div class="mb-5 flex h-fit flex-col gap-3 lg:mb-0 lg:contents lg:gap-0">
-  {
-    indexedBlocks.map(({ block, mediaIndex, imageIndex }) => (
-      <BlockRenderer
-        block={block}
-        mediaIndex={mediaIndex}
-        imageIndex={imageIndex}
-        tags={tags}
-      />
-    ))
-  }
+  {indexedBlocks.map(({ block, mediaIndex, imageIndex }) => (
+    <BlockRenderer
+      block={block}
+      mediaIndex={mediaIndex}
+      imageIndex={imageIndex}
+      tags={tags}
+    />
+  ))}
 </div>

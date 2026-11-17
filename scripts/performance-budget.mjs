@@ -3,7 +3,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { gzipSync } from "node:zlib";
 
-const DIST_DIRECTORY = path.resolve("dist");
+const DIST_DIRECTORY = path.resolve("dist", "client");
 const ASTRO_DIRECTORY = path.join(DIST_DIRECTORY, "_astro");
 const MEDIA_MANIFEST_PATH = path.resolve("src/generated/media-manifest.json");
 const EXPECTED_FONT = {

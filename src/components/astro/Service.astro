@@ -1,5 +1,5 @@
 ---
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { servicesSchema } from "@/content/schemas/pageSchemas";
 import { cn } from "@/utils/cn";
@@ -45,22 +45,17 @@ const even = idx % 2 !== 0;
     <div
       class="service-animated-bg -z-1 absolute"
       style={`background: var(${bgColorIcon})`}
-    >
-    </div>
+    ></div>
     <h2 class="text-large md:text-larger z-10">{title}</h2>
   </div>
-  <div
-    class="text-normal md:text-medium xl:text-big z-10 mt-6 flex grow flex-col text-base leading-tight tracking-[-0.0175em] lg:mt-12 lg:pr-6 2xl:pr-9"
-  >
-    {
-      bodyRich ? (
-        <RichText
-          richText={bodyRich}
-          className="flex flex-col gap-4 lg:gap-4 lg:[&>p]:min-h-41 [&>ul]:pb-4 md:[&>ul]:pb-0"
-        />
-      ) : (
-        body
-      )
-    }
+  <div class="text-normal md:text-medium xl:text-big z-10 mt-6 flex grow flex-col text-base leading-tight tracking-[-0.0175em] lg:mt-12 lg:pr-6 2xl:pr-9">
+    {bodyRich ? (
+      <RichText
+        richText={bodyRich}
+        className="flex flex-col gap-4 lg:gap-4 lg:[&>p]:min-h-41 [&>ul]:pb-4 md:[&>ul]:pb-0"
+      />
+    ) : (
+      body
+    )}
   </div>
 </div>

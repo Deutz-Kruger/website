@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection, type z } from "astro:content";
+import type { z } from "astro/zod";
+import { getCollection } from "astro:content";
 
 import GroupRenderer from "@/components/astro/GroupRenderer.astro";
 import { caseSchema } from "@/content/schemas/pageSchemas";
@@ -61,15 +62,13 @@ const indexedGroups = indexMediaGroups(groups);
 >
   <hr class="mb-4 lg:mb-6" />
   <main class="relative grid grid-cols-1 lg:grid-cols-4 lg:gap-6">
-    {
-      indexedGroups.map(({ group, mediaStartIndex, imageStartIndex }) => (
-        <GroupRenderer
-          group={group}
-          mediaStartIndex={mediaStartIndex}
-          imageStartIndex={imageStartIndex}
-          tags={tags}
-        />
-      ))
-    }
+    {indexedGroups.map(({ group, mediaStartIndex, imageStartIndex }) => (
+      <GroupRenderer
+        group={group}
+        mediaStartIndex={mediaStartIndex}
+        imageStartIndex={imageStartIndex}
+        tags={tags}
+      />
+    ))}
   </main>
 </Layout>

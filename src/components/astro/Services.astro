@@ -1,7 +1,7 @@
 ---
 import Service from "@components/astro/Service.astro";
 import { servicesSchema } from "@content/schemas/pageSchemas";
-import { z } from "astro:content";
+import { z } from "astro/zod";
 
 export type Services = z.infer<typeof servicesSchema>;
 
@@ -15,21 +15,19 @@ const { services } = Astro.props;
 <section>
   <hr class="hidden lg:block" />
   <div class="lg:flex lg:min-h-[600px]">
-    {
-      services.map((service, idx) => {
-        const { title, body, icon, bodyRich } = service;
+    {services.map((service, idx) => {
+      const { title, body, icon, bodyRich } = service;
 
-        return (
-          <Service
-            idx={idx}
-            title={title}
-            body={body}
-            bodyRich={bodyRich}
-            icon={icon}
-          />
-        );
-      })
-    }
+      return (
+        <Service
+          idx={idx}
+          title={title}
+          body={body}
+          bodyRich={bodyRich}
+          icon={icon}
+        />
+      );
+    })}
   </div>
 </section>
 

@@ -1,5 +1,5 @@
 ---
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { landingPageSchema } from "@/content/schemas/pageSchemas";
 
@@ -27,45 +27,34 @@ const contactParts = hero.contact.split(
 );
 ---
 
-<section
-  class="md:pt-big xl:pt-biggest 2xl:pt-huge pt-22 relative flex flex-col justify-end pb-4 md:mb-8 md:pb-8"
->
+<section class="md:pt-big xl:pt-biggest 2xl:pt-huge pt-22 relative flex flex-col justify-end pb-4 md:mb-8 md:pb-8">
   <div
     class="absolute left-1/2 -z-10 w-screen -translate-x-1/2 transition-colors duration-300"
     style="background-color: var(--theme-color); top: -50vh; height: calc(100% + 50vh);"
-  >
-  </div>
-  <h1
-    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop xl:w-12/17 mb-4 w-11/12 md:mb-12"
-  >
-    {
-      headlineParts.map((part) => {
-        const keywordColor = keywordColors.get(part.toLowerCase());
-        return keywordColor ? (
-          <span class="keyword cursor-pointer" data-color={keywordColor}>
-            {part}
-          </span>
-        ) : (
-          part
-        );
-      })
-    }
+  ></div>
+  <h1 class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop xl:w-12/17 mb-4 w-11/12 md:mb-12">
+    {headlineParts.map((part) => {
+      const keywordColor = keywordColors.get(part.toLowerCase());
+      return keywordColor ? (
+        <span class="keyword cursor-pointer" data-color={keywordColor}>
+          {part}
+        </span>
+      ) : (
+        part
+      );
+    })}
   </h1>
-  <h2
-    class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop md:w-15/17 2xl:w-8/17 3xl:w- ml-auto w-5/6 text-right"
-  >
-    {
-      contactParts.map((part) =>
-        part === "\n" ? (
-          <br />
-        ) : part === contactEmail ? (
-          <a href="mailto:hi@deutzkrueger.de" class="keyword not-italic!">
-            {contactEmail}
-          </a>
-        ) : (
-          part
-        ),
-      )
-    }
+  <h2 class="text-large md:text-largerer tracking-heading-mobile-mobile leading-heading-mobile md:leading-heading-mobile-desktop md:tracking-heading-mobile-desktop md:w-15/17 2xl:w-8/17 3xl:w- ml-auto w-5/6 text-right">
+    {contactParts.map((part) =>
+      part === "\n" ? (
+        <br />
+      ) : part === contactEmail ? (
+        <a href="mailto:hi@deutzkrueger.de" class="keyword not-italic!">
+          {contactEmail}
+        </a>
+      ) : (
+        part
+      ),
+    )}
   </h2>
 </section>

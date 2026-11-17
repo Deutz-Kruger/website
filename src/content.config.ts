@@ -7,8 +7,11 @@ import {
   aboutSchema,
   caseSchema,
   landingPageSchema,
-} from "./schemas/pageSchemas";
-import { layoutSchema, settingsSchema } from "./schemas/settingsSchemas";
+} from "./content/schemas/pageSchemas";
+import {
+  layoutSchema,
+  settingsSchema,
+} from "./content/schemas/settingsSchemas";
 
 const cases = defineCollection({
   loader: glob({

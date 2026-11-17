@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from "astro/zod";
 
 import { backgroundField, imagesField, layoutField } from "./fieldSchemas";
 

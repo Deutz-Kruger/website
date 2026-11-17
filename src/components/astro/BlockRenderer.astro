@@ -1,7 +1,7 @@
 ---
 import "./blocks/blockstyles.css";
 
-import { type z } from "astro:content";
+import type { z } from "astro/zod";
 
 import { blocksUnion } from "@/content/schemas/blockSchemas";
 
@@ -25,18 +25,14 @@ const isFirstImage = imageIndex === 0;
 ---
 
 {block._block === "title" && <TitleBlock block={block} tags={tags} />}
-{
-  block._block === "video" && (
-    <VideoBlock block={block} priority={mediaIndex === 0} />
-  )
-}
-{
-  block._block === "image" && (
-    <ImageBlock
-      block={block}
-      loading={isFirstImage ? "eager" : "lazy"}
-      fetchpriority={isFirstImage ? "high" : "auto"}
-    />
-  )
-}
+{block._block === "video" && (
+  <VideoBlock block={block} priority={mediaIndex === 0} />
+)}
+{block._block === "image" && (
+  <ImageBlock
+    block={block}
+    loading={isFirstImage ? "eager" : "lazy"}
+    fetchpriority={isFirstImage ? "high" : "auto"}
+  />
+)}
 {block._block === "text" && <TextBlock block={block} />}
