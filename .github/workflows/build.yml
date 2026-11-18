@@ -53,7 +53,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload --config wrangler.jsonc --preview-alias run-${{ github.run_id }}
+          command: versions upload --config dist/server/wrangler.json --preview-alias run-${{ github.run_id }}
           wranglerVersion: "4.163.0"
 
       - name: Publish preview details
@@ -86,7 +86,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --config wrangler.jsonc
+          command: deploy --config dist/server/wrangler.json
           wranglerVersion: "4.163.0"
 
       - name: Prune stale managed media
