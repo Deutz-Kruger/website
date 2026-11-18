@@ -6,7 +6,7 @@ stored in Cloudflare Images and videos in Cloudflare Stream.
 
 ## Requirements
 
-- Node.js 20 or newer
+- Node.js 22.23.4 or newer (`mise.toml` pins the local development version)
 - pnpm 10 or newer
 - Cloudflare media credentials for the initial media sync and media changes
 
@@ -40,49 +40,27 @@ manifest produces an actionable error asking you to run `pnpm sync-media`.
 
 ## Commands
 
-| Command                          | Purpose                                                                       |
-| -------------------------------- | ----------------------------------------------------------------------------- |
-| `pnpm dev`                       | Start the Astro development server.                                           |
-| `pnpm build`                     | Create the production Worker and static assets in `dist`.                     |
-| `pnpm preview`                   | Build and run the result locally with Wrangler.                               |
-| `pnpm check`                     | Run ESLint, Prettier verification, and Astro type checking.                   |
-| `pnpm test:media`                | Run the media reconciliation test suite.                                      |
-| `pnpm sync-media`                | Reconcile local media and write the generated manifest. Never deletes assets. |
-| `pnpm sync-media:prune`          | Mark or delete stale managed media after a successful deployment.             |
-| `pnpm sync-media:audit`          | Report possible untagged legacy duplicates without mutation.                  |
-| `pnpm sync-media:cleanup-legacy` | Validate or apply an approved legacy cleanup report. Dry-run by default.      |
+| Command           | Purpose                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| `pnpm dev`        | Start the Astro development server.                         |
+| `pnpm build`      | Production build, including budget and verification checks. |
+| `pnpm preview`    | Build and serve the result locally with `astro preview`.    |
+| `pnpm check`      | Run ESLint, Prettier verification, and Astro type checking. |
+| `pnpm test`       | Run the unit and media test suites.                         |
+| `pnpm sync-media` | Reconcile local media and write the generated manifest.     |
 
-Run `pnpm sync-media -- --help` for all media commands, safety behavior, and
-flags. Implementation and recovery details are in
+The full command list lives in [AGENTS.md](AGENTS.md) and is discoverable
+with `pnpm run`. Media internals and recovery details are in
 [media-sync/README.md](media-sync/README.md).
 
 ## Media lifecycle
 
-Supported source formats are PNG, JPG/JPEG, SVG, MP4, and WebM. Dotfiles are
-ignored; unsupported visible files fail the sync.
-
-```text
-src/content/media
-  → SHA-256 scan and metadata extraction
-  → Cloudflare Images / Stream reconciliation
-  → src/generated/media-manifest.json
-  → Astro build
-```
-
-Cloudflare metadata is the remote source of truth. Assets are tagged with their
-normalized source path and SHA-256 hash. Exact matches are reused, so an
-unchanged sync performs zero uploads. Images use deterministic content-addressed
-IDs; videos are reused after interrupted uploads and must finish encoding before
-the manifest is written.
-
-The manifest contains only the remote ID, media type, width, and height. It is
-written atomically after every local asset has a usable remote ID and remains
-unchanged if reconciliation fails.
-
-Normal sync never deletes media. Production pruning is a separate post-deploy
-operation: unused managed assets are first marked stale and are deleted only
-after seven days. Reusing an asset clears its stale marker. Untagged assets are
-outside normal pruning.
+Sources live in `src/content/media` (PNG, JPG/JPEG, SVG, MP4, WebM).
+`pnpm sync-media` reconciles them against tagged Cloudflare Images and Stream
+inventory and atomically writes the generated, ignored
+`src/generated/media-manifest.json`. Normal sync never deletes media.
+Deployment pruning and the intentionally separate legacy cleanup flow are
+documented in [media-sync/README.md](media-sync/README.md).
 
 ## Deployment workflow
 
@@ -150,34 +128,3 @@ Cloudflare documents the underlying non-production mechanism under
 [Preview URLs](https://developers.cloudflare.com/workers/versions-and-deployments/preview-urls/)
 and GitHub documents branch selection under
 [Manually running a workflow](https://docs.github.com/actions/managing-workflow-runs/manually-running-a-workflow).
-
-## Legacy media cleanup
-
-Legacy cleanup is intentionally excluded from deployment automation. Its normal
-sequence is:
-
-```bash
-pnpm sync-media:audit
-pnpm sync-media:cleanup-legacy
-pnpm sync-media:cleanup-legacy -- --apply --report-sha256=<sha256>
-```
-
-The audit does not print the approval checksum. The cleanup dry run revalidates
-the report against Cloudflare and prints the SHA-256 required by apply. During
-apply, progress is checkpointed and `Ctrl+C` requests a graceful, resumable
-pause. Read [media-sync/README.md](media-sync/README.md) before running deletion.
-
-## Project structure
-
-```text
-.github/workflows/build.yml       Preview and production deployment workflow
-media-sync/                       Cloudflare reconciliation CLI and tests
-src/content/media/                Source images and videos
-src/generated/media-manifest.json Generated, ignored frontend manifest
-src/utils/media.ts                Runtime media lookup and URL helpers
-astro.config.mjs                  Astro and Cloudflare adapter configuration
-wrangler.jsonc                    Cloudflare Worker and asset configuration
-```
-
-The primary stack is Astro, TypeScript, React, Tailwind CSS, GSAP, Cloudflare
-Workers, Cloudflare Images, and Cloudflare Stream.

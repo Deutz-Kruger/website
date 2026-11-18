@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+    # Documentation-only changes do not need a production deploy.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
 
 permissions:
   contents: read
