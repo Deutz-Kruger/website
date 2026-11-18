@@ -6,6 +6,9 @@ const CASE_SLUGS = ["bl-thermo", "kamikuratcg", "krumphof", "skaut"];
 const LOCALES = ["en", "de"];
 const LQIP_PATTERN = /^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/;
 const LQIP_MAX_DATA_URI_LENGTH = 4 * 1024;
+// Source of truth is MANIFEST_SCHEMA_VERSION in media-sync/schema.ts, which
+// cannot be imported from a plain Node script.
+const EXPECTED_MANIFEST_SCHEMA_VERSION = "2";
 
 const readOutput = (path) =>
   readFile(new URL(`../dist/client/${path}`, import.meta.url), "utf8");
@@ -127,7 +130,7 @@ const manifest = JSON.parse(
     "utf8",
   ),
 );
-assert.equal(manifest.schemaVersion, "2");
+assert.equal(manifest.schemaVersion, EXPECTED_MANIFEST_SCHEMA_VERSION);
 assert.ok(Object.keys(manifest.entries).length > 0);
 for (const [sourcePath, entry] of Object.entries(manifest.entries)) {
   assert.ok(entry.id, `${sourcePath} is missing an ID`);

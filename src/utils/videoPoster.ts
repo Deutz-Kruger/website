@@ -1,7 +1,6 @@
 import type { ManifestEntry } from "../../media-sync/schema.ts";
+import { CLOUDFLARE_STREAM_URL } from "./cloudflareDelivery";
 
-const CLOUDFLARE_STREAM_URL =
-  "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
 const POSTER_WIDTHS = [480, 768, 1280] as const;
 
 export interface VideoPosterSources {

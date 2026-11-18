@@ -1,20 +1,25 @@
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { basename, extname, relative, resolve, sep } from "node:path";
+import { extname, relative, resolve, sep } from "node:path";
 
 import ffprobe from "ffprobe";
 import ffprobeStatic from "ffprobe-static";
 import { glob } from "glob";
 import sharp from "sharp";
 
+import {
+  DEFAULT_MEDIA_ROOT,
+  DEFAULT_PROJECT_ROOT,
+  IMAGE_LQIP_CONCURRENCY,
+  mapConcurrent,
+  SCAN_CONCURRENCY,
+  VIDEO_LQIP_CONCURRENCY,
+} from "./config";
 import { generateImageLqip, generateVideoLqip, preflightFfmpeg } from "./lqip";
 import type { LocalMediaFile, MediaType } from "./schema";
 
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".svg"]);
 const VIDEO_EXTENSIONS = new Set([".mp4", ".webm"]);
-
-export const DEFAULT_MEDIA_ROOT = resolve("./src/content/media");
-export const DEFAULT_PROJECT_ROOT = resolve(".");
 
 const normalizePath = (path: string) => path.split(sep).join("/");
 
@@ -37,29 +42,6 @@ export const generateSha256 = async (filePath: string): Promise<string> => {
     hash.update(new Uint8Array(chunk as Uint8Array));
   }
   return hash.digest("hex");
-};
-
-/** Runs asynchronous work with a fixed concurrency limit. */
-export const mapConcurrent = async <T, R>(
-  values: T[],
-  concurrency: number,
-  worker: (value: T, index: number) => Promise<R>,
-): Promise<R[]> => {
-  const results = new Array<R>(values.length);
-  let nextIndex = 0;
-
-  const runWorker = async () => {
-    while (nextIndex < values.length) {
-      const index = nextIndex;
-      nextIndex += 1;
-      results[index] = await worker(values[index], index);
-    }
-  };
-
-  await Promise.all(
-    Array.from({ length: Math.min(concurrency, values.length) }, runWorker),
-  );
-  return results;
 };
 
 const inspectFile = async (
@@ -113,43 +95,39 @@ const inspectFile = async (
   };
 };
 
+/**
+ * Generates LQIPs per media type and zips the results back onto the scanned
+ * files by index, so equal source paths can never collide.
+ */
 const attachLqips = async (
   files: Array<Omit<LocalMediaFile, "lqip">>,
 ): Promise<LocalMediaFile[]> => {
-  const imageFiles = files.filter((file) => file.type === "image");
-  const videoFiles = files.filter((file) => file.type === "video");
-
+  const imageIndexes: number[] = [];
+  const videoIndexes: number[] = [];
+  files.forEach((file, index) => {
+    (file.type === "image" ? imageIndexes : videoIndexes).push(index);
+  });
   const [imageLqips, videoLqips] = await Promise.all([
-    mapConcurrent(imageFiles, 4, (file) =>
-      generateImageLqip(file.absolutePath, file.sourcePath),
+    mapConcurrent(imageIndexes, IMAGE_LQIP_CONCURRENCY, (index) =>
+      generateImageLqip(files[index].absolutePath, files[index].sourcePath),
     ),
     (async () => {
-      if (videoFiles.length === 0) return [];
+      if (videoIndexes.length === 0) return [];
       await preflightFfmpeg();
-      return mapConcurrent(videoFiles, 2, (file) =>
-        generateVideoLqip(file.absolutePath, file.sourcePath),
+      return mapConcurrent(videoIndexes, VIDEO_LQIP_CONCURRENCY, (index) =>
+        generateVideoLqip(files[index].absolutePath, files[index].sourcePath),
       );
     })(),
   ]);
 
-  const lqipsByPath = new Map([
-    ...imageFiles.map(
-      (file, index) => [file.sourcePath, imageLqips[index]] as const,
-    ),
-    ...videoFiles.map(
-      (file, index) => [file.sourcePath, videoLqips[index]] as const,
-    ),
-  ]);
-
-  return files.map((file) => {
-    const lqip = lqipsByPath.get(file.sourcePath);
-    if (!lqip) {
-      throw new Error(
-        `LQIP generation produced no result for ${file.sourcePath}`,
-      );
-    }
-    return { ...file, lqip };
+  const withLqips = new Array<LocalMediaFile>(files.length);
+  imageIndexes.forEach((fileIndex, position) => {
+    withLqips[fileIndex] = { ...files[fileIndex], lqip: imageLqips[position] };
   });
+  videoIndexes.forEach((fileIndex, position) => {
+    withLqips[fileIndex] = { ...files[fileIndex], lqip: videoLqips[position] };
+  });
+  return withLqips;
 };
 
 /** Scans supported local media and returns deterministic metadata. */
@@ -181,7 +159,7 @@ export const scanLocalMedia = async (options?: {
 
   const files = await mapConcurrent(
     visiblePaths,
-    options?.concurrency ?? 4,
+    options?.concurrency ?? SCAN_CONCURRENCY,
     async (path) => {
       const absolutePath = resolve(mediaRoot, path);
       const sourcePath = normalizePath(relative(projectRoot, absolutePath));
@@ -189,10 +167,4 @@ export const scanLocalMedia = async (options?: {
     },
   );
   return attachLqips(files);
-};
-
-/** Returns possible legacy upload names for a source file. */
-export const getLegacyRemoteNames = (sourcePath: string): string[] => {
-  const name = basename(sourcePath);
-  return [...new Set([name, name.replace(" ", "_")])];
 };

@@ -14,6 +14,7 @@ import {
 
 const API_ROOT = "https://api.cloudflare.com/client/v4";
 const MAX_RETRIES = 3;
+const IMAGE_PAGE_SIZE = 1000;
 const VIDEO_PAGE_SIZE = 1000;
 
 type Fetch = (
@@ -22,6 +23,11 @@ type Fetch = (
 ) => Promise<Response>;
 
 type Sleep = (milliseconds: number) => Promise<void>;
+
+interface RequestOptions {
+  allowNotFound?: boolean;
+  idempotent?: boolean;
+}
 
 interface ApiErrorItem {
   code?: number;
@@ -34,6 +40,18 @@ interface ApiEnvelope<T> {
   errors?: ApiErrorItem[];
   messages?: ApiErrorItem[];
   total?: number;
+}
+
+type ApiRequester = <T>(
+  path: string,
+  init?: RequestInit,
+  options?: RequestOptions,
+) => Promise<ApiEnvelope<T> | null>;
+
+/** Everything an asset-type adapter needs to talk to the API. */
+interface ApiContext {
+  fetch: Fetch;
+  request: ApiRequester;
 }
 
 export interface CloudflareClientOptions {
@@ -162,6 +180,206 @@ const imageCustomId = (file: LocalMediaFile): string => {
 const encodeMediaId = (id: string) =>
   id.split("/").map(encodeURIComponent).join("/");
 
+/** Encapsulates everything that differs between Images and Stream assets. */
+interface MediaApi {
+  detailPath(id: string): string;
+  get(context: ApiContext, id: string): Promise<RemoteMedia | null>;
+  list(context: ApiContext, creator?: string): Promise<RemoteMedia[]>;
+  updateMetadata(
+    context: ApiContext,
+    media: Pick<RemoteMedia, "filename" | "id" | "type">,
+    metadata: ManagedMetadata,
+  ): Promise<void>;
+  upload(
+    context: ApiContext,
+    file: LocalMediaFile,
+    metadata: ManagedMetadata,
+  ): Promise<RemoteMedia>;
+}
+
+const imageApi: MediaApi = {
+  detailPath: (id) => `/images/v1/${encodeMediaId(id)}`,
+
+  get: async ({ request }, id) => {
+    const envelope = await request<unknown>(
+      imageApi.detailPath(id),
+      {},
+      {
+        allowNotFound: true,
+        idempotent: true,
+      },
+    );
+    return envelope ? toRemoteImage(imageSchema.parse(envelope.result)) : null;
+  },
+
+  list: async ({ request }, creator) => {
+    const images: RemoteMedia[] = [];
+    let continuationToken: string | undefined;
+
+    do {
+      const query = new URLSearchParams({
+        per_page: IMAGE_PAGE_SIZE.toString(),
+      });
+      if (creator !== undefined) query.set("creator", creator);
+      if (continuationToken) {
+        query.set("continuation_token", continuationToken);
+      }
+      const envelope = await request<unknown>(
+        `/images/v2?${query.toString()}`,
+        {},
+        { idempotent: true },
+      );
+      const page = imagesPageSchema.parse(envelope?.result);
+      images.push(...page.images.map(toRemoteImage));
+      continuationToken = page.continuation_token ?? undefined;
+    } while (continuationToken);
+
+    return images;
+  },
+
+  updateMetadata: async ({ request }, media, metadata) => {
+    await request(
+      imageApi.detailPath(media.id),
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ creator: MEDIA_CREATOR, metadata }),
+      },
+      { idempotent: true },
+    );
+  },
+
+  upload: async ({ request }, file, metadata) => {
+    const formData = new FormData();
+    formData.append(
+      "file",
+      await openAsBlob(file.absolutePath),
+      basename(file.absolutePath),
+    );
+    formData.append("id", imageCustomId(file));
+    formData.append("creator", MEDIA_CREATOR);
+    formData.append("metadata", JSON.stringify(metadata));
+
+    const envelope = await request<unknown>("/images/v1", {
+      method: "POST",
+      body: formData,
+    });
+    return toRemoteImage(imageSchema.parse(envelope?.result));
+  },
+};
+
+const videoApi: MediaApi = {
+  detailPath: (id) => `/stream/${encodeMediaId(id)}`,
+
+  get: async ({ request }, id) => {
+    const envelope = await request<unknown>(
+      videoApi.detailPath(id),
+      {},
+      {
+        allowNotFound: true,
+        idempotent: true,
+      },
+    );
+    return envelope ? toRemoteVideo(videoSchema.parse(envelope.result)) : null;
+  },
+
+  list: async ({ request }, creator) => {
+    const videos = new Map<string, RemoteMedia>();
+    let after: string | undefined;
+
+    while (true) {
+      const query = new URLSearchParams({
+        asc: "true",
+        include_counts: "true",
+        limit: VIDEO_PAGE_SIZE.toString(),
+      });
+      if (creator !== undefined) query.set("creator", creator);
+      if (after) query.set("after", after);
+
+      const envelope = await request<unknown>(
+        `/stream?${query.toString()}`,
+        {},
+        { idempotent: true },
+      );
+      const parsedPage = videoListSchema.parse(envelope?.result);
+      const page = Array.isArray(parsedPage) ? parsedPage : parsedPage.videos;
+      const previousSize = videos.size;
+      page.map(toRemoteVideo).forEach((video) => videos.set(video.id, video));
+
+      if (page.length < VIDEO_PAGE_SIZE) break;
+      const cursor = page.at(-1)?.created ?? page.at(-1)?.uploaded;
+      if (!cursor || videos.size === previousSize || cursor === after) {
+        throw new Error(
+          "Cloudflare Stream inventory pagination did not advance; refusing incomplete inventory.",
+        );
+      }
+      after = cursor;
+    }
+
+    return [...videos.values()];
+  },
+
+  updateMetadata: async ({ request }, media, metadata) => {
+    await request(
+      videoApi.detailPath(media.id),
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          creator: MEDIA_CREATOR,
+          meta: {
+            ...metadata,
+            ...(media.filename ? { name: media.filename } : {}),
+          },
+        }),
+      },
+      { idempotent: true },
+    );
+  },
+
+  upload: async ({ fetch, request }, file, metadata) => {
+    const filename = basename(file.absolutePath);
+    const maxDurationSeconds = file.duration
+      ? Math.min(36000, Math.max(1, Math.ceil(file.duration) + 5))
+      : 36000;
+    const envelope = await request<unknown>("/stream/direct_upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        creator: MEDIA_CREATOR,
+        maxDurationSeconds,
+        meta: { ...metadata, name: filename },
+      }),
+    });
+    const directUpload = directUploadSchema.parse(envelope?.result);
+
+    const formData = new FormData();
+    formData.append("file", await openAsBlob(file.absolutePath), filename);
+    const uploadResponse = await fetch(directUpload.uploadURL, {
+      method: "POST",
+      body: formData,
+    });
+    if (!uploadResponse.ok) {
+      throw new Error(
+        `Cloudflare Stream upload failed (${uploadResponse.status} ${uploadResponse.statusText})`,
+      );
+    }
+
+    return {
+      id: directUpload.uid,
+      type: "video",
+      creator: MEDIA_CREATOR,
+      filename,
+      metadata: { ...metadata, name: filename },
+      readyToStream: false,
+      status: "queued",
+    };
+  },
+};
+
+const mediaApi = (type: MediaType): MediaApi =>
+  type === "image" ? imageApi : videoApi;
+
 export const getCloudflareConfig = (): CloudflareClientOptions => {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const apiToken = process.env.CLOUDFLARE_MEDIA_API_TOKEN;
@@ -193,10 +411,17 @@ export class CloudflareMediaClient {
     return `${API_ROOT}/accounts/${this.accountId}${path}`;
   }
 
+  private context(): ApiContext {
+    return {
+      fetch: (input, init) => this.fetch(input, init),
+      request: (path, init, options) => this.request(path, init, options),
+    };
+  }
+
   private async request<T>(
     path: string,
     init: RequestInit = {},
-    options?: { idempotent?: boolean; allowNotFound?: boolean },
+    options?: RequestOptions,
   ): Promise<ApiEnvelope<T> | null> {
     const headers = new Headers(init.headers);
     headers.set("Authorization", `Bearer ${this.apiToken}`);
@@ -247,62 +472,11 @@ export class CloudflareMediaClient {
   }
 
   async listImages(creator?: string): Promise<RemoteMedia[]> {
-    const images: RemoteMedia[] = [];
-    let continuationToken: string | undefined;
-
-    do {
-      const query = new URLSearchParams({ per_page: "1000" });
-      if (creator !== undefined) query.set("creator", creator);
-      if (continuationToken) {
-        query.set("continuation_token", continuationToken);
-      }
-      const envelope = await this.request<unknown>(
-        `/images/v2?${query.toString()}`,
-        {},
-        { idempotent: true },
-      );
-      const page = imagesPageSchema.parse(envelope?.result);
-      images.push(...page.images.map(toRemoteImage));
-      continuationToken = page.continuation_token ?? undefined;
-    } while (continuationToken);
-
-    return images;
+    return imageApi.list(this.context(), creator);
   }
 
   async listVideos(creator?: string): Promise<RemoteMedia[]> {
-    const videos = new Map<string, RemoteMedia>();
-    let after: string | undefined;
-
-    while (true) {
-      const query = new URLSearchParams({
-        asc: "true",
-        include_counts: "true",
-        limit: VIDEO_PAGE_SIZE.toString(),
-      });
-      if (creator !== undefined) query.set("creator", creator);
-      if (after) query.set("after", after);
-
-      const envelope = await this.request<unknown>(
-        `/stream?${query.toString()}`,
-        {},
-        { idempotent: true },
-      );
-      const parsedPage = videoListSchema.parse(envelope?.result);
-      const page = Array.isArray(parsedPage) ? parsedPage : parsedPage.videos;
-      const previousSize = videos.size;
-      page.map(toRemoteVideo).forEach((video) => videos.set(video.id, video));
-
-      if (page.length < VIDEO_PAGE_SIZE) break;
-      const cursor = page.at(-1)?.created ?? page.at(-1)?.uploaded;
-      if (!cursor || videos.size === previousSize || cursor === after) {
-        throw new Error(
-          "Cloudflare Stream inventory pagination did not advance; refusing incomplete inventory.",
-        );
-      }
-      after = cursor;
-    }
-
-    return [...videos.values()];
+    return videoApi.list(this.context(), creator);
   }
 
   async listManagedMedia(): Promise<RemoteMedia[]> {
@@ -314,89 +488,21 @@ export class CloudflareMediaClient {
   }
 
   async getMedia(id: string, type: MediaType): Promise<RemoteMedia | null> {
-    if (type === "image") {
-      const envelope = await this.request<unknown>(
-        `/images/v1/${encodeMediaId(id)}`,
-        {},
-        { allowNotFound: true, idempotent: true },
-      );
-      return envelope
-        ? toRemoteImage(imageSchema.parse(envelope.result))
-        : null;
-    }
-
-    const envelope = await this.request<unknown>(
-      `/stream/${encodeMediaId(id)}`,
-      {},
-      { allowNotFound: true, idempotent: true },
-    );
-    return envelope ? toRemoteVideo(videoSchema.parse(envelope.result)) : null;
+    return mediaApi(type).get(this.context(), id);
   }
 
   async uploadImage(
     file: LocalMediaFile,
     metadata: ManagedMetadata,
   ): Promise<RemoteMedia> {
-    const formData = new FormData();
-    formData.append(
-      "file",
-      await openAsBlob(file.absolutePath),
-      basename(file.absolutePath),
-    );
-    formData.append("id", imageCustomId(file));
-    formData.append("creator", MEDIA_CREATOR);
-    formData.append("metadata", JSON.stringify(metadata));
-
-    const envelope = await this.request<unknown>("/images/v1", {
-      method: "POST",
-      body: formData,
-    });
-    return toRemoteImage(imageSchema.parse(envelope?.result));
+    return imageApi.upload(this.context(), file, metadata);
   }
 
   async uploadVideo(
     file: LocalMediaFile,
     metadata: ManagedMetadata,
   ): Promise<RemoteMedia> {
-    const maxDurationSeconds = file.duration
-      ? Math.min(36000, Math.max(1, Math.ceil(file.duration) + 5))
-      : 36000;
-    const envelope = await this.request<unknown>("/stream/direct_upload", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        creator: MEDIA_CREATOR,
-        maxDurationSeconds,
-        meta: { ...metadata, name: basename(file.absolutePath) },
-      }),
-    });
-    const directUpload = directUploadSchema.parse(envelope?.result);
-
-    const formData = new FormData();
-    formData.append(
-      "file",
-      await openAsBlob(file.absolutePath),
-      basename(file.absolutePath),
-    );
-    const uploadResponse = await this.fetch(directUpload.uploadURL, {
-      method: "POST",
-      body: formData,
-    });
-    if (!uploadResponse.ok) {
-      throw new Error(
-        `Cloudflare Stream upload failed (${uploadResponse.status} ${uploadResponse.statusText})`,
-      );
-    }
-
-    return {
-      id: directUpload.uid,
-      type: "video",
-      creator: MEDIA_CREATOR,
-      filename: basename(file.absolutePath),
-      metadata: { ...metadata, name: basename(file.absolutePath) },
-      readyToStream: false,
-      status: "queued",
-    };
+    return videoApi.upload(this.context(), file, metadata);
   }
 
   async waitForVideoReady(
@@ -424,41 +530,28 @@ export class CloudflareMediaClient {
     media: Pick<RemoteMedia, "filename" | "id" | "type">,
     metadata: ManagedMetadata,
   ): Promise<void> {
-    const path =
-      media.type === "image"
-        ? `/images/v1/${encodeMediaId(media.id)}`
-        : `/stream/${encodeMediaId(media.id)}`;
-    const method = media.type === "image" ? "PATCH" : "POST";
-    const body =
-      media.type === "image"
-        ? { creator: MEDIA_CREATOR, metadata }
-        : {
-            creator: MEDIA_CREATOR,
-            meta: {
-              ...metadata,
-              ...(media.filename ? { name: media.filename } : {}),
-            },
-          };
-    await this.request(
-      path,
-      {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      },
-      { idempotent: true },
-    );
+    await mediaApi(media.type).updateMetadata(this.context(), media, metadata);
   }
 
   async deleteMedia(media: Pick<RemoteMedia, "id" | "type">): Promise<void> {
-    const path =
-      media.type === "image"
-        ? `/images/v1/${encodeMediaId(media.id)}`
-        : `/stream/${encodeMediaId(media.id)}`;
     await this.request(
-      path,
+      mediaApi(media.type).detailPath(media.id),
       { method: "DELETE" },
-      { idempotent: true, allowNotFound: true },
+      { allowNotFound: true, idempotent: true },
     );
   }
 }
+
+/** The subset of the Cloudflare client that sync and prune depend on. */
+export type MediaClient = Pick<
+  CloudflareMediaClient,
+  | "deleteMedia"
+  | "getMedia"
+  | "listImages"
+  | "listManagedMedia"
+  | "listVideos"
+  | "updateMetadata"
+  | "uploadImage"
+  | "uploadVideo"
+  | "waitForVideoReady"
+>;

@@ -1,5 +1,4 @@
-import { spawn } from "node:child_process";
-
+import { execa } from "execa";
 import ffmpegPath from "ffmpeg-static";
 import sharp from "sharp";
 
@@ -13,84 +12,82 @@ const FFMPEG_MAX_ERROR_BYTES = 64 * 1024;
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : String(error);
 
-const combineChunks = (chunks: Buffer[], length: number): Buffer => {
-  const combined = Buffer.allocUnsafe(length);
-  let offset = 0;
-  for (const chunk of chunks) {
-    combined.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return combined;
-};
+/** The subset of an execa failure that FFmpeg error reporting relies on. */
+interface FfmpegFailure {
+  code?: string;
+  exitCode?: number;
+  isMaxBuffer?: boolean;
+  originalMessage?: string;
+  signal?: string;
+  stderr?: Uint8Array;
+  stdout?: Uint8Array;
+  timedOut?: boolean;
+}
 
-const runFfmpeg = (
+const asFfmpegFailure = (error: unknown): FfmpegFailure =>
+  typeof error === "object" && error !== null ? (error as FfmpegFailure) : {};
+
+const toBuffer = (value: Uint8Array | undefined): Buffer =>
+  Buffer.from(value ?? new Uint8Array());
+
+/** Bounds reported stderr so failures stay readable. */
+const stderrDetails = (failure: FfmpegFailure): string =>
+  toBuffer(failure.stderr)
+    .subarray(0, FFMPEG_MAX_ERROR_BYTES)
+    .toString("utf8")
+    .trim();
+
+/**
+ * Runs FFmpeg with a hard timeout, a capped stdout, and bounded stderr.
+ * A timeout or output overflow terminates the process immediately (SIGKILL).
+ */
+const runFfmpeg = async (
   binaryPath: string,
   args: string[],
   timeoutMs: number,
-): Promise<Buffer> =>
-  new Promise((resolve, reject) => {
-    const child = spawn(binaryPath, args, {
-      stdio: ["ignore", "pipe", "pipe"],
+): Promise<Buffer> => {
+  try {
+    const { stdout } = await execa(binaryPath, args, {
+      encoding: "buffer",
+      killSignal: "SIGKILL",
+      maxBuffer: {
+        stdout: FFMPEG_MAX_OUTPUT_BYTES,
+        stderr: FFMPEG_MAX_OUTPUT_BYTES,
+      },
+      stdin: "ignore",
+      stripFinalNewline: false,
+      timeout: timeoutMs,
     });
-    const output: Buffer[] = [];
-    const errors: Buffer[] = [];
-    let outputBytes = 0;
-    let errorBytes = 0;
-    let settled = false;
-
-    const rejectOnce = (error: Error) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timeout);
-      child.kill("SIGKILL");
-      reject(error);
-    };
-
-    const timeout = setTimeout(() => {
-      rejectOnce(new Error(`FFmpeg timed out after ${timeoutMs}ms`));
-    }, timeoutMs);
-
-    child.stdout.on("data", (chunk: Buffer) => {
-      outputBytes += chunk.length;
-      if (outputBytes > FFMPEG_MAX_OUTPUT_BYTES) {
-        rejectOnce(
-          new Error(`FFmpeg output exceeded ${FFMPEG_MAX_OUTPUT_BYTES} bytes`),
-        );
-        return;
-      }
-      output.push(chunk);
-    });
-
-    child.stderr.on("data", (chunk: Buffer) => {
-      if (errorBytes >= FFMPEG_MAX_ERROR_BYTES) return;
-      const remaining = FFMPEG_MAX_ERROR_BYTES - errorBytes;
-      const boundedChunk = chunk.subarray(0, remaining);
-      errors.push(boundedChunk);
-      errorBytes += boundedChunk.length;
-    });
-
-    child.once("error", (error) => {
-      rejectOnce(new Error(`Unable to start FFmpeg: ${error.message}`));
-    });
-
-    child.once("close", (code, signal) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timeout);
-      if (code !== 0) {
-        const details = combineChunks(errors, errorBytes)
-          .toString("utf8")
-          .trim();
-        reject(
-          new Error(
-            `FFmpeg exited with ${code ?? signal ?? "unknown status"}${details ? `: ${details}` : ""}`,
-          ),
-        );
-        return;
-      }
-      resolve(combineChunks(output, outputBytes));
-    });
-  });
+    return toBuffer(stdout);
+  } catch (error) {
+    const failure = asFfmpegFailure(error);
+    if (failure.code) {
+      throw new Error(
+        `Unable to start FFmpeg: ${failure.originalMessage ?? failure.code}`,
+        { cause: error },
+      );
+    }
+    if (failure.timedOut) {
+      throw new Error(`FFmpeg timed out after ${timeoutMs}ms`, {
+        cause: error,
+      });
+    }
+    if (
+      failure.isMaxBuffer &&
+      toBuffer(failure.stdout).length >= FFMPEG_MAX_OUTPUT_BYTES
+    ) {
+      throw new Error(
+        `FFmpeg output exceeded ${FFMPEG_MAX_OUTPUT_BYTES} bytes`,
+        { cause: error },
+      );
+    }
+    const details = stderrDetails(failure);
+    throw new Error(
+      `FFmpeg exited with ${failure.exitCode ?? failure.signal ?? "unknown status"}${details ? `: ${details}` : ""}`,
+      { cause: error },
+    );
+  }
+};
 
 const encodeLqip = async (
   input: string | Buffer,
