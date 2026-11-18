@@ -1,154 +1,175 @@
 # Agent Guidelines
 
-## Build / Lint / Test Commands
+Agent-facing documentation for the Deutz & Krüger portfolio site. Everything
+here is verified against the repository; if a statement conflicts with the
+code, the code wins — and this file should be updated.
+
+For deeper detail, see [README.md](README.md) (development, media lifecycle,
+deployment workflow) and [media-sync/README.md](media-sync/README.md)
+(media reconciliation internals and recovery).
+
+## What this project is
+
+An Astro 7 site rendered as a Cloudflare Worker with static assets, deployed
+via `wrangler deploy`. Server rendering is handled by `@astrojs/cloudflare`
+v14, which builds through the Cloudflare Vite plugin. The site is bilingual
+(`en` / `de`), with content in Astro content collections.
+
+There is no React (or any UI framework) in the client. Interactive behavior is
+framework-free TypeScript: Swup for page transitions (head + preload plugins),
+GSAP, Lenis, hls.js for video, and nanostores for state.
+
+## Requirements
+
+- Node.js: engines require `>=22.23.4`; local development is pinned to a
+  concrete version in `mise.toml`; CI runs Node 24.
+- pnpm 10 or newer
+- Cloudflare media credentials for the initial media sync and media changes
+  (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_MEDIA_API_TOKEN` in an ignored
+  `.env`). A missing generated manifest fails `astro dev` and `astro build`
+  with an instruction to run `pnpm sync-media` first.
+
+## Commands
 
 ```bash
 # Development
 pnpm dev                        # Start Astro dev server (localhost:4321)
+pnpm preview                    # Build, then serve the Worker via astro preview (workerd)
 
 # Building
-pnpm build                      # Build for production
-pnpm preview                     # Build and preview with Wrangler
+pnpm build                      # astro build + performance budget + build verification
 
-# Linting & Formatting
-pnpm lint                        # Run ESLint on .js, .ts, .astro files
-pnpm lint:fix                    # Auto-fix ESLint issues
-pnpm format                      # Format files with Prettier
-pnpm format:check                # Check formatting without changes
-pnpm type-check                  # Run Astro type checking
+# Checks (run before committing)
+pnpm check                      # ESLint + Prettier check + astro check
+pnpm lint / lint:fix            # ESLint on .js, .ts, .astro
+pnpm format / format:check      # Prettier
+pnpm type-check                 # astro check
 
-# All Checks (run before committing)
-pnpm check                       # Run lint, format check, and type-check
+# Tests (Node built-in test runner via tsx; no frontend test framework)
+pnpm test                       # unit tests + media tests
+pnpm test:unit                  # ./test/*.test.ts
+pnpm test:media                 # ./media-sync/**/*.test.ts
+
+# Media (see media-sync/README.md before destructive commands)
+pnpm sync-media                 # Reconcile local media with Cloudflare; writes manifest
+pnpm sync-media:prune           # Mark/delete stale managed media after a successful deploy
+pnpm sync-media:audit           # Report untagged legacy media (read-only)
+pnpm sync-media:cleanup-legacy  # Dry-run approved legacy cleanup (apply needs --report-sha256)
 
 # Utilities
-pnpm reset:cache                 # Clear .astro, .cache, .wrangler, dist folders
-pnpm sync-media                  # Sync media files to Cloudflare
-pnpm sync-media:prune            # Prune managed stale media after deploy
-pnpm sync-media:audit            # Report untagged legacy media
-pnpm sync-media:cleanup-legacy   # Dry-run approved legacy cleanup
-pnpm test:media                  # Run media sync tests
+pnpm reset:cache                # Clear .astro, .cache, .wrangler, dist
+pnpm perf:budget                # Performance budget report (also runs in build)
+pnpm verify:build               # Post-build HTML/SEO assertions on dist
 ```
 
-Media-sync tests use Node's built-in test runner through `tsx`. No general
-frontend test framework is configured.
+## Build output and deployment
 
----
+`astro build` produces `dist/client` (static assets) and `dist/server`
+(bundled Worker + a generated `dist/server/wrangler.json`). That generated
+config is the only valid deploy target:
 
-## Code Style Guidelines
+```bash
+wrangler deploy --config dist/server/wrangler.json
+```
+
+The root `wrangler.jsonc` is the build-time source configuration consumed by
+the adapter. Do **not** run `wrangler deploy` or `wrangler dev` against it —
+its `main` entrypoint is a bare package specifier that wrangler cannot resolve
+outside the Vite build.
+
+Deployment runs through `.github/workflows/build.yml`: manual runs are
+preview-only Worker versions; pushes to `main` deploy to production and then
+prune stale managed media. Details, including secrets and preview validation,
+are in README.md.
+
+## Media pipeline
+
+Sources live in `src/content/media` (PNG, JPG/JPEG, SVG, MP4, WebM).
+`pnpm sync-media` reconciles them against Cloudflare Images and Stream
+(`sourcePath` + SHA-256 tagged), writes the generated, ignored
+`src/generated/media-manifest.json`, and never deletes media. Normal sync is
+fail-closed and idempotent. The runtime consumes the manifest via
+`src/utils/media.ts`; no media processing happens in the deployed Worker.
+
+## Project structure
+
+```text
+.github/workflows/build.yml     Preview + production deployment workflow
+astro.config.mjs                Astro config: i18n, adapter, sitemap, robots
+wrangler.jsonc                  Build-time source config for the adapter
+media-sync/                     Cloudflare reconciliation CLI + tests
+scripts/                        performance-budget.mjs, verify-build.mjs
+test/                           Unit tests (security, locale, motion, seo, video)
+src/components/astro/           All components (.astro only): UI, blocks/, util/
+src/content/                    Collections: cases, pages, media, settings
+src/content/schemas/            Zod schemas (blocks, pages, fields, settings)
+src/generated/                  media-manifest.json (generated, ignored)
+src/layouts/                    SiteLayout.astro
+src/styles/global.css           Global styles (Tailwind CSS 4)
+src/utils/                      Runtime helpers (media, cn, locale, motion, …)
+```
+
+## Code Style
 
 ### Imports
 
-- Use path aliases defined in tsconfig.json:
-  - `@/*` → `src/*`
-  - `@components/*` → `src/components/*`
-  - `@content/*` → `src/content/*`
-  - `@layouts/*` → `src/layouts/*`
-  - `@styles/*` → `src/styles/*`
-- Imports are automatically sorted by `simple-import-sort/imports` ESLint rule
-- Group imports: external libs first, then internal dependencies, then relative imports
+- Path aliases (tsconfig.json): `@/*`, `@components/*`, `@content/*`,
+  `@layouts/*`, `@styles/*`
+- Imports are auto-sorted by `simple-import-sort/imports`; group external
+  libraries first, then internal, then relative.
 
 ### Formatting (Prettier)
 
-- Semi-colons: `true`
-- Trailing commas: `all`
-- Print width: `80` characters
-- Tab width: `2` spaces
-- Astro files use `astro` parser
-- JSONC files use `none` for trailing commas
+- Semi-colons: `true`; trailing commas: `all`; print width: `80`; tab width: `2`
+- Astro files use the `astro` parser; JSONC uses `none` for trailing commas
 - Tailwind classes are sorted automatically
 
 ### TypeScript
 
-- Strict mode enabled (extends `astro/tsconfigs/strict`)
-- Path aliases configured via `baseUrl: "./"`
-- `verbatimModuleSyntax: true` - use explicit type-only imports with `import type`
-- `noUnusedLocals: false` - unused locals allowed
-- JSX: `react-jsx` with import source `react`
-- Skip lib checks for faster builds
+- Strict mode (extends `astro/tsconfigs/strict`)
+- `verbatimModuleSyntax: true` — use `import type` for type-only imports
+- JSX: `react-jsx` with import source `react` (config only; no React in use)
+- `noUnusedLocals: false`; `skipLibCheck: true`
 
 ### Naming Conventions
 
-- **Components**: PascalCase (e.g., `BackgroundGradient`, `NavBar`)
-- **Functions/Variables**: camelCase (e.g., `generateKeywords`, `initHeaderLogic`)
-- **Constants**: UPPER_SNAKE_CASE for exported config (e.g., `CLOUDFLARE_ACCOUNT`)
-- **Types/Interfaces**: PascalCase (e.g., `Props`, `LayoutData`, `Manifest`)
-- **Schemas**: lowercase camelCase for zod schemas (e.g., `textBlock`, `blocksUnion`)
-
-### Error Handling
-
-- Use try/catch blocks for async operations
-- Log errors with `console.error()` or `console.warn()`
-- Type guard unknown errors (e.g., `isErrorWithCode(error)`)
-- Return early or throw meaningful errors with context
-- Example pattern:
-  ```typescript
-  try {
-    const data = await readFile(path, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    if (isErrorWithCode(error) && error.code === "ENOENT") {
-      console.log("⚠️ File not found");
-    } else {
-      console.error(
-        "❗ Error:",
-        error instanceof Error ? error.message : error,
-      );
-    }
-    return {};
-  }
-  ```
+- **Components**: PascalCase (e.g., `FixedLogo`, `CasePreview`)
+- **Functions/Variables**: camelCase (e.g., `generateKeywords`)
+- **Constants**: UPPER_SNAKE_CASE for exported config
+- **Types/Interfaces**: PascalCase (e.g., `LayoutData`, `Manifest`)
+- **Schemas**: lowercase camelCase zod schemas (e.g., `textBlock`, `blocksUnion`)
 
 ### Astro Components
 
-- Frontmatter with `---` delimiters
-- Use `Astro.props` to access props, destructure immediately
+- Frontmatter with `---` delimiters; destructure `Astro.props` immediately
 - Type props with `interface Props { }` or infer from zod schemas
-- Use `set:html` for trusted HTML content
 - Use `class` (not `className`) for HTML elements
-- Props passed as attributes, not as `{...props}` unless necessary
+- Use `set:html` only for trusted content
 
-### React Components
+### Error Handling
 
-- Use `className` for class names
-- Combine Tailwind classes with `cn()` utility (uses clsx + tailwind-merge)
-- Use `interface Props extends React.PropsWithChildren` for components with children
-- Export named components: `export const Component = (props: Props) => { ... }`
-- Use `useRef` for DOM refs, `useState` for state, `useEffect` for side effects
-- Cleanup event listeners and observers in useEffect cleanup functions
-
-### Utility Functions
-
-- Add JSDoc comments for exported functions
-- Use TypeScript generics with proper constraints
-- Example:
-  ```typescript
-  export function throttle<T extends (...args: unknown[]) => unknown>(
-    func: T,
-    delay: number,
-  ): (this: ThisParameterType, ...args: Parameters) => void {
-    // implementation
-  }
-  ```
+- try/catch for async operations; log with `console.error()` / `console.warn()`
+- Type-guard unknown errors (e.g., `isErrorWithCode(error)`)
+- Return early or throw errors with meaningful context
 
 ### Schemas (Zod)
 
 - Define schemas in `src/content/schemas/`
-- Use discriminated unions with `z.discriminatedUnion()` for block types
-- Use `z.literal()` for string literals
-- Export both schemas and inferred types: `export type TextBlock = z.infer<typeof textBlock>;`
+- Use discriminated unions (`z.discriminatedUnion()`) for block types
+- Export both schemas and inferred types:
+  `export type TextBlock = z.infer<typeof textBlock>;`
 
-### ESLint Rules
+### ESLint Notes
 
-- `simple-import-sort/imports`: Auto-sorts imports (error level)
-- `simple-import-sort/exports`: Auto-sorts exports (error level)
-- `prettier/prettier`: Disabled (Prettier runs separately)
-- No unused eslint disable/enable comments allowed
-- `@typescript-eslint/no-explicit-any`: Off in `.astro` files
+- `simple-import-sort/imports` and `/exports`: error level
+- `prettier/prettier` rule disabled (Prettier runs separately)
+- No unused eslint disable/enable comments
+- `@typescript-eslint/no-explicit-any`: off in `.astro` files
 
 ### Pre-Commit Hooks
 
-- Husky runs on pre-commit
-- Lint-staged enforces:
-  - Type check on all `.ts`, `.tsx`, `.astro` files
-  - ESLint fix on `.ts`, `.tsx`, `.js`, `.jsx`, `.astro` files
-  - Prettier format on code, markdown, JSON, YAML, CSS files
+Husky runs `lint-staged` on pre-commit:
+
+- Type check on `.ts`, `.tsx`, `.astro` files
+- ESLint fix + Prettier on code files
+- Prettier format on markdown, JSON, YAML, CSS
