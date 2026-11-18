@@ -3,7 +3,7 @@
 Cloudflare Images and Stream metadata are the sync source of truth. The
 generated frontend manifest is build output and stays untracked.
 
-The 87 production assets were migrated to managed metadata on 2026-07-13.
+The production assets were migrated to managed metadata on 2026-07-13.
 Normal sync refuses an empty managed inventory to prevent an accidental full
 upload. `--allow-empty-inventory` exists only for a deliberate fresh start.
 

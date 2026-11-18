@@ -16,9 +16,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && pnpm perf:budget && pnpm verify:build",
-    "preview": "astro build && wrangler dev",
-    "deploy": "wrangler deploy",
-    "deploy-cf": "astro build && wrangler deploy",
+    "preview": "astro build && astro preview",
     "astro": "astro",
     "lint": "eslint . --ext .js,.ts,.astro",
     "lint:fix": "eslint . --ext .js,.ts,.astro --fix",
