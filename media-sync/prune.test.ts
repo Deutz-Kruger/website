@@ -83,3 +83,88 @@ test("prune marks, retains, deletes, and isolates managed media", async (t) => {
     "new-stale",
   ]);
 });
+
+test("prune keep path clears staleSince while preserving the asset identity", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-prune-keep-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const manifestPath = join(directory, "manifest.json");
+  const current = imageFile();
+  await writeManifest(
+    {
+      [current.sourcePath]: {
+        id: "current",
+        type: "image",
+        width: current.width,
+        height: current.height,
+        lqip: TEST_LQIP,
+      },
+    },
+    manifestPath,
+  );
+  const staleSince = "2026-06-01T00:00:00.000Z";
+  const client = new FakeClient();
+  client.remote = [
+    remoteFor(current, {
+      id: "current",
+      metadata: metadataFor(current, staleSince),
+    }),
+  ];
+
+  const summary = await pruneMedia({
+    client,
+    logger: silentLogger,
+    manifestPath,
+    now: new Date("2026-07-13T00:00:00.000Z"),
+  });
+
+  assert.equal(summary.kept, 1);
+  assert.equal(client.updates.length, 1);
+  const update = client.updates[0];
+  assert.equal(update.media.id, "current");
+  assert.equal(update.metadata.staleSince, undefined);
+  assert.equal(update.metadata.sourcePath, current.sourcePath);
+  assert.equal(update.metadata.sha256, current.sha256);
+});
+
+test("prune dry run leaves a kept asset's stale marker untouched", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-prune-dry-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const manifestPath = join(directory, "manifest.json");
+  const current = imageFile();
+  await writeManifest(
+    {
+      [current.sourcePath]: {
+        id: "current",
+        type: "image",
+        width: current.width,
+        height: current.height,
+        lqip: TEST_LQIP,
+      },
+    },
+    manifestPath,
+  );
+  const staleSince = "2026-06-01T00:00:00.000Z";
+  const client = new FakeClient();
+  client.remote = [
+    remoteFor(current, {
+      id: "current",
+      metadata: metadataFor(current, staleSince),
+    }),
+  ];
+
+  const summary = await pruneMedia({
+    client,
+    dryRun: true,
+    logger: silentLogger,
+    manifestPath,
+    now: new Date("2026-07-13T00:00:00.000Z"),
+  });
+
+  assert.equal(summary.kept, 1);
+  assert.equal(client.updates.length, 0);
+  assert.equal(
+    (client.remote[0].metadata as { staleSince?: string }).staleSince,
+    staleSince,
+    "dry run must not send an update or clear the marker",
+  );
+});

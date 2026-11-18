@@ -11,6 +11,7 @@ import {
   FakeClient,
   hash,
   imageFile,
+  metadataFor,
   remoteFor,
   silentLogger,
   SQUARE_TEST_LQIP,
@@ -47,6 +48,62 @@ test("unchanged sync reuses remote asset and writes complete manifest", async (t
       },
     },
   });
+});
+
+test("reused stale asset clears the stale marker and keeps its identity", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-sync-stale-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const local = imageFile();
+  const client = new FakeClient();
+  client.remote = [
+    remoteFor(local, {
+      metadata: metadataFor(local, "2026-06-01T00:00:00.000Z"),
+    }),
+  ];
+
+  const summary = await syncMedia({
+    client,
+    localMedia: [local],
+    logger: silentLogger,
+    manifestPath: join(directory, "manifest.json"),
+  });
+
+  assert.equal(summary.reused, 1);
+  assert.equal(summary.staleMarkersCleared, 1);
+  assert.equal(client.updates.length, 1);
+  const update = client.updates[0];
+  assert.equal(update.media.id, client.remote[0].id);
+  assert.equal(update.metadata.staleSince, undefined);
+  assert.equal(update.metadata.sourcePath, local.sourcePath);
+  assert.equal(update.metadata.sha256, local.sha256);
+});
+
+test("dry run reports the stale clear without sending an update", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-sync-stale-dry-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const local = imageFile();
+  const client = new FakeClient();
+  client.remote = [
+    remoteFor(local, {
+      metadata: metadataFor(local, "2026-06-01T00:00:00.000Z"),
+    }),
+  ];
+
+  const summary = await syncMedia({
+    client,
+    dryRun: true,
+    localMedia: [local],
+    logger: silentLogger,
+    manifestPath: join(directory, "manifest.json"),
+  });
+
+  assert.equal(summary.reused, 1);
+  assert.equal(client.updates.length, 0);
+  assert.equal(
+    (client.remote[0].metadata as { staleSince?: string }).staleSince,
+    "2026-06-01T00:00:00.000Z",
+    "dry run must leave the stale marker intact",
+  );
 });
 
 test("manifest output is versioned and deterministically ordered", async (t) => {

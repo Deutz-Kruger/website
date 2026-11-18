@@ -1,4 +1,4 @@
-import { execa } from "execa";
+import { execa, type ResultPromise } from "execa";
 import ffmpegPath from "ffmpeg-static";
 import sharp from "sharp";
 
@@ -21,7 +21,6 @@ interface FfmpegFailure {
   signal?: string;
   stderr?: Uint8Array;
   stdout?: Uint8Array;
-  timedOut?: boolean;
 }
 
 const asFfmpegFailure = (error: unknown): FfmpegFailure =>
@@ -38,39 +37,76 @@ const stderrDetails = (failure: FfmpegFailure): string =>
     .trim();
 
 /**
- * Runs FFmpeg with a hard timeout, a capped stdout, and bounded stderr.
- * A timeout or output overflow terminates the process immediately (SIGKILL).
+ * Kills the subprocess and its whole process tree (POSIX process group) and
+ * closes the captured pipes, so a timeout rejects promptly even when a
+ * descendant keeps stdout/stderr open.
+ */
+const killProcessTree = (child: ResultPromise): void => {
+  child.stdout?.destroy();
+  child.stderr?.destroy();
+  if (process.platform !== "win32" && child.pid !== undefined) {
+    try {
+      process.kill(-child.pid, "SIGKILL");
+      return;
+    } catch {
+      // Process group already gone; fall through to killing the subprocess.
+    }
+  }
+  try {
+    child.kill("SIGKILL");
+  } catch {
+    // Subprocess already exited.
+  }
+};
+
+/**
+ * Runs FFmpeg with a hard timeout, a capped stdout, and drained stderr.
+ * A timeout or output overflow terminates the process tree immediately
+ * (SIGKILL) and rejects without waiting for the pipes to close.
  */
 const runFfmpeg = async (
   binaryPath: string,
   args: string[],
   timeoutMs: number,
 ): Promise<Buffer> => {
+  // A zero timeout must not disable the timer: the previous Node timer
+  // fired on the next tick, so normalize zero (or negative) to 1 ms.
+  const effectiveTimeoutMs = timeoutMs > 0 ? timeoutMs : 1;
+  const child = execa(binaryPath, args, {
+    detached: process.platform !== "win32",
+    encoding: "buffer",
+    killSignal: "SIGKILL",
+    maxBuffer: {
+      stdout: FFMPEG_MAX_OUTPUT_BYTES,
+      // Drain stderr without ever terminating the process; only bounded
+      // diagnostics are retained in error messages.
+      stderr: Number.POSITIVE_INFINITY,
+    },
+    stdin: "ignore",
+    stripFinalNewline: false,
+  });
+
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    killProcessTree(child);
+  }, effectiveTimeoutMs);
+
   try {
-    const { stdout } = await execa(binaryPath, args, {
-      encoding: "buffer",
-      killSignal: "SIGKILL",
-      maxBuffer: {
-        stdout: FFMPEG_MAX_OUTPUT_BYTES,
-        stderr: FFMPEG_MAX_OUTPUT_BYTES,
-      },
-      stdin: "ignore",
-      stripFinalNewline: false,
-      timeout: timeoutMs,
-    });
+    const { stdout } = await child;
     return toBuffer(stdout);
   } catch (error) {
     const failure = asFfmpegFailure(error);
+    if (timedOut) {
+      throw new Error(`FFmpeg timed out after ${effectiveTimeoutMs}ms`, {
+        cause: error,
+      });
+    }
     if (failure.code) {
       throw new Error(
         `Unable to start FFmpeg: ${failure.originalMessage ?? failure.code}`,
         { cause: error },
       );
-    }
-    if (failure.timedOut) {
-      throw new Error(`FFmpeg timed out after ${timeoutMs}ms`, {
-        cause: error,
-      });
     }
     if (
       failure.isMaxBuffer &&
@@ -86,6 +122,8 @@ const runFfmpeg = async (
       `FFmpeg exited with ${failure.exitCode ?? failure.signal ?? "unknown status"}${details ? `: ${details}` : ""}`,
       { cause: error },
     );
+  } finally {
+    clearTimeout(timer);
   }
 };
 
