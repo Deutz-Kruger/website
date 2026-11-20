@@ -1,24 +1,21 @@
 import type { Manifest, ManifestEntry } from "../../media-sync/schema.ts";
+import { MANIFEST_SCHEMA_VERSION } from "../../media-sync/schema.ts";
+import generatedManifest from "../generated/media-manifest.json";
+import {
+  CLOUDFLARE_IMAGE_ACCOUNT,
+  CLOUDFLARE_IMAGE_URL,
+  CLOUDFLARE_STREAM_URL,
+} from "./cloudflareDelivery";
 import {
   buildVideoPosterSources,
   type VideoPosterSources,
 } from "./videoPoster";
 
-const CLOUDFLARE_STREAM_URL =
-  "https://customer-k0tb9kusbwt5rfcb.cloudflarestream.com";
-const CLOUDFLARE_IMAGE_URL = "https://imagedelivery.net";
-const CLOUDFLARE_IMAGE_ACCOUNT = "MdnPOFk9l0bFpoVPozEWbw";
-const MANIFEST_SCHEMA_VERSION = "2";
-
-const manifestModules = import.meta.glob<{ default: Manifest }>(
-  "../generated/media-manifest.json",
-  { eager: true },
-);
-const manifest = Object.values(manifestModules)[0]?.default;
+const manifest = generatedManifest as Manifest;
 
 /** Returns generated Cloudflare media data for a local source path. */
 export const getMedia = (src: string): ManifestEntry => {
-  if (manifest?.schemaVersion !== MANIFEST_SCHEMA_VERSION) {
+  if (manifest.schemaVersion !== MANIFEST_SCHEMA_VERSION) {
     throw new Error(
       'Media manifest is missing or outdated. Run "pnpm sync-media" first.',
     );

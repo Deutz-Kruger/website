@@ -27,7 +27,7 @@ GSAP, Lenis, hls.js for video, and nanostores for state.
 - Cloudflare media credentials for the initial media sync and media changes
   (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_MEDIA_API_TOKEN` in an ignored
   `.env`). A missing generated manifest fails `astro dev` and `astro build`
-  with an instruction to run `pnpm sync-media` first.
+  as an unresolved import; an outdated one names `pnpm sync-media`.
 
 ## Commands
 
@@ -53,8 +53,6 @@ pnpm test:media                 # ./media-sync/**/*.test.ts
 # Media (see media-sync/README.md before destructive commands)
 pnpm sync-media                 # Reconcile local media with Cloudflare; writes manifest
 pnpm sync-media:prune           # Mark/delete stale managed media after a successful deploy
-pnpm sync-media:audit           # Report untagged legacy media (read-only)
-pnpm sync-media:cleanup-legacy  # Dry-run approved legacy cleanup (apply needs --report-sha256)
 
 # Utilities
 pnpm reset:cache                # Clear .astro, .cache, .wrangler, dist

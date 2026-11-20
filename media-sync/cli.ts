@@ -1,56 +1,106 @@
 import "dotenv/config";
 
 import { CloudflareMediaClient, getCloudflareConfig } from "./cloudflare";
-import { createInterruptHandler } from "./interrupt";
-import {
-  auditLegacyMedia,
-  cleanupLegacyMedia,
-  pruneMedia,
-  syncMedia,
-} from "./sync";
+import { pruneMedia } from "./prune";
+import { syncMedia } from "./sync";
 
-const HELP_TEXT = `Cloudflare Images and Stream reconciliation
+interface CommandSpec {
+  name: string;
+  usage: string;
+  description: string[];
+}
 
-Usage:
-  pnpm sync-media [-- --dry-run] [-- --allow-empty-inventory]
-  pnpm sync-media:prune [-- --dry-run]
-  pnpm sync-media:audit
-  pnpm sync-media:cleanup-legacy [-- --dry-run]
-  pnpm sync-media:cleanup-legacy -- --apply --report-sha256=<sha256>
+interface OptionSpec {
+  flags: string;
+  description: string[];
+}
 
-Commands:
-  sync             Reconcile local media and atomically write the manifest.
-                   Never deletes remote assets.
-  prune            Mark stale managed assets, then delete after seven days.
-                   Intended only after a successful deployment.
-  audit            Write an ignored report of possible untagged duplicates.
-                   Never mutates assets. Then run cleanup-legacy for the SHA.
-  cleanup-legacy   Validate the audit report and classify deletion candidates.
-                   Dry-run by default and prints the SHA required by --apply.
-                   Apply checkpoints progress and safely resumes after Ctrl+C.
-                   A graceful pause exits successfully with a final summary.
-                   Never part of deployment automation.
+/** Single source of truth for the command list rendered into HELP_TEXT. */
+const COMMANDS: CommandSpec[] = [
+  {
+    name: "sync",
+    usage: "pnpm sync-media [-- --dry-run] [-- --allow-empty-inventory]",
+    description: [
+      "Reconcile local media and atomically write the manifest.",
+      "Never deletes remote assets.",
+    ],
+  },
+  {
+    name: "prune",
+    usage: "pnpm sync-media:prune [-- --dry-run]",
+    description: [
+      "Mark stale managed assets, then delete after seven days.",
+      "Intended only after a successful deployment.",
+    ],
+  },
+];
 
-Options:
-  --dry-run                Report intended work without remote mutations or
-                           generated output changes.
-  --allow-empty-inventory  Allow sync when no managed assets exist remotely.
-                           Use only for a deliberate fresh start.
-  --apply                  Enable legacy deletion after all safety checks.
-  --report-sha256=<value>  Exact checksum printed by cleanup-legacy dry-run.
-                           Required with --apply.
-  -h, --help               Show this help without requiring credentials.
+const OPTIONS: OptionSpec[] = [
+  {
+    flags: "--dry-run",
+    description: [
+      "Report intended work without remote mutations or",
+      "generated output changes.",
+    ],
+  },
+  {
+    flags: "--allow-empty-inventory",
+    description: [
+      "Allow sync when no managed assets exist remotely.",
+      "Use only for a deliberate fresh start.",
+    ],
+  },
+  {
+    flags: "-h, --help",
+    description: ["Show this help without requiring credentials."],
+  },
+];
 
-Environment:
-  CLOUDFLARE_ACCOUNT_ID
-  CLOUDFLARE_MEDIA_API_TOKEN`;
+const COMMAND_LABEL_WIDTH = 14;
 
-const getOption = (args: string[], name: string): string | undefined => {
-  const inline = args.find((argument) => argument.startsWith(`${name}=`));
-  if (inline) return inline.slice(name.length + 1);
-  const index = args.indexOf(name);
-  return index >= 0 ? args[index + 1] : undefined;
+const renderSection = (
+  title: string,
+  rows: Array<[string, string[]]>,
+  minLabelWidth = 0,
+) => {
+  const labelWidth = Math.max(
+    minLabelWidth,
+    ...rows.map(([label]) => label.length),
+  );
+  const continuationIndent = " ".repeat(labelWidth + 4);
+  const lines = rows.flatMap(([label, description]) => [
+    `  ${label.padEnd(labelWidth)}  ${description[0]}`,
+    ...description.slice(1).map((line) => `${continuationIndent}${line}`),
+  ]);
+  return `${title}:\n${lines.join("\n")}`;
 };
+
+const renderHelp = (): string => {
+  const usages = COMMANDS.map((command) => `  ${command.usage}`).join("\n");
+  return [
+    "Cloudflare Images and Stream reconciliation",
+    "",
+    "Usage:",
+    usages,
+    "",
+    renderSection(
+      "Commands",
+      COMMANDS.map((command) => [command.name, command.description]),
+      COMMAND_LABEL_WIDTH,
+    ),
+    "",
+    renderSection(
+      "Options",
+      OPTIONS.map((option) => [option.flags, option.description]),
+    ),
+    "",
+    "Environment:",
+    "  CLOUDFLARE_ACCOUNT_ID",
+    "  CLOUDFLARE_MEDIA_API_TOKEN",
+  ].join("\n");
+};
+
+const HELP_TEXT = renderHelp();
 
 const run = async () => {
   const rawCommand = process.argv[2];
@@ -81,34 +131,6 @@ const run = async () => {
     case "prune":
       await pruneMedia({ client, dryRun: flags.has("--dry-run") });
       return;
-    case "audit":
-      await auditLegacyMedia({ client });
-      return;
-    case "cleanup-legacy": {
-      const apply = flags.has("--apply");
-      if (apply && flags.has("--dry-run")) {
-        throw new Error('Use either "--apply" or "--dry-run", not both.');
-      }
-      const controller = new AbortController();
-      const handleInterrupt = createInterruptHandler({
-        forceExit: () => process.exit(130),
-        pause: () => controller.abort(),
-        writeError: console.error,
-        writeInfo: console.log,
-      });
-      if (apply) process.on("SIGINT", handleInterrupt);
-      try {
-        await cleanupLegacyMedia({
-          apply,
-          client,
-          expectedReportSha256: getOption(args, "--report-sha256"),
-          signal: controller.signal,
-        });
-      } finally {
-        if (apply) process.off("SIGINT", handleInterrupt);
-      }
-      return;
-    }
     default:
       throw new Error(`Unknown media-sync command: ${command}`);
   }

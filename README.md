@@ -36,7 +36,8 @@ pnpm dev
 ```
 
 The development server is available at `http://localhost:4321`. A missing
-manifest produces an actionable error asking you to run `pnpm sync-media`.
+manifest fails the build as an unresolved import; an outdated one asks you to
+run `pnpm sync-media`.
 
 ## Commands
 
@@ -59,8 +60,7 @@ Sources live in `src/content/media` (PNG, JPG/JPEG, SVG, MP4, WebM).
 `pnpm sync-media` reconciles them against tagged Cloudflare Images and Stream
 inventory and atomically writes the generated, ignored
 `src/generated/media-manifest.json`. Normal sync never deletes media.
-Deployment pruning and the intentionally separate legacy cleanup flow are
-documented in [media-sync/README.md](media-sync/README.md).
+Deployment pruning is documented in [media-sync/README.md](media-sync/README.md).
 
 ## Deployment workflow
 

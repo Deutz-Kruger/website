@@ -105,6 +105,110 @@ test("video LQIP errors identify corrupt sources and timeouts", async (t) => {
   );
 });
 
+test("video LQIP timeout rejects promptly when a descendant holds the pipes open", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-lqip-pipes-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  // The background sleep inherits stdout/stderr and outlives the wrapper,
+  // so only killing the process tree (and closing the pipes) rejects promptly.
+  const wrapper = join(directory, "pipe-holding-ffmpeg");
+  await writeFile(wrapper, "#!/bin/sh\nsleep 30 &\nsleep 30\n", "utf8");
+  await chmod(wrapper, 0o755);
+
+  const startedAt = Date.now();
+  await assert.rejects(
+    generateVideoLqip("unused.mp4", "content/pipe-hold.mp4", {
+      binaryPath: wrapper,
+      timeoutMs: 100,
+    }),
+    /LQIP generation failed for content\/pipe-hold\.mp4: FFmpeg timed out after 100ms/,
+  );
+  assert.ok(
+    Date.now() - startedAt < 15_000,
+    "timeout must reject without waiting for the pipe-holding descendant",
+  );
+});
+
+test("video LQIP treats a zero timeout as an immediate timeout", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-lqip-zero-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const hangingBinary = join(directory, "hanging-ffmpeg");
+  await writeFile(hangingBinary, "#!/bin/sh\nsleep 30\n", "utf8");
+  await chmod(hangingBinary, 0o755);
+
+  await assert.rejects(
+    generateVideoLqip("unused.mp4", "content/zero-timeout.mp4", {
+      binaryPath: hangingBinary,
+      timeoutMs: 0,
+    }),
+    /FFmpeg timed out after 1ms/,
+  );
+});
+
+test("video LQIP tolerates noisy stderr on success and bounds it in errors", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-lqip-noise-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const framePath = join(directory, "frame.png");
+  await sharp({
+    create: {
+      width: 64,
+      height: 32,
+      channels: 3,
+      background: { r: 200, g: 40, b: 40 },
+    },
+  })
+    .png()
+    .toFile(framePath);
+
+  // 2 MiB of stderr must not terminate a successful extraction.
+  const noisySuccess = join(directory, "noisy-success");
+  await writeFile(
+    noisySuccess,
+    `#!/bin/sh\nhead -c 2097152 /dev/zero | tr '\\0' 'x' >&2\ncat '${framePath}'\n`,
+    "utf8",
+  );
+  await chmod(noisySuccess, 0o755);
+  const lqip = await generateVideoLqip("unused.mp4", "content/noisy.mp4", {
+    binaryPath: noisySuccess,
+    timeoutMs: 10_000,
+  });
+  assert.equal(lqip.width, 32);
+  assert.equal(lqip.height, 16);
+  assert.match(lqip.src, /^data:image\/webp;base64,/);
+
+  // A nonzero exit still reports bounded diagnostics.
+  const noisyFailure = join(directory, "noisy-failure");
+  await writeFile(
+    noisyFailure,
+    "#!/bin/sh\nhead -c 2097152 /dev/zero | tr '\\0' 'x' >&2\nexit 3\n",
+    "utf8",
+  );
+  await chmod(noisyFailure, 0o755);
+  const error: Error = await generateVideoLqip(
+    "unused.mp4",
+    "content/noisy-fail.mp4",
+    { binaryPath: noisyFailure, timeoutMs: 10_000 },
+  ).then(
+    () => assert.fail("expected noisy failure to reject"),
+    (cause: unknown) => cause as Error,
+  );
+  assert.match(error.message, /FFmpeg exited with 3/);
+  assert.ok(
+    error.message.length < 66_000,
+    "stderr diagnostics in the error stay bounded",
+  );
+  // Regression: execa must not buffer the full 2 MiB stderr anywhere in the
+  // error chain; only the first 64 KiB may be retained.
+  let cause: unknown = error;
+  while (cause instanceof Error) {
+    const stderr = (cause as { stderr?: unknown }).stderr;
+    assert.ok(
+      !(stderr instanceof Uint8Array) || stderr.length <= 64 * 1024,
+      "retained stderr in the error chain stays bounded",
+    );
+    cause = cause.cause;
+  }
+});
+
 test("LQIP and manifest schemas reject incomplete generated artifacts", () => {
   assert.throws(() => lqipSchema.parse({ src: "https://example.com/a.webp" }));
   assert.throws(() =>

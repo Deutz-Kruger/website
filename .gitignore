@@ -24,10 +24,7 @@ pnpm-debug.log*
 .idea/
 
 backup.pages.yml
-manifest.json
 src/generated/media-manifest.json
-media-sync/legacy-media-audit.json
-media-sync/legacy-media-cleanup-*.json
 
 src/placeholder
 
