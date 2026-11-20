@@ -1,10 +1,17 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { readManifest, writeManifest } from "./manifest";
+import { readManifest, writeJsonAtomic, writeManifest } from "./manifest";
 import type { LocalMediaFile } from "./schema";
 import { syncMedia } from "./sync";
 import {
@@ -98,11 +105,27 @@ test("dry run reports the stale clear without sending an update", async (t) => {
   });
 
   assert.equal(summary.reused, 1);
+  assert.equal(summary.staleMarkersCleared, 1);
   assert.equal(client.updates.length, 0);
   assert.equal(
     (client.remote[0].metadata as { staleSince?: string }).staleSince,
     "2026-06-01T00:00:00.000Z",
     "dry run must leave the stale marker intact",
+  );
+});
+
+test("failed atomic manifest write removes the temporary file", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "media-manifest-tmp-"));
+  t.after(() => rm(directory, { force: true, recursive: true }));
+  const path = join(directory, "manifest.json");
+  // Renaming onto an existing directory fails after the temporary write.
+  await mkdir(path);
+
+  await assert.rejects(writeJsonAtomic(path, { hello: "world" }));
+  assert.deepEqual(
+    await readdir(directory),
+    ["manifest.json"],
+    "no PID-specific temporary file may remain after a failed publish",
   );
 });
 

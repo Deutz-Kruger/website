@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
 import {
@@ -24,8 +24,23 @@ export const writeJsonAtomic = async (
 ): Promise<void> => {
   const temporaryPath = `${path}.${process.pid}.tmp`;
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-  await rename(temporaryPath, path);
+  try {
+    await writeFile(
+      temporaryPath,
+      `${JSON.stringify(value, null, 2)}\n`,
+      "utf8",
+    );
+    await rename(temporaryPath, path);
+  } catch (error) {
+    // Never leave a partial temporary file behind; the original error takes
+    // precedence even if cleanup also fails. Rename stays the final step.
+    try {
+      await rm(temporaryPath, { force: true });
+    } catch {
+      // Cleanup failure must not mask the original error.
+    }
+    throw error;
+  }
 };
 
 /** Writes a generated manifest atomically to avoid partial builds. */

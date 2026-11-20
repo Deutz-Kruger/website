@@ -196,6 +196,17 @@ test("video LQIP tolerates noisy stderr on success and bounds it in errors", asy
     error.message.length < 66_000,
     "stderr diagnostics in the error stay bounded",
   );
+  // Regression: execa must not buffer the full 2 MiB stderr anywhere in the
+  // error chain; only the first 64 KiB may be retained.
+  let cause: unknown = error;
+  while (cause instanceof Error) {
+    const stderr = (cause as { stderr?: unknown }).stderr;
+    assert.ok(
+      !(stderr instanceof Uint8Array) || stderr.length <= 64 * 1024,
+      "retained stderr in the error chain stays bounded",
+    );
+    cause = cause.cause;
+  }
 });
 
 test("LQIP and manifest schemas reject incomplete generated artifacts", () => {

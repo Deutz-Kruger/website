@@ -116,7 +116,9 @@ export class FakeClient implements MediaClient {
     media: Pick<RemoteMedia, "filename" | "id" | "type">,
     metadata: ManagedMetadata,
   ) {
-    const found = this.remote.find((entry) => entry.id === media.id);
+    const found = this.remote.find(
+      (entry) => entry.id === media.id && entry.type === media.type,
+    );
     if (!found) throw new Error(`missing fake media ${media.id}`);
     found.creator = MEDIA_CREATOR;
     found.metadata = metadata;
@@ -148,7 +150,9 @@ export class FakeClient implements MediaClient {
   }
 
   async waitForVideoReady(id: string) {
-    const found = this.remote.find((entry) => entry.id === id);
+    const found = this.remote.find(
+      (entry) => entry.id === id && entry.type === "video",
+    );
     if (!found) throw new Error(`missing fake video ${id}`);
     found.readyToStream = true;
     found.status = "ready";

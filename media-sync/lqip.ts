@@ -19,7 +19,6 @@ interface FfmpegFailure {
   isMaxBuffer?: boolean;
   originalMessage?: string;
   signal?: string;
-  stderr?: Uint8Array;
   stdout?: Uint8Array;
 }
 
@@ -30,11 +29,8 @@ const toBuffer = (value: Uint8Array | undefined): Buffer =>
   Buffer.from(value ?? new Uint8Array());
 
 /** Bounds reported stderr so failures stay readable. */
-const stderrDetails = (failure: FfmpegFailure): string =>
-  toBuffer(failure.stderr)
-    .subarray(0, FFMPEG_MAX_ERROR_BYTES)
-    .toString("utf8")
-    .trim();
+const stderrDetails = (stderr: Buffer): string =>
+  stderr.subarray(0, FFMPEG_MAX_ERROR_BYTES).toString("utf8").trim();
 
 /**
  * Kills the subprocess and its whole process tree (POSIX process group) and
@@ -72,18 +68,27 @@ const runFfmpeg = async (
   // A zero timeout must not disable the timer: the previous Node timer
   // fired on the next tick, so normalize zero (or negative) to 1 ms.
   const effectiveTimeoutMs = timeoutMs > 0 ? timeoutMs : 1;
+  // Retain only the first FFMPEG_MAX_ERROR_BYTES of stderr. With
+  // `buffer: { stderr: false }` execa resumes the pipe (so it keeps draining
+  // and can never terminate the process over stderr) but never buffers it,
+  // and the listener below keeps the bounded prefix for error messages.
+  let retainedStderr = Buffer.alloc(0);
   const child = execa(binaryPath, args, {
     detached: process.platform !== "win32",
     encoding: "buffer",
     killSignal: "SIGKILL",
-    maxBuffer: {
-      stdout: FFMPEG_MAX_OUTPUT_BYTES,
-      // Drain stderr without ever terminating the process; only bounded
-      // diagnostics are retained in error messages.
-      stderr: Number.POSITIVE_INFINITY,
-    },
+    buffer: { stdout: true, stderr: false },
+    maxBuffer: { stdout: FFMPEG_MAX_OUTPUT_BYTES },
     stdin: "ignore",
     stripFinalNewline: false,
+  });
+  child.stderr?.on("data", (chunk: Buffer) => {
+    if (retainedStderr.length < FFMPEG_MAX_ERROR_BYTES) {
+      retainedStderr = Buffer.concat([retainedStderr, chunk]).subarray(
+        0,
+        FFMPEG_MAX_ERROR_BYTES,
+      );
+    }
   });
 
   let timedOut = false;
@@ -117,7 +122,7 @@ const runFfmpeg = async (
         { cause: error },
       );
     }
-    const details = stderrDetails(failure);
+    const details = stderrDetails(retainedStderr);
     throw new Error(
       `FFmpeg exited with ${failure.exitCode ?? failure.signal ?? "unknown status"}${details ? `: ${details}` : ""}`,
       { cause: error },
